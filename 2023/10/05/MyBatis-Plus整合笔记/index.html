@@ -1,0 +1,705 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>MyBatis-Plus整合笔记 - 愔颂</title>
+
+  
+    <meta name="description" content="Spring Boot集成MyBatis-Plus持久层框架实现数据库连接，支持自定义增删改查、条件构造器、分页插件、代码生成。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis-Plus整合笔记">
+<meta property="og:url" content="https://yinsong-llsc.github.io/2023/10/05/MyBatis-Plus%E6%95%B4%E5%90%88%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="Spring Boot集成MyBatis-Plus持久层框架实现数据库连接，支持自定义增删改查、条件构造器、分页插件、代码生成。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-05T03:13:35.012Z">
+<meta property="article:modified_time" content="2023-10-04T09:15:20.115Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets"></div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Spring-Boot/">Spring Boot</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-05T03:13:35.012Z">2023-10-05</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2023-10-04T09:15:20.115Z">2023-10-04</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>MyBatis-Plus整合笔记</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<p>Spring Boot集成MyBatis-Plus持久层框架实现数据库连接，支持自定义增删改查、条件构造器、分页插件、代码生成。</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://www.baomidou.com/pages/24112f/">简介 | MyBatis-Plus (baomidou.com)</a></p>
+<h1 id="1、快速整合MyBatis-Plus"><a href="#1、快速整合MyBatis-Plus" class="headerlink" title="1、快速整合MyBatis-Plus"></a>1、快速整合MyBatis-Plus</h1><p>第一步，在 pom.xml 中引入 starter。 </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>第二步，使用 @MapperScan 注解扫描 mapper 文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.github.paicoding.forum.service&quot;)</span></span><br><span class="line"><span class="meta">@MapperScan(basePackages = &#123;</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.article.repository.mapper&quot;,</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.user.repository.mapper&quot;,</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.comment.repository.mapper&quot;,</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.config.repository.mapper&quot;,</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.statistics.repository.mappe</span></span><br><span class="line"><span class="meta"> &quot;com.github.paicoding.forum.service.notify.repository.mapper&quot;,&#125;</span></span><br><span class="line"><span class="meta">public class ServiceAutoConfig &#123;</span></span><br><span class="line"><span class="meta">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>ServiceAutoConfig 是单独的配置类，mapper 接口按照业务进行了分类，mapper.xml  放在 resources 目录下。</p>
+<p>第三步，在 application.yml 文件中增加MyBatis-Plus 的统一配置。</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mybatis 相关统一配置</span></span><br><span class="line"><span class="attr">mybatis-plus</span>:<span class="string"></span></span><br><span class="line"> <span class="attr">configuration</span>:<span class="string"></span></span><br><span class="line"><span class="comment"> #开启下划线转驼峰</span></span><br><span class="line"> <span class="attr">map-underscore-to-camel-case</span>: <span class="string">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>将数据库表中的下划线命名方式 （underscore case）映射为 Java 对象中的驼峰命名方式（camel case）。例如，数据库 表中的列名为 user_name，对应的 Java 对象的属性名为 userName。</p>
+<h1 id="2、MyBatis-Plus的基本使用"><a href="#2、MyBatis-Plus的基本使用" class="headerlink" title="2、MyBatis-Plus的基本使用"></a>2、MyBatis-Plus的基本使用</h1><h2 id="2-1、Service-CRUD"><a href="#2-1、Service-CRUD" class="headerlink" title="2.1、Service CRUD"></a>2.1、Service CRUD</h2><p>示例：比如说我们要保存一个文章的标签。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> TagDao tagDao;</span><br><span class="line">tagDao.save(tagDO);</span><br></pre></td></tr></table></figure>
+
+<p>tagDao 是我们定义的数据访问对象（Data Access Object，简称 DAO），它继承自  MyBatis-Plus 提供的 ServiceImpl 类。 @Autowired 注解将 TagDao 自动注入到当前类 中。这是 Spring 提供的依赖注入（DI）功能，可以让我们在当前类中方便地使用  TagDao。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TagDao</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;TagMapper, TagDO&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> @Repository 注解：这是 Spring 提供的注解，用于标识这个类是一个数据访问层 （DAO）组件。Spring 会自动扫描并将其实例化为一个 Bean，方便在其他类中通过依赖 注入（DI）使用。</p>
+</blockquote>
+<blockquote>
+<p>ServiceImpl 是 MyBatis-Plus 提供的一个抽象类，提供了通用的 CRUD 方法。泛型参数  意味着 TagDao 类 主要用于处理 TagDO 数据对象的数据库操作，并使用 TagMapper 接口定义的方法进行操作。</p>
+</blockquote>
+<p>通过继承 ServiceImpl 类，TagDao 就可以使用 MyBatis-Plus 提供的通用 CRUD 方法，如 save、getById、updateById 等。这些方法已经实现了基本的数据库操作，通常无需自 己编写 SQL 语句。</p>
+<p>参数 tagDO 是一个数据对象（Data Object，简称 DO），表示数据库中的 tag 表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@EqualsAndHashCode(callSuper = true)</span></span><br><span class="line"><span class="meta">@TableName(&quot;tag&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TagDO</span> <span class="keyword">extends</span> <span class="title class_">BaseDO</span> &#123;</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">3796460143933607644L</span>;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 标签名称</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">private</span> String tagName;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 标签类型：1-系统标签，2-自定义标签</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">private</span> Integer tagType;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 状态：0-未发布，1-已发布</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">private</span> Integer status;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 是否删除</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">private</span> Integer deleted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> @Data 注解是 Lombok 提供的，用于自动生成类的 getter、setter、equals、 hashCode 和 toString 方法，简化了代码编写。 </p>
+<p>@EqualsAndHashCode(callSuper &#x3D; true) 注解也是 Lombok 提供的注解， cal lSuper &#x3D; true 表示要调用父类（BaseDO）的 equals 和 hashCode 方法。</p>
+</blockquote>
+<p>BaseDO 是我们自定义的 DO 基类，实现了 Serializable 接口 ，并且定义了主键 id（ @TableI d(type &#x3D; IdType.AUTO) 表示自增长，是 MyBatis-Plus 提供的注解），创建时间  createTime和更新时间 updateTime。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseDO</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"> <span class="meta">@TableId(type = IdType.AUTO)</span></span><br><span class="line"> <span class="keyword">private</span> Long id;</span><br><span class="line"> <span class="keyword">private</span> Date createTime;</span><br><span class="line"> <span class="keyword">private</span> Date updateTime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p> @TableName(“tag”) 注解是 MyBatis-Plus 提供的注解，用于指定数据库表名。 </p>
+<p>另外定义了四个属性：tagName（标签名称）、tagType（标签类型）、status（状 态）和 deleted（是否删除）。这些属性对应数据库表中的列。</p>
+<h2 id="2-2、Mapper-CRUD"><a href="#2-2、Mapper-CRUD" class="headerlink" title="2.2、Mapper CRUD"></a>2.2、Mapper CRUD</h2><p>MyBatis-Plus 除了提供 Service 的 CRUD， 还提供了基于 Mapper 的 CRUD。 通常一些特殊的增删改查是通过 MyBatis-Plus 的 Mapper CRUD 接口实现的。 </p>
+<p>示例：比如说我们要保存文章，可以通过下面这种方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArticleDao</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;ArticleMapper, ArticleDO&gt; &#123;</span><br><span class="line"> <span class="meta">@Resource</span></span><br><span class="line"> <span class="keyword">private</span> ArticleDetailMapper articleDetailMapper;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">public</span> Long <span class="title function_">saveArticleContent</span><span class="params">(Long articleId, String content)</span> &#123;</span><br><span class="line"> <span class="type">ArticleDetailDO</span> <span class="variable">detail</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArticleDetailDO</span>();</span><br><span class="line"> detail.setArticleId(articleId);</span><br><span class="line"> detail.setContent(content);</span><br><span class="line"> detail.setVersion(<span class="number">1L</span>);</span><br><span class="line"> articleDetailMapper.insert(detail);</span><br><span class="line"> <span class="keyword">return</span> detail.getId();</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>articleDetailMapper 是我们在当前类中注入的一个 Mapper 接口，它继承自 MyBatis-Plus 的 BaseMapper 接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ArticleDetailMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;ArticleDetailDO&gt;&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Mapper 继承该接口后，无需编写 mapper.xml 文件，即可获得CRUD功能</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;这个 Mapper 支持 id 泛型&lt;/p&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> hubin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2016-01-23</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BaseMapper</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Mapper</span>&lt;T&gt; &#123;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 插入一条记录</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> entity 实体对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">insert</span><span class="params">(T entity)</span>;</span><br><span class="line"> </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据 entity 条件，删除记录</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> queryWrapper 实体对象封装操作类（可以为 null,里面的 entity 用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">delete</span><span class="params">(<span class="meta">@Param(Constants.WRAPPER)</span> Wrapper&lt;T&gt; queryWrapper)</span>;</span><br><span class="line"> </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据 whereEntity 条件，更新记录</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> entity 实体对象 (set 条件值,可以为 null)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> updateWrapper 实体对象封装操作类（可以为 null,里面的 entity </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">update</span><span class="params">(<span class="meta">@Param(Constants.ENTITY)</span> T entity, <span class="meta">@Param(Constants.WRAP</span></span></span><br><span class="line"><span class="meta"><span class="params"> </span></span></span><br><span class="line"><span class="meta"><span class="params"> /**</span></span></span><br><span class="line"><span class="meta"><span class="params"> * 根据 ID 查询</span></span></span><br><span class="line"><span class="meta"><span class="params"> *</span></span></span><br><span class="line"><span class="meta"><span class="params"> * @param id 主键ID</span></span></span><br><span class="line"><span class="meta"><span class="params"> */</span></span></span><br><span class="line"><span class="meta"><span class="params"> T selectById(Serializable id);</span></span></span><br><span class="line"><span class="meta"><span class="params">&#125;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样，articleDetailMapper 也就具备了基本的增删改查功能。</p>
+<h2 id="2-3、常用注解"><a href="#2-3、常用注解" class="headerlink" title="2.3、常用注解"></a>2.3、常用注解</h2><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@TableName</td>
+<td>用于指定数据库表名，通常在实体类（DO 或 Entity）上使用。例如： @TableName(“user”) 。</td>
+</tr>
+<tr>
+<td>@TableId</td>
+<td>用于指定表中的主键字段。通常在实体类的主键属性上使用。例如： @ TableId(value &#x3D; “id”, type &#x3D; IdType.AUTO) ，其中 value 表示主键字段名， type 表示主键生成策略。</td>
+</tr>
+<tr>
+<td>@TableField</td>
+<td>用于指定表中的非主键字段。可以用于实体类的属性上，以映射属 性和数据库字段。</td>
+</tr>
+<tr>
+<td>@TableLogic</td>
+<td>用于指定逻辑删除字段。逻辑删除是指在数据库中标记某个记录已 删除，而不是真正地删除记录。例如： @TableLogic(value &#x3D; “0”, delval &#x3D;  “1”) ，其中 value 表示未删除状态的默认值，delval 表示删除状态的值。</td>
+</tr>
+<tr>
+<td>@Version</td>
+<td>用于指定乐观锁字段。乐观锁是一种并发控制策略，用于解决多个线程 同时修改同一条记录的问题。例如： @Version private Integer version;</td>
+</tr>
+</tbody></table>
+<h1 id="3、MyBatis-Plus查询"><a href="#3、MyBatis-Plus查询" class="headerlink" title="3、MyBatis-Plus查询"></a>3、MyBatis-Plus查询</h1><h2 id="3-1、普通查询"><a href="#3-1、普通查询" class="headerlink" title="3.1、普通查询"></a>3.1、普通查询</h2><p>MyBatis-Plus 的 BaseMapper 提供了多种查询方法，比如说根据 ID 查找文章是这样用的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ArticleDO</span> <span class="variable">article</span> <span class="operator">=</span> baseMapper.selectById(articleId);</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，还有根据ID 批量查询的 selectBatchIds：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">baseMapper.selectBatchIds(Arrays.asList(<span class="number">1</span>,<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>根据键值对查询的 selectByMap：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;id&quot;</span>, <span class="number">15L</span>);</span><br><span class="line">List&lt;ArticleDO&gt; dtoList = baseMapper.selectByMap(map);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-2、条件构造器"><a href="#3-2、条件构造器" class="headerlink" title="3.2、条件构造器"></a>3.2、条件构造器</h2><p>MyBatis-Plus 的 Wrapper 是一个条件构造器，用于简化复杂的 SQL 查询条件的构建。它 提供了一系列易于使用的 API，让你能够以链式编程的方式编写查询条件，而不需要手动编 写 SQL 语句。</p>
+<p>示例：假如我们来查询这样一个结果，包含“j”且状态是已发布的标签。我们可以这样来构建条件构造器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testWrapper</span><span class="params">()</span> &#123;</span><br><span class="line"> QueryWrapper&lt;TagDO&gt; wrapper = <span class="keyword">new</span> <span class="title class_">QueryWrapper</span>&lt;&gt;();</span><br><span class="line"> <span class="comment">// 包含“j”且状态是已发布</span></span><br><span class="line"> wrapper.like(<span class="string">&quot;tag_name&quot;</span>, <span class="string">&quot;j&quot;</span>).eq(<span class="string">&quot;status&quot;</span>, <span class="number">1</span>);</span><br><span class="line"> BaseMapper&lt;TagDO&gt; baseMapper = tagDao.getBaseMapper();</span><br><span class="line"> List&lt;TagDO&gt; tagList = baseMapper.selectList(wrapper);</span><br><span class="line"> tagList.forEach(System.out::println);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>QueryWrapper：用于构建查询条件。它继承自 AbstractWrapper，提供了各种查询条件 的构建方法，如 eq, ne, gt, ge, lt, le, like, isNull, orderBy 等等。详细见：<a target="_blank" rel="noopener" href="https://www.baomidou.com/pages/10c804/#abstractwrapper">条件构造器 | MyBatis-Plus (baomidou.com)</a></p>
+<p>但是，通过表的字段总感觉很不舒服，万一哪一天数据库表发生变化了怎么办呢？代码和数据库就不匹配了呀。 更优雅的做法是采用 Lambda 的方式，如下查询标签示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;TagDTO&gt; <span class="title function_">listOnlineTag</span><span class="params">(String key, PageParam pageParam)</span> &#123;</span><br><span class="line"> LambdaQueryWrapper&lt;TagDO&gt; query = Wrappers.lambdaQuery();</span><br><span class="line"> query.eq(TagDO::getStatus, PushStatusEnum.ONLINE.getCode())</span><br><span class="line"> .eq(TagDO::getDeleted, YesOrNoEnum.NO.getCode())</span><br><span class="line"> .and(!StringUtils.isEmpty(key), v -&gt; v.like(TagDO::getTagNa</span><br><span class="line"> .orderByDesc(TagDO::getId);</span><br><span class="line"> <span class="keyword">if</span> (pageParam != <span class="literal">null</span>) &#123;</span><br><span class="line"> query.last(PageParam.getLimitSql(pageParam));</span><br><span class="line"> &#125;</span><br><span class="line"> List&lt;TagDO&gt; list = baseMapper.selectList(query);</span><br><span class="line"> <span class="keyword">return</span> ArticleConverter.toDtoList(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>①、可以通过 Wrappers.lambdaQuery() 静态方法创建一个 Lambda 条件构造器。 </p>
+<p>②、 eq(TagDO::getStatus, PushStatusEnum.ONLINE.getCode()) ：表示查询条件 为 status 等于 PushStatusEnum.ONLINE 的值（即查询上线的标签）。 </p>
+<p>③、 eq(TagDO::getDeleted, YesOrNoEnum.NO.getCode()) ：表示查询条件为  deleted 等于 YesOrNoEnum.NO 的值（即查询未删除的记录）。 </p>
+<p>④、 and(!StringUtils.isEmpty(key), v -&gt; v.like(TagDO::getTagName, ke y)) ：表示如果 key 不为空，则添加一个查询条件，要求 tag_name 包含 key。 </p>
+<p>⑤、 orderByDesc(TagDO::getId) ：表示按照 id 字段降序排序。</p>
+<p>⑥、 if (pageParam !&#x3D; null) { query.last(PageParam.getLimitSql(pagePara  m)); } ：如果 pageParam 不为 null，则添加分页参数。</p>
+<p>这样的话，就可以和数据库的字段隔离开，完全通过代码的方式去查询。</p>
+<h2 id="3-3、MyBatis-Plus自定义SQL"><a href="#3-3、MyBatis-Plus自定义SQL" class="headerlink" title="3.3、MyBatis-Plus自定义SQL"></a>3.3、MyBatis-Plus自定义SQL</h2><p>MyBatis-Plus 支持自定义 SQL 语句，我们可以在 Mapper 接口中编写自定义 SQL 方法， 并使用注解添加自定义的 SQL 语句。 </p>
+<p>示例：微信登录的时候会执行这条 SQL 语句。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;UserDO&gt; &#123;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据三方唯一id进行查询</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> accountId</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="meta">@Select(&quot;select * from user where third_account_id = #&#123;account_id&#125; </span></span><br><span class="line"><span class="meta"> UserDO getByThirdAccountId(@Param(&quot;account_id&quot;) String accountId);</span></span><br><span class="line"><span class="meta">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>接口中定义了一个名为 getByThirdAccountId 的方法，它接收一个名为 accountId 的参 数。 </p>
+<p>该方法使用了 @Select 注解，这个注解用于编写自定义的 SQL 查询。 @Select 注解内的 SQL 语句是： <code>select * from user where third_account_id = #&#123;account_i d&#125; limit 1</code> ，它会根据传入的 account_id 参数查询 user 表中的记录。 同时，方法参数 accountId 使用了 @Param 注解，指定了参数在 SQL 语句中的名称为  account_id。这样，在执行 SQL 语句时，MyBatis 会将参数值替换到对应的位置上。</p>
+<p>除此之外，可以使用 xml 的方式，用来定义一些复杂的 SQL。</p>
+<p>比如说，我们要统计网站的 PV、UV，那么我们在 resources 目录下新建一个名为  QueryCountMapper.xml 的文件，内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span> <span class="string">&quot;http://my</span></span></span><br><span class="line"><span class="string"><span class="meta">&lt;mapper namespace=&quot;</span>com.github.paicoding.forum.service.statistics.reposi</span></span><br><span class="line"><span class="meta"> &lt;select <span class="keyword">id</span>=<span class="string">&quot;getPvTotalCount&quot;</span> <span class="keyword">resultType</span>=<span class="string">&quot;java.lang.Long&quot;</span>&gt;</span></span><br><span class="line"> select sum(cnt) from request_count</span><br><span class="line"> <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getPvDayList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.github.paicoding.forum.ap</span></span></span><br><span class="line"><span class="string"><span class="tag"> SELECT sum(cnt) as count, date</span></span></span><br><span class="line"><span class="string"><span class="tag"> FROM request_count</span></span></span><br><span class="line"><span class="string"><span class="tag"> group by date order by date asc</span></span></span><br><span class="line"><span class="string"><span class="tag"> limit #&#123;day&#125;;</span></span></span><br><span class="line"><span class="string"><span class="tag"> &lt;/select&gt;</span></span></span><br><span class="line"><span class="string"><span class="tag"> &lt;select id=&quot;</span><span class="attr">getUvDayList</span>&quot; <span class="attr">resultType</span>=<span class="string">&quot;com.github.paicoding.forum.ap</span></span></span><br><span class="line"><span class="string"><span class="tag"> SELECT count(*) as count, date</span></span></span><br><span class="line"><span class="string"><span class="tag"> FROM request_count</span></span></span><br><span class="line"><span class="string"><span class="tag"> group by date order by date asc</span></span></span><br><span class="line"><span class="string"><span class="tag"> limit #&#123;day&#125;;</span></span></span><br><span class="line"><span class="string"><span class="tag"> &lt;/select&gt;</span></span></span><br><span class="line"><span class="string"><span class="tag">&lt;/mapper&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>①、在 resources 目录下的好处是，MyBatis-Plus 默认帮我们配置了 xml 的位置，这样我们就不需要在 application.yml 中再配置了。</p>
+<p>②、该 XML 文件定义了一个RequestCountMapper 映射器，它包含三个自定义查询：getPvTotalCount、getPvDayList 和 getUvDayList。与com.github.paicoding.forum.service.statistics.repository.mapper.RequestCountMapper 相匹配。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RequestCountMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;RequestCountDO&gt; </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取 PV 总数</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> Long <span class="title function_">getPvTotalCount</span><span class="params">()</span>;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取 PV 数据列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> day</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> List&lt;StatisticsDayDTO&gt; <span class="title function_">getPvDayList</span><span class="params">(<span class="meta">@Param(&quot;day&quot;)</span> Integer day)</span>;</span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取 UV 数据列表</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> day</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> List&lt;StatisticsDayDTO&gt; <span class="title function_">getUvDayList</span><span class="params">(<span class="meta">@Param(&quot;day&quot;)</span> Integer day)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="4、MyBatis-Plus主键策略"><a href="#4、MyBatis-Plus主键策略" class="headerlink" title="4、MyBatis-Plus主键策略"></a>4、MyBatis-Plus主键策略</h1><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IdType.AUTO</td>
+<td>自增策略，也就是说，在插入数据时，无需设置主键值，数据库会自动分配主键值，数据库表的 ID 会设置为 Auto  Increment。</td>
+</tr>
+<tr>
+<td>IdType.NONE</td>
+<td>无主键策略。表示不使用任何主键生成策略，主键值需要手动设置。</td>
+</tr>
+<tr>
+<td>IdType.UUID</td>
+<td>使用 UUID 作为主键。插入数据时，MyBatis-Plus 会自动生成一个 UUID  值作为主键值。</td>
+</tr>
+<tr>
+<td>IdType.ID_WORKER</td>
+<td>使用雪花算法生成分布式唯一 ID。插入数据时，MyBatis-Plus 会 自动生成一个雪花 ID 作为主键值。</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line"> <span class="meta">@TableId(type = IdType.ID_WORKER)</span> <span class="comment">//默认</span></span><br><span class="line"> <span class="keyword">private</span> Long id;</span><br><span class="line"> <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2023/10/05/Nacos%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Nacos使用笔记</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2023/10/05/Gateway+JWT%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81/">Gateway+JWT实现登录认证</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%BF%AB%E9%80%9F%E6%95%B4%E5%90%88MyBatis-Plus"><span class="toc-text">1、快速整合MyBatis-Plus</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81MyBatis-Plus%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">2、MyBatis-Plus的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1%E3%80%81Service-CRUD"><span class="toc-text">2.1、Service CRUD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2%E3%80%81Mapper-CRUD"><span class="toc-text">2.2、Mapper CRUD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3%E3%80%81%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.3、常用注解</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81MyBatis-Plus%E6%9F%A5%E8%AF%A2"><span class="toc-text">3、MyBatis-Plus查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1%E3%80%81%E6%99%AE%E9%80%9A%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.1、普通查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2%E3%80%81%E6%9D%A1%E4%BB%B6%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-text">3.2、条件构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3%E3%80%81MyBatis-Plus%E8%87%AA%E5%AE%9A%E4%B9%89SQL"><span class="toc-text">3.3、MyBatis-Plus自定义SQL</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81MyBatis-Plus%E4%B8%BB%E9%94%AE%E7%AD%96%E7%95%A5"><span class="toc-text">4、MyBatis-Plus主键策略</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

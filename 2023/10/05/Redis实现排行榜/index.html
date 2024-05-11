@@ -1,0 +1,688 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>Redis实现排行榜 - 愔颂</title>
+
+  
+    <meta name="description" content="基于Redis的基本数据结构和业务逻辑设计实现用户活跃排行榜。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis实现排行榜">
+<meta property="og:url" content="https://yinsong-llsc.github.io/2023/10/05/Redis%E5%AE%9E%E7%8E%B0%E6%8E%92%E8%A1%8C%E6%A6%9C/index.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="基于Redis的基本数据结构和业务逻辑设计实现用户活跃排行榜。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695536770890-456ec61e-4cfd-4f41-aa60-f6b71a94f7cb.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695544852919-d968b842-6aa6-4549-b430-df58dc8895fa.png">
+<meta property="article:published_time" content="2023-10-05T03:13:35.020Z">
+<meta property="article:modified_time" content="2023-10-04T10:54:20.236Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695536770890-456ec61e-4cfd-4f41-aa60-f6b71a94f7cb.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets"></div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">项目实战</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-05T03:13:35.020Z">2023-10-05</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2023-10-04T10:54:20.236Z">2023-10-04</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Redis实现排行榜</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<p>基于Redis的基本数据结构和业务逻辑设计实现用户活跃排行榜。</p>
+<span id="more"></span>
+
+<h2 id="1-1、场景说明"><a href="#1-1、场景说明" class="headerlink" title="1.1、场景说明"></a>1.1、场景说明</h2><p>技术派中，设计了一个社区用户的活跃排行榜，包括日榜和月榜。</p>
+<p><strong>用户活跃度计算方式：</strong></p>
+<ol>
+<li>用户每访问一个新的页面， +1分</li>
+<li>对于一篇文章，点赞、收藏， +2分；取消点赞、取消收藏，将之前的活跃分收回。</li>
+<li>文章评论， +3分</li>
+<li>发布一篇审核通过的文章， +10分</li>
+</ol>
+<p><strong>榜单：</strong><br>展示活跃度最高的前三十名用户。</p>
+<p>效果如下：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695536770890-456ec61e-4cfd-4f41-aa60-f6b71a94f7cb.png" alt="img"></p>
+<h2 id="1-2、方案设计"><a href="#1-2、方案设计" class="headerlink" title="1.2、方案设计"></a>1.2、方案设计</h2><p>使用Redis的ZSet数据结构实现，以下是ZSet的简介：</p>
+<p>Redis的ZSet（有序集合）是一种有序的、唯一的数据结构。它类似于Set，但每个元素都关联着一个分数（score），用于进行排序。</p>
+<p>ZSet的特点包括：</p>
+<ol>
+<li>有序性：ZSet中的元素按照分数进行排序，可以根据分数进行范围查询、区间获取等操作。 </li>
+<li>唯一性：ZSet中的元素是唯一的，不会存在重复的元素。 </li>
+<li>快速的插入和删除：ZSet使用了跳跃表（Skip List）和哈希表（Hash Table）的结合体，使得插入和删除操作的时间复杂度为O(log N)。 </li>
+<li>高效的查找：通过索引和跳跃表的特性，可以在O(log N)的时间复杂度内查找某个元素。</li>
+</ol>
+<p>ZSet常用的操作包括：</p>
+<ul>
+<li>ZADD：向ZSet中添加一个元素，同时指定其分数。</li>
+<li>ZREM：从ZSet中移除一个元素。</li>
+<li>ZRANGE：按照分数的顺序，获取指定范围内的元素。</li>
+<li>ZSCORE：获取指定元素的分数。</li>
+<li>ZINCRBY：将指定元素的分数增加一个特定的值。</li>
+</ul>
+<p>ZSet广泛应用于排行榜、计分系统、排行榜、时间轴等场景，提供了高效的排序和检索功能。</p>
+<h2 id="1-3、排行榜实现"><a href="#1-3、排行榜实现" class="headerlink" title="1.3、排行榜实现"></a>1.3、排行榜实现</h2><h3 id="1-3-1、业务实体设计"><a href="#1-3-1、业务实体设计" class="headerlink" title="1.3.1、业务实体设计"></a>1.3.1、业务实体设计</h3><p>​       我们先实现一个更新用户活跃的方法，首先定义一个涵盖该业务场景的参数传递实体 ActivityScoreBo，记录用户活动（是否访问页面、点赞、收藏、评论、关注、发布文章）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Accessors(chain = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActivityScoreBo</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 访问页面增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String path;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 目标文章</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long articleId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 评论增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Boolean rate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 点赞增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Boolean praise;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 收藏增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Boolean collect;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发布文章增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Boolean publishArticle;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 被关注的用户</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long followedUserId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 关注增加活跃度</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Boolean follow;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+
+
+<p>有了业务实体，进一步我们需要计算活跃度。活跃度包括日榜和月榜，如下为对应的key生成。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当天活跃度排行榜</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 当天排行榜key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">todayRankKey</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ACTIVITY_SCORE_KEY + DateUtil.format(DateTimeFormatter.ofPattern(<span class="string">&quot;yyyyMMdd&quot;</span>), System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 本月排行榜</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 月度排行榜key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">monthRankKey</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ACTIVITY_SCORE_KEY + DateUtil.format(DateTimeFormatter.ofPattern(<span class="string">&quot;yyyyMM&quot;</span>), System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-3-2、计算活跃度"><a href="#1-3-2、计算活跃度" class="headerlink" title="1.3.2、计算活跃度"></a>1.3.2、计算活跃度</h3><p>（1）根据传入的业务实体，判断文章浏览、点赞、收藏、关注、排列、发文等行为，并计算对应的字段field和分数score，不同行为的加分机制见上述场景说明。</p>
+<p>（2）接着，根据用户ID和当天日期（日为单位）生成一个唯一的活跃度信息的键值（userActionKey）。</p>
+<p>（3）通过RedisClient从Redis中获取该userActionKey键对应的field值（ans）。</p>
+<p>（4）如果ans为null，说明之前没有加分记录，执行加分操作： </p>
+<ul>
+<li><ul>
+<li>如果加分数大于0，将加分记录保存到Redis的hash结构中，并设置有效期为一个月。&#x2F;注：【加分记录使用Redis的Hash结构存储，key为userActionKey，字段为field，value为分数score】</li>
+<li>更新当天和当月的活跃度排行榜，使用Redis的zIncrBy函数。</li>
+<li>如果新的活跃度得分大于等于加分数，更新日活跃榜单和月活跃榜单的有效期。</li>
+</ul>
+</li>
+</ul>
+<p>（5）如果ans大于0，说明之前该field已经加过分，继续判断： </p>
+<ul>
+<li><ul>
+<li>如果分数小于0，说明是减分行为，应从Redis中删除加分记录。</li>
+<li>更新当天和当月的活跃度排行榜。</li>
+</ul>
+</li>
+</ul>
+<p>幂等策略：</p>
+<p>在上述加分操作中，为了防止重复加活跃度，我们做了一个幂等操作。</p>
+<p>就是将用户的每个加分项，都记录下来，在执行具体加分时，基于此来做幂等判定 。</p>
+<p>因此，我们对每个用户维护一个活跃更新的操作历史记录表，保存在redis的hash数据结构中，每天一个记录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">key: activity_rank_&#123;user_id&#125;_&#123;年月日&#125; </span><br><span class="line">field: 活跃度更新key</span><br><span class="line">value: 添加的活跃度  </span><br></pre></td></tr></table></figure>
+
+
+
+<p>思考：</p>
+<p>1、事务问题：虽然单个redis操作是原子性的，但多次的redis操作，存在事务问题。</p>
+<p>2、并发问题：没有做并发，幂等无法100%生效，依然可能存在重复添加&#x2F;扣减活跃度的情况  </p>
+<p>问题一：</p>
+<p>通过最终一致性（Eventual Consistency）来解决多次Redis操作的事务问题是一种常见的方法。最终一致性是指在分布式系统中，经过一段时间后，系统的所有副本最终会达到一致的状态。</p>
+<p>在Redis中，可以使用以下方法来实现最终一致性：</p>
+<ol>
+<li>批量操作：将多个操作组合成一个批量操作，减少网络往返的次数。例如，使用管道（Pipeline）来发送多个命令，然后一次性获取它们的响应。 </li>
+<li>异步操作：将操作异步化，即将操作放入消息队列或任务队列中，由后台线程或其他服务异步处理。这样可以避免阻塞主线程，并允许操作在不同的时间点执行。 </li>
+<li>回滚机制：在执行操作之前，先将相关数据备份或记录下来。如果操作失败，可以使用备份数据进行回滚操作。 </li>
+<li>重试机制：如果某个操作失败，可以进行重试，直到操作成功或达到最大重试次数。 </li>
+<li>业务层面的补偿机制：如果操作失败，可以通过业务逻辑来进行补偿操作，以达到一致性。</li>
+</ol>
+<p>需要注意的是，最终一致性并不能提供强一致性的保证，因此在某些场景下可能会出现数据不一致的情况。在选择使用最终一致性来解决事务问题时，需要根据具体的业务需求和数据一致性要求来评估和权衡。</p>
+<p>问题二：</p>
+<p>通过加锁解决并发问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addActivityScore</span><span class="params">(Long userId, ActivityScoreBo activityScore)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (userId == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 计算活跃度(正为加活跃,负为减活跃)</span></span><br><span class="line">        String field;</span><br><span class="line">        <span class="type">int</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (activityScore.getPath() != <span class="literal">null</span>) &#123;</span><br><span class="line">            field = <span class="string">&quot;path_&quot;</span> + activityScore.getPath();</span><br><span class="line">            score = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (activityScore.getArticleId() != <span class="literal">null</span>) &#123;</span><br><span class="line">            field = activityScore.getArticleId() + <span class="string">&quot;_&quot;</span>;</span><br><span class="line">            <span class="keyword">if</span> (activityScore.getPraise() != <span class="literal">null</span>) &#123;</span><br><span class="line">                field += <span class="string">&quot;praise&quot;</span>;</span><br><span class="line">                score = BooleanUtils.isTrue(activityScore.getPraise()) ? <span class="number">2</span> : -<span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (activityScore.getCollect() != <span class="literal">null</span>) &#123;</span><br><span class="line">                field += <span class="string">&quot;collect&quot;</span>;</span><br><span class="line">                score = BooleanUtils.isTrue(activityScore.getCollect()) ? <span class="number">2</span> : -<span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (activityScore.getRate() != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 评论回复</span></span><br><span class="line">                field += <span class="string">&quot;rate&quot;</span>;</span><br><span class="line">                score = BooleanUtils.isTrue(activityScore.getRate()) ? <span class="number">3</span> : -<span class="number">3</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (BooleanUtils.isTrue(activityScore.getPublishArticle())) &#123;</span><br><span class="line">                <span class="comment">// 发布文章</span></span><br><span class="line">                field += <span class="string">&quot;publish&quot;</span>;</span><br><span class="line">                score += <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (activityScore.getFollowedUserId() != <span class="literal">null</span>) &#123;</span><br><span class="line">            field = activityScore.getFollowedUserId() + <span class="string">&quot;_follow&quot;</span>;</span><br><span class="line">            score = BooleanUtils.isTrue(activityScore.getFollow()) ? <span class="number">2</span> : -<span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="type">String</span> <span class="variable">todayRankKey</span> <span class="operator">=</span> todayRankKey();</span><br><span class="line">        <span class="keyword">final</span> <span class="type">String</span> <span class="variable">monthRankKey</span> <span class="operator">=</span> monthRankKey();</span><br><span class="line">        <span class="comment">// 2. 幂等：判断之前是否有更新过相关的活跃度信息</span></span><br><span class="line">        <span class="keyword">final</span> <span class="type">String</span> <span class="variable">userActionKey</span> <span class="operator">=</span> ACTIVITY_SCORE_KEY + userId + DateUtil.format(DateTimeFormatter.ofPattern(<span class="string">&quot;yyyyMMdd&quot;</span>), System.currentTimeMillis());</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">ans</span> <span class="operator">=</span> RedisClient.hGet(userActionKey, field, Integer.class);</span><br><span class="line">        <span class="keyword">if</span> (ans == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 2.1 之前没有加分记录，执行具体的加分</span></span><br><span class="line">            <span class="keyword">if</span> (score &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 记录加分记录</span></span><br><span class="line">                RedisClient.hSet(userActionKey, field, score);</span><br><span class="line">                <span class="comment">// 个人用户的操作记录，保存一个月的有效期，方便用户查询自己最近31天的活跃情况</span></span><br><span class="line">                RedisClient.expire(userActionKey, <span class="number">31</span> * DateUtil.ONE_DAY_SECONDS);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 更新当天和当月的活跃度排行榜</span></span><br><span class="line">                <span class="type">Double</span> <span class="variable">newAns</span> <span class="operator">=</span> RedisClient.zIncrBy(todayRankKey, String.valueOf(userId), score);</span><br><span class="line">                RedisClient.zIncrBy(monthRankKey, String.valueOf(userId), score);</span><br><span class="line">                <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">                    log.info(<span class="string">&quot;活跃度更新加分! key#field = &#123;&#125;#&#123;&#125;, add = &#123;&#125;, newScore = &#123;&#125;&quot;</span>, todayRankKey, userId, score, newAns);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (newAns &lt;= score) &#123;</span><br><span class="line">                    <span class="comment">// 日活跃榜单，保存31天；月活跃榜单，保存1年</span></span><br><span class="line">                    RedisClient.expire(todayRankKey, <span class="number">31</span> * DateUtil.ONE_DAY_SECONDS);</span><br><span class="line">                    RedisClient.expire(monthRankKey, <span class="number">12</span> * DateUtil.ONE_MONTH_SECONDS);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ans &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// 2.2 之前已经加过分，因此这次减分可以执行</span></span><br><span class="line">            <span class="keyword">if</span> (score &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="type">Boolean</span> <span class="variable">oldHave</span> <span class="operator">=</span> RedisClient.hDel(userActionKey, field);</span><br><span class="line">                <span class="keyword">if</span> (BooleanUtils.isTrue(oldHave)) &#123;</span><br><span class="line">                    <span class="type">Double</span> <span class="variable">newAns</span> <span class="operator">=</span> RedisClient.zIncrBy(todayRankKey, String.valueOf(userId), score);</span><br><span class="line">                    RedisClient.zIncrBy(monthRankKey, String.valueOf(userId), score);</span><br><span class="line">                    <span class="keyword">if</span> (log.isDebugEnabled()) &#123;</span><br><span class="line">                        log.info(<span class="string">&quot;活跃度更新减分! key#field = &#123;&#125;#&#123;&#125;, add = &#123;&#125;, newScore = &#123;&#125;&quot;</span>, todayRankKey, userId, score, newAns);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-3-3、触发活跃度更新"><a href="#1-3-3、触发活跃度更新" class="headerlink" title="1.3.3、触发活跃度更新"></a>1.3.3、触发活跃度更新</h3><p>前面只是提供了一个增加活跃度的方法，但是什么时候调用它呢？</p>
+<p>我们这里借助之前实现 Event&#x2F;Listenter方式来处理活跃度更新。</p>
+<p>文章&#x2F;用户的相关操作事件监听，并更新对应的活跃度：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserActivityListener</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserActivityRankService userActivityRankService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户操作行为，增加对应的积分</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msgEvent</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@EventListener(classes = NotifyMsgEvent.class)</span></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyMsgListener</span><span class="params">(NotifyMsgEvent msgEvent)</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> (msgEvent.getNotifyType()) &#123;</span><br><span class="line">            <span class="keyword">case</span> COMMENT:</span><br><span class="line">            <span class="keyword">case</span> REPLY:</span><br><span class="line">                <span class="type">CommentDO</span> <span class="variable">comment</span> <span class="operator">=</span> (CommentDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>()</span><br><span class="line">                        .setRate(<span class="literal">true</span>).setArticleId(comment.getArticleId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> COLLECT:</span><br><span class="line">                <span class="type">UserFootDO</span> <span class="variable">foot</span> <span class="operator">=</span> (UserFootDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setCollect(<span class="literal">true</span>).setArticleId(foot.getDocumentId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CANCEL_COLLECT:</span><br><span class="line">                foot = (UserFootDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setCollect(<span class="literal">false</span>).setArticleId(foot.getDocumentId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> PRAISE:</span><br><span class="line">                foot = (UserFootDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setPraise(<span class="literal">true</span>).setArticleId(foot.getDocumentId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CANCEL_PRAISE:</span><br><span class="line">                foot = (UserFootDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setPraise(<span class="literal">false</span>).setArticleId(foot.getDocumentId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> FOLLOW:</span><br><span class="line">                <span class="type">UserRelationDO</span> <span class="variable">relation</span> <span class="operator">=</span> (UserRelationDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setFollow(<span class="literal">true</span>).setArticleId(relation.getUserId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CANCEL_FOLLOW:</span><br><span class="line">                relation = (UserRelationDO) msgEvent.getContent();</span><br><span class="line">                userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setFollow(<span class="literal">false</span>).setArticleId(relation.getUserId()));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发布文章，更新对应的积分</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> event</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="meta">@EventListener(ArticleMsgEvent.class)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">publishArticleListener</span><span class="params">(ArticleMsgEvent&lt;ArticleDO&gt; event)</span> &#123;</span><br><span class="line">        <span class="type">ArticleEventEnum</span> <span class="variable">type</span> <span class="operator">=</span> event.getType();</span><br><span class="line">        <span class="keyword">if</span> (type == ArticleEventEnum.ONLINE) &#123;</span><br><span class="line">            userActivityRankService.addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setPublishArticle(<span class="literal">true</span>).setArticleId(event.getContent().getId()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>接下来，就是对应方法触发后事件更新了，包括ArticleMsgEvent、NotifyMsgEvent等。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695544852919-d968b842-6aa6-4549-b430-df58dc8895fa.png" alt="img"></p>
+<p>另外，针对用户浏览页面的活跃度触发，我们在 Filte&#x2F;Inteceptor 层实现，通过GlobalViewInterceptor的preHandle方法实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span> (handler <span class="keyword">instanceof</span> HandlerMethod) &#123;</span><br><span class="line">            <span class="type">HandlerMethod</span> <span class="variable">handlerMethod</span> <span class="operator">=</span> (HandlerMethod) handler;</span><br><span class="line">            <span class="type">Permission</span> <span class="variable">permission</span> <span class="operator">=</span> handlerMethod.getMethod().getAnnotation(Permission.class);</span><br><span class="line">            <span class="keyword">if</span> (permission == <span class="literal">null</span>) &#123;</span><br><span class="line">                permission = handlerMethod.getBeanType().getAnnotation(Permission.class);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (permission == <span class="literal">null</span> || permission.role() == UserRole.ALL) &#123;</span><br><span class="line">                <span class="keyword">if</span> (ReqInfoContext.getReqInfo() != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// 用户活跃度更新</span></span><br><span class="line">                    SpringUtil.getBean(UserActivityRankService.class).addActivityScore(ReqInfoContext.getReqInfo().getUserId(), <span class="keyword">new</span> <span class="title class_">ActivityScoreBo</span>().setPath(ReqInfoContext.getReqInfo().getPath()));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-3-4、排行榜查询"><a href="#1-3-4、排行榜查询" class="headerlink" title="1.3.4、排行榜查询"></a>1.3.4、排行榜查询</h3><p>接下来就是将这个榜单展示给用户看。</p>
+<p>基本流程如下： </p>
+<p>1、从redis中获取topN的用户+评分 </p>
+<p>2、查询用户的信息 </p>
+<p>3、根据用户评分进行排序，并更新每个用户的排名</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;RankItemDTO&gt; <span class="title function_">queryRankList</span><span class="params">(ActivityRankTimeEnum time, <span class="type">int</span> size)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">rankKey</span> <span class="operator">=</span> time == ActivityRankTimeEnum.DAY ? todayRankKey() : monthRankKey();</span><br><span class="line">        <span class="comment">// 1. 获取topN的活跃用户</span></span><br><span class="line">        List&lt;ImmutablePair&lt;String, Double&gt;&gt; rankList = RedisClient.zTopNScore(rankKey, size);</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtils.isEmpty(rankList)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Collections.emptyList();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 查询用户对应的基本信息</span></span><br><span class="line">        <span class="comment">// 构建userId -&gt; 活跃评分的map映射，用于补齐用户信息</span></span><br><span class="line">        Map&lt;Long, Integer&gt; userScoreMap = rankList.stream().collect(Collectors.toMap(s -&gt; Long.valueOf(s.getLeft()), s -&gt; s.getRight().intValue()));</span><br><span class="line">        List&lt;SimpleUserInfoDTO&gt; users = userService.batchQuerySimpleUserInfo(userScoreMap.keySet());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 根据评分进行排序</span></span><br><span class="line">        List&lt;RankItemDTO&gt; rank = users.stream()</span><br><span class="line">                .map(user -&gt; <span class="keyword">new</span> <span class="title class_">RankItemDTO</span>().setUser(user).setScore(userScoreMap.getOrDefault(user.getUserId(), <span class="number">0</span>)))</span><br><span class="line">                .sorted((o1, o2) -&gt; Integer.compare(o2.getScore(), o1.getScore()))</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 补齐每个用户的排名</span></span><br><span class="line">        IntStream.range(<span class="number">0</span>, rank.size()).forEach(i -&gt; rank.get(i).setRank(i + <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">return</span> rank;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中核心方法是Redis的<code>zRangeWithScores</code>，用以获取指定排名的用户和对应分数。</p>
+<p><code>zrevrange</code> 是Redis中的一个有序集合操作命令，用于按照分数从大到小的顺序获取有序集合中指定范围内的成员。</p>
+<p>命令语法如下：<br>ZREVRANGE key start stop [WITHSCORES]<br>参数说明：</p>
+<ul>
+<li><code>key</code> ：有序集合的键名。</li>
+<li><code>start</code> ：指定范围的起始位置，从0开始计数，表示成员的排名。</li>
+<li><code>stop</code> ：指定范围的结束位置，从0开始计数，表示成员的排名。</li>
+<li><code>WITHSCORES</code> （可选）：如果提供了该参数，命令会返回成员和对应的分数，以一个成员和一个分数交替排列的方式返回结果。</li>
+</ul>
+<blockquote>
+<p>示例：<br>假设有一个有序集合名为 <code>myset</code> ，包含以下成员和对应的分数：<br>“member1” -&gt; 10<br>“member2” -&gt; 20<br>“member3” -&gt; 30<br>“member4” -&gt; 40<br>“member5” -&gt; 50<br>使用 <code>ZREVRANGE myset 0 2</code> 命令，将返回范围为0到2的成员：</p>
+<ol>
+<li>“member5”</li>
+<li>“member4”</li>
+<li>“member3”<br>使用 <code>ZREVRANGE myset 0 2 WITHSCORES</code> 命令，将返回范围为0到2的成员和对应的分数：</li>
+<li>“member5”</li>
+<li>“50”</li>
+<li>“member4”</li>
+<li>“40”</li>
+<li>“member3”</li>
+<li>“30”</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;ImmutablePair&lt;String, Double&gt;&gt; <span class="title function_">zTopNScore</span><span class="params">(String key, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> template.execute(<span class="keyword">new</span> <span class="title class_">RedisCallback</span>&lt;List&lt;ImmutablePair&lt;String, Double&gt;&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> List&lt;ImmutablePair&lt;String, Double&gt;&gt; <span class="title function_">doInRedis</span><span class="params">(RedisConnection connection)</span> <span class="keyword">throws</span> DataAccessException &#123;</span><br><span class="line">                Set&lt;RedisZSetCommands.Tuple&gt; set = connection.zRangeWithScores(keyBytes(key), -n, -<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (set == <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> Collections.emptyList();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> set.stream()</span><br><span class="line">                        .map(tuple -&gt; ImmutablePair.of(toObj(tuple.getValue(), String.class), tuple.getScore()))</span><br><span class="line">                        .sorted((o1, o2) -&gt; Double.compare(o2.getRight(), o1.getRight())).collect(Collectors.toList());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2023/10/05/Spring-Cloud-Gateway%E8%AF%A6%E8%A7%A3/">Spring Cloud Gateway详解</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2023/10/05/Redis%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%8E%9F%E7%90%86/">Redis核心技术与原理</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1%E3%80%81%E5%9C%BA%E6%99%AF%E8%AF%B4%E6%98%8E"><span class="toc-text">1.1、场景说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2%E3%80%81%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="toc-text">1.2、方案设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3%E3%80%81%E6%8E%92%E8%A1%8C%E6%A6%9C%E5%AE%9E%E7%8E%B0"><span class="toc-text">1.3、排行榜实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1%E3%80%81%E4%B8%9A%E5%8A%A1%E5%AE%9E%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="toc-text">1.3.1、业务实体设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2%E3%80%81%E8%AE%A1%E7%AE%97%E6%B4%BB%E8%B7%83%E5%BA%A6"><span class="toc-text">1.3.2、计算活跃度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3%E3%80%81%E8%A7%A6%E5%8F%91%E6%B4%BB%E8%B7%83%E5%BA%A6%E6%9B%B4%E6%96%B0"><span class="toc-text">1.3.3、触发活跃度更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4%E3%80%81%E6%8E%92%E8%A1%8C%E6%A6%9C%E6%9F%A5%E8%AF%A2"><span class="toc-text">1.3.4、排行榜查询</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

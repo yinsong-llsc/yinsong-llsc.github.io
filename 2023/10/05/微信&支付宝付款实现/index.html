@@ -1,0 +1,737 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>微信&支付宝付款实现 - 愔颂</title>
+
+  
+    <meta name="description" content="微信&amp;支付宝付款实现，包括API接入指引和相关方法实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信&amp;支付宝付款实现">
+<meta property="og:url" content="https://yinsong-llsc.github.io/2023/10/05/%E5%BE%AE%E4%BF%A1&%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="微信&amp;支付宝付款实现，包括API接入指引和相关方法实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694862276536-1e3bd461-38bb-4cca-954c-c194a8662f5f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694866690777-39df90ed-22cc-41f2-aaf9-12b2f49d2931.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694867523626-74dcec4a-1ab7-4893-aba4-b41e611a051c.png">
+<meta property="og:image" content="https://pay.weixin.qq.com/wiki/doc/apiv3/assets/img/common/ico-guide/chapter1_5_1.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696496947507-f9d18fd7-d05a-4776-a2d9-a42e64fc167b.png">
+<meta property="og:image" content="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/assets/img/common/pay/chapter3_1_2.png">
+<meta property="article:published_time" content="2023-10-05T10:54:25.438Z">
+<meta property="article:modified_time" content="2023-10-05T10:54:25.703Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694862276536-1e3bd461-38bb-4cca-954c-c194a8662f5f.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets"></div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">项目实战</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-05T10:54:25.438Z">2023-10-05</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2023-10-05T10:54:25.703Z">2023-10-05</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>微信&支付宝付款实现</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<p>微信&amp;支付宝付款实现，包括API接入指引和相关方法实现。</p>
+<span id="more"></span>
+
+<hr>
+<h1 id="一、微信支付介绍和接入指引"><a href="#一、微信支付介绍和接入指引" class="headerlink" title="一、微信支付介绍和接入指引"></a>一、微信支付介绍和接入指引</h1><hr>
+<h2 id="1、微信支付产品介绍"><a href="#1、微信支付产品介绍" class="headerlink" title="1、微信支付产品介绍"></a>1、微信支付产品介绍</h2><hr>
+<p><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/static/product/product_intro.shtml?name=qrcode">微信支付产品介绍</a></p>
+<p><strong>1.1、付款码支付</strong> </p>
+<p>用户展示微信钱包内的“付款码”给商家，商家扫描后直接完成支付，适用于线下面对面收银的场景。 </p>
+<p><strong>1.2、JSAPI支付</strong> </p>
+<p>线下场所：商户展示一个支付二维码，用户使用微信扫描二维码后，输入需要支付的金额，完成支付。 </p>
+<p>公众号场景：用户在微信内进入商家公众号，打开某个页面，选择某个产品，完成支付。 </p>
+<p>PC网站场景：在网站中展示二维码，用户使用微信扫描二维码，输入需要支付的金额，完成支付。 </p>
+<p>特点：用户在客户端输入支付金额 </p>
+<p><strong>1.3、小程序支付</strong> </p>
+<p>在微信小程序平台内实现支付的功能。 </p>
+<p><strong>1.4、Native支付</strong> </p>
+<p>Native支付是指商户展示支付二维码，用户再用微信“扫一扫”完成支付的模式。这种方式适用于PC网 站。 特点：商家预先指定支付金额 </p>
+<p><strong>1.5、APP支付</strong> </p>
+<p>商户通过在移动端独立的APP应用程序中集成微信支付模块，完成支付。 </p>
+<p><strong>1.6、刷脸支付</strong> </p>
+<p>用户在刷脸设备前通过摄像头刷脸、识别身份后进行的一种支付方式。  </p>
+<h2 id="2、接入指引"><a href="#2、接入指引" class="headerlink" title="2、接入指引"></a>2、接入指引</h2><p><strong>2.1、获取商户号</strong> </p>
+<p>微信商户平台：<a href="about:blank">https://pay.weixin.qq.com/ </a></p>
+<p>场景：Native支付 </p>
+<p>步骤：提交资料 &#x3D;&gt; 签署协议 &#x3D;&gt; 获取商户号 </p>
+<p><strong>2.2、获取APPID</strong> </p>
+<p>微信公众平台：<a href="about:blank">https://mp.weixin.qq.com/</a> </p>
+<p>步骤：注册服务号 &#x3D;&gt; 服务号认证 &#x3D;&gt; 获取APPID &#x3D;&gt; 绑定商户号 </p>
+<p><strong>2.3、获取API秘钥</strong> </p>
+<p>APIv2版本的接口需要此秘钥 </p>
+<p>步骤：登录商户平台 &#x3D;&gt; 选择 账户中心 &#x3D;&gt; 安全中心 &#x3D;&gt; API安全 &#x3D;&gt; 设置API密钥 </p>
+<p><strong>2.4、获取APIv3秘钥</strong> </p>
+<p>APIv3版本的接口需要此秘钥 步骤：登录商户平台 &#x3D;&gt; 选择 账户中心 &#x3D;&gt; 安全中心 &#x3D;&gt; API安全 &#x3D;&gt; 设置APIv3</p>
+<p>密钥 随机密码生成工具：<a href="about:blank">https://suijimimashengcheng.bmcx.com/ </a></p>
+<p><strong>2.5、申请商户API证书</strong> </p>
+<p>APIv3版本的所有接口都需要；</p>
+<p>APIv2版本的高级接口需要（如：退款、企业红包、企业付款等） </p>
+<p>步骤：登录商户平台 &#x3D;&gt; 选择 账户中心 &#x3D;&gt; 安全中心 &#x3D;&gt; API安全 &#x3D;&gt; 申请API证书 </p>
+<p><strong>2.6、获取微信平台证书</strong> </p>
+<p>可以预先下载，也可以通过编程的方式获取。后面的课程中，我们会通过编程的方式来获取。 </p>
+<p>注意：以上所有API秘钥和证书需妥善保管防止泄露  </p>
+<h1 id="二、支付安全（证书-秘钥-签名）"><a href="#二、支付安全（证书-秘钥-签名）" class="headerlink" title="二、支付安全（证书&#x2F;秘钥&#x2F;签名）"></a>二、支付安全（证书&#x2F;秘钥&#x2F;签名）</h1><hr>
+<h2 id="1、信息安全的基础-机密性"><a href="#1、信息安全的基础-机密性" class="headerlink" title="1、信息安全的基础 - 机密性"></a>1、信息安全的基础 - 机密性</h2><hr>
+<ul>
+<li><p><strong>明文</strong>：加密前的消息叫“明文”（plain text） </p>
+</li>
+<li><p><strong>密文</strong>：加密后的文本叫“密文”（cipher text） </p>
+</li>
+<li><p><strong>密钥</strong>：只有掌握特殊“钥匙”的人，才能对加密的文本进行解密，这里的“钥匙”就叫做“密钥”（key） </p>
+<blockquote>
+<p>“密钥”就是一个字符串，度量单位是“位”（bit），比如，密钥长度是 128，就是 16 字节的二进制串 </p>
+</blockquote>
+</li>
+<li><p><strong>加密</strong>：实现机密性最常用的手段是“加密”（encrypt）</p>
+<blockquote>
+<p>按照密钥的使用方式，加密可以分为两大类：对称加密和非对称加密。 </p>
+</blockquote>
+</li>
+<li><p><strong>解密</strong>：使用密钥还原明文的过程叫“解密”（decrypt） </p>
+</li>
+<li><p><strong>加密算法</strong>：加密解密的操作过程就是“加密算法” </p>
+<blockquote>
+<p>所有的加密算法都是公开的，而算法使用的“密钥”则必须保密</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="2、对称加密和非对称加密"><a href="#2、对称加密和非对称加密" class="headerlink" title="2、对称加密和非对称加密"></a>2、对称加密和非对称加密</h2><hr>
+<p><strong>对称加密</strong> </p>
+<ul>
+<li>特点：只使用一个密钥，密钥必须保密，常用的有 AES算法 </li>
+<li>优点：运算速度快 </li>
+<li>缺点：秘钥需要信息交换的双方共享，一旦被窃取，消息会被破解，无法做到安全的密钥交换</li>
+</ul>
+<p><strong>非对称加密</strong> </p>
+<ul>
+<li>特点：使用两个密钥：公钥和私钥，公钥可以任意分发而私钥保密，常用的有 RSA </li>
+<li>优点：黑客获取公钥无法破解密文，解决了密钥交换的问题 </li>
+<li>缺点：运算速度非常慢，混合加密，实际场景中把对称加密和非对称加密结合起来使用。</li>
+</ul>
+<h2 id="3、身份认证"><a href="#3、身份认证" class="headerlink" title="3、身份认证"></a>3、身份认证</h2><hr>
+<ul>
+<li>公钥加密，私钥解密的作用是加密信息 </li>
+<li>私钥加密，公钥解密的作用是身份认证</li>
+</ul>
+<blockquote>
+<p>示例：bob给susan写了一封信，为了加密，bob用它的公钥进行加密，susan拥有bob的私钥，因此可以进行解密。而如果bob用私钥进行加密，bob的其他好友都有公钥，并且能够解密，说明这封信是bob写的，相当于身份认证。</p>
+</blockquote>
+<h2 id="4、摘要算法（Digest-Algorithm）"><a href="#4、摘要算法（Digest-Algorithm）" class="headerlink" title="4、摘要算法（Digest Algorithm）"></a>4、摘要算法（Digest Algorithm）</h2><p>摘要算法就是我们常说的散列函数、哈希函数（Hash Function），它能够把任意长度的数据“压缩”成 固定长度、而且独一无二的“摘要”字符串，就好像是给这段数据生成了一个数字“指纹”。 </p>
+<p><strong>作用：</strong></p>
+<ul>
+<li>保证信息的完整性和唯一性 ，确保信息没有被篡改。</li>
+</ul>
+<p><strong>特性：</strong> </p>
+<ul>
+<li>不可逆：只有算法，没有秘钥，只能加密，不能解密 </li>
+<li>难题友好性：想要破解，只能暴力枚举 </li>
+<li>发散性：只要对原文进行一点点改动，摘要就会发生剧烈变化 </li>
+<li>抗碰撞性：原文不同，计算后的摘要也要不同 常见摘要算法： MD5、SHA1、SHA2（SHA224、SHA256、SHA384）</li>
+</ul>
+<h2 id="5、数字签名"><a href="#5、数字签名" class="headerlink" title="5、数字签名"></a>5、数字签名</h2><p>数字签名是使用私钥对摘要加密生成签名，需要由公钥将签名解密后进行验证，实现身份认证和不可否认签名和验证签名的流程：  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694862276536-1e3bd461-38bb-4cca-954c-c194a8662f5f.png" alt="img"></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/403704980">https://zhuanlan.zhihu.com/p/403704980</a></p>
+<h2 id="6、数字证书"><a href="#6、数字证书" class="headerlink" title="6、数字证书"></a>6、数字证书</h2><p>数字证书解决“公钥的信任”问题，可以防止黑客伪造公钥。 不能直接分发公钥，公钥的分发必须使用数字证书，数字证书由CA颁发 。</p>
+<p>https协议中的数字证书：  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694866690777-39df90ed-22cc-41f2-aaf9-12b2f49d2931.png" alt="img"></p>
+<h2 id="7、微信APIv3证书"><a href="#7、微信APIv3证书" class="headerlink" title="7、微信APIv3证书"></a>7、微信APIv3证书</h2><p>商户证书： 商户API证书是指由商户申请的，包含商户的商户号、公司名称、公钥信息的证书。 </p>
+<p>商户证书在商户后台申请：<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/index.php/core/cert/api_cert#/">https://pay.weixin.qq.com/index.php/core/cert/api_cert#/</a>  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1694867523626-74dcec4a-1ab7-4893-aba4-b41e611a051c.png" alt="img"></p>
+<h2 id="8、API密钥和APIv3密钥"><a href="#8、API密钥和APIv3密钥" class="headerlink" title="8、API密钥和APIv3密钥"></a>8、API密钥和APIv3密钥</h2><p>都是对称加密需要使用的加密和解密密钥，一定要保管好，不能泄露。 </p>
+<p>API密钥对应V2版本的API APIv3密钥对应V3版本的API  </p>
+<h1 id="三、基础支付API-V3"><a href="#三、基础支付API-V3" class="headerlink" title="三、基础支付API V3"></a>三、基础支付API V3</h1><h2 id="1、引入支付参数"><a href="#1、引入支付参数" class="headerlink" title="1、引入支付参数"></a>1、引入支付参数</h2><p><strong>1、定义微信支付相关参数</strong>  </p>
+<p>将资料文件夹中的 wxpay.properties 复制到resources目录中这个文件定义了之前我们准备的微信支付相关的参数，例如商户号、APPID、API秘钥等 。</p>
+<p><strong>2、读取支付参数</strong>  </p>
+<p>将资料文件夹中的 config 目录中的 WxPayConfig.java 复制到源码目录中  </p>
+<h2 id="2、加载商户私钥"><a href="#2、加载商户私钥" class="headerlink" title="2、加载商户私钥"></a>2、加载商户私钥</h2><p><strong>1、复制商户私钥</strong></p>
+<p> 将下载的私钥文件复制到项目根目录下：  </p>
+<p><strong>2、引入SDK</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay6_0.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay6_0.shtml</a> </p>
+<p>我们可以使用官方提供的 SDK，帮助我们完成开发。实现了请求签名的生成和应答签名的验证。</p>
+<p><strong>3、获取商户私钥</strong> </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient">https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient</a> （如何加载商户私钥）  </p>
+<h2 id="3、获取签名验证器和HttpClient"><a href="#3、获取签名验证器和HttpClient" class="headerlink" title="3、获取签名验证器和HttpClient"></a>3、获取签名验证器和HttpClient</h2><p> <strong>1、证书密钥使用说明</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3_partner/wechatpay/wechatpay3_0.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3_partner/wechatpay/wechatpay3_0.shtml</a>  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://pay.weixin.qq.com/wiki/doc/apiv3/assets/img/common/ico-guide/chapter1_5_1.png" alt="img"></p>
+<p><strong>2、获取签名验证器</strong> </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient">https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient</a> （定时更新平台证书功能） </p>
+<p>平台证书：平台证书封装了微信的公钥，商户可以使用平台证书中的公钥进行验签。</p>
+<p>签名验证器：帮助我们进行验签工作，我们单独将它定义出来，方便后面的开发。</p>
+<p><strong>3、 获取 HttpClient 对象</strong> </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient">https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient</a> （定时更新平台证书功能） </p>
+<p>HttpClient 对象：是建立远程连接的基础，我们通过SDK创建这个对象。 </p>
+<h2 id="4、API字典和相关工具"><a href="#4、API字典和相关工具" class="headerlink" title="4、API字典和相关工具"></a>4、API字典和相关工具</h2><p><strong>1、API列表</strong> </p>
+<p><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/open/pay/chapter2_7_3.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/open/pay/chapter2_7_3.shtml</a> </p>
+<p>我们的项目中要实现以下所有API的功能。  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696496947507-f9d18fd7-d05a-4776-a2d9-a42e64fc167b.png" alt="img"></p>
+<p> <strong>2、接口规则</strong> </p>
+<p><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay2_0.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay2_0.shtml</a> </p>
+<p>微信支付 APIv3 使用 JSON 作为消息体的数据交换格式。  </p>
+<h2 id="5、Native下单API"><a href="#5、Native下单API" class="headerlink" title="5、Native下单API"></a>5、Native下单API</h2><h3 id="5-1、Native支付流程"><a href="#5-1、Native支付流程" class="headerlink" title="5.1、Native支付流程"></a>5.1、Native支付流程</h3><p><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_4.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_4.shtml</a>  </p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/assets/img/common/pay/chapter3_1_2.png" alt="img"></p>
+<h3 id="5-2、签名和验签原理"><a href="#5-2、签名和验签原理" class="headerlink" title="5.2、签名和验签原理"></a>5.2、签名和验签原理</h3><p>签名生成流程：<br><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_0.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_0.shtml</a>  </p>
+<p>签名验证流程：<br><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_1.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_1.shtml</a>  </p>
+<h2 id="6、支付通知API"><a href="#6、支付通知API" class="headerlink" title="6、支付通知API"></a>6、支付通知API</h2><h3 id="6-1、内网穿透"><a href="#6-1、内网穿透" class="headerlink" title="6.1、内网穿透"></a>6.1、内网穿透</h3><p>ngrok是一款用于实现内网穿透的工具。它可以帮助你将本地部署的服务器暴露给公网，使外部网络可以访问到你的本地服务。</p>
+<p>支付通知API：<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_5.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_5.shtml</a>  </p>
+<p>流程：</p>
+<ol>
+<li>启用ngrok内网穿透</li>
+<li>设置通知地址</li>
+<li>创建通知接口</li>
+<li>通知验签</li>
+<li>通知数据解密</li>
+<li>处理订单</li>
+<li>处理重复通知，在处理订单时加数据锁。</li>
+</ol>
+<h3 id="6-2、商户定时查询本地订单"><a href="#6-2、商户定时查询本地订单" class="headerlink" title="6.2、商户定时查询本地订单"></a>6.2、商户定时查询本地订单</h3><p>支付成功后，商户侧查询本地数据库，订单是否支付成功 。</p>
+<p><strong>1、后端定义商户查单接口</strong>  </p>
+<p><strong>2、前端定时轮询查单</strong>  </p>
+<p>在二维码展示页面，前端定时轮询查询订单是否已支付，如果支付成功则跳转到订单页面 。</p>
+<h2 id="7、用户取消订单API"><a href="#7、用户取消订单API" class="headerlink" title="7、用户取消订单API"></a>7、用户取消订单API</h2><p>流程：</p>
+<ol>
+<li>添加取消订单接口</li>
+<li>调用微信支付的关单接口（创建远程请求对象、组装json请求体、完成签名并执行请求）</li>
+<li>处理订单状态</li>
+</ol>
+<h2 id="8、微信支付查单API"><a href="#8、微信支付查单API" class="headerlink" title="8、微信支付查单API"></a>8、微信支付查单API</h2><p>商户后台未收到异步支付结果通知时，商户应该主动调用《微信支付查单接口》，同步订单状态 。</p>
+<p>流程：</p>
+<ol>
+<li>集成Spring Task启动定时任务查找超时未支付的订单</li>
+<li>调用微信查单接口获取订单状态，如已支付，更新订单状态，若未支付，调用关单接口。</li>
+</ol>
+<h2 id="9、申请退款API"><a href="#9、申请退款API" class="headerlink" title="9、申请退款API"></a>9、申请退款API</h2><p>文档：<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_9.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_9.shtml</a>  </p>
+<p>流程：</p>
+<ol>
+<li>创建退款单</li>
+<li>调用退款API</li>
+<li>更新订单、退款单</li>
+</ol>
+<h2 id="10、更多"><a href="#10、更多" class="headerlink" title="10、更多"></a>10、更多</h2><p>同下单流程，同样有查询退款API、退款结果通知API、申请和下载账单API。</p>
+
+
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2023/10/05/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%91%98%E5%BD%95/">设计模式摘录</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2023/10/05/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0AOP%E5%88%87%E9%9D%A2/">自定义注解实现AOP切面</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%8E%A5%E5%85%A5%E6%8C%87%E5%BC%95"><span class="toc-text">一、微信支付介绍和接入指引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D"><span class="toc-text">1、微信支付产品介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8E%A5%E5%85%A5%E6%8C%87%E5%BC%95"><span class="toc-text">2、接入指引</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8%EF%BC%88%E8%AF%81%E4%B9%A6-%E7%A7%98%E9%92%A5-%E7%AD%BE%E5%90%8D%EF%BC%89"><span class="toc-text">二、支付安全（证书&#x2F;秘钥&#x2F;签名）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%9A%84%E5%9F%BA%E7%A1%80-%E6%9C%BA%E5%AF%86%E6%80%A7"><span class="toc-text">1、信息安全的基础 - 机密性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%92%8C%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="toc-text">2、对称加密和非对称加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="toc-text">3、身份认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%EF%BC%88Digest-Algorithm%EF%BC%89"><span class="toc-text">4、摘要算法（Digest Algorithm）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="toc-text">5、数字签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6"><span class="toc-text">6、数字证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%BE%AE%E4%BF%A1APIv3%E8%AF%81%E4%B9%A6"><span class="toc-text">7、微信APIv3证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81API%E5%AF%86%E9%92%A5%E5%92%8CAPIv3%E5%AF%86%E9%92%A5"><span class="toc-text">8、API密钥和APIv3密钥</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%9F%BA%E7%A1%80%E6%94%AF%E4%BB%98API-V3"><span class="toc-text">三、基础支付API V3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%BC%95%E5%85%A5%E6%94%AF%E4%BB%98%E5%8F%82%E6%95%B0"><span class="toc-text">1、引入支付参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%8A%A0%E8%BD%BD%E5%95%86%E6%88%B7%E7%A7%81%E9%92%A5"><span class="toc-text">2、加载商户私钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E8%8E%B7%E5%8F%96%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E5%99%A8%E5%92%8CHttpClient"><span class="toc-text">3、获取签名验证器和HttpClient</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81API%E5%AD%97%E5%85%B8%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="toc-text">4、API字典和相关工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81Native%E4%B8%8B%E5%8D%95API"><span class="toc-text">5、Native下单API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81Native%E6%94%AF%E4%BB%98%E6%B5%81%E7%A8%8B"><span class="toc-text">5.1、Native支付流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E7%AD%BE%E5%90%8D%E5%92%8C%E9%AA%8C%E7%AD%BE%E5%8E%9F%E7%90%86"><span class="toc-text">5.2、签名和验签原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%94%AF%E4%BB%98%E9%80%9A%E7%9F%A5API"><span class="toc-text">6、支付通知API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1%E3%80%81%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F"><span class="toc-text">6.1、内网穿透</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2%E3%80%81%E5%95%86%E6%88%B7%E5%AE%9A%E6%97%B6%E6%9F%A5%E8%AF%A2%E6%9C%AC%E5%9C%B0%E8%AE%A2%E5%8D%95"><span class="toc-text">6.2、商户定时查询本地订单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E7%94%A8%E6%88%B7%E5%8F%96%E6%B6%88%E8%AE%A2%E5%8D%95API"><span class="toc-text">7、用户取消订单API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%9F%A5%E5%8D%95API"><span class="toc-text">8、微信支付查单API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81%E7%94%B3%E8%AF%B7%E9%80%80%E6%AC%BEAPI"><span class="toc-text">9、申请退款API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E3%80%81%E6%9B%B4%E5%A4%9A"><span class="toc-text">10、更多</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

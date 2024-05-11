@@ -1,0 +1,1163 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>面试题精选（二） - 愔颂</title>
+
+  
+    <meta name="description" content="Java后端面试题精选。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题精选（二）">
+<meta property="og:url" content="https://yinsong-llsc.github.io/2023/10/09/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%B2%BE%E9%80%89%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="Java后端面试题精选。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/java/io/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9pcy1jbG91ZC5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70.jpeg">
+<meta property="og:image" content="https://oss.javaguide.cn/p3-juejin/6a9e704af49b4380bb686f0c96d33b81~tplv-k3u1fbpfcp-watermark.png">
+<meta property="og:image" content="https://oss.javaguide.cn/p3-juejin/bb174e22dbe04bb79fe3fc126aed0c61~tplv-k3u1fbpfcp-watermark.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/java/io/88ff862764024c3b8567367df11df6ab~tplv-k3u1fbpfcp-watermark.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/java/nio/channel-buffer-selector.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/java/io/3077e72a1af049559e81d18205b56fd7~tplv-k3u1fbpfcp-watermark.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/af43835447d6d467f9fe659c88854e0a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695281033516-9865afd5-8f03-4994-8022-afd975f94a13.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695285687342-c2faeb86-cc94-4860-94f1-ce7f4513b19f.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286299801-3d1a298d-7492-426f-af73-79b8d258ff11.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286983657-73661062-3c1f-4f1c-8cdf-662354547abf.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/server-load-balancing.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/cs-basics/network/osi-7-model.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/spring-cloud-lb-gateway.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/read-and-write-separation-and-library-subtable/read-and-write-separation.png">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/read-and-write-separation-and-library-subtable/read-and-write-separation-proxy.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696840251691-8c599f2f-8a7d-4503-95ce-04449f4fcf12.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696840359616-e56d101a-be31-4e4a-95f1-f2f1423857ee.png?x-oss-process=image%2Fresize%2Cw_741%2Climit_0">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/shardingsphere-features.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1697247192909-b475b66c-cf87-4f59-b5fd-17734fe1f140.png?x-oss-process=image%2Fresize%2Cw_739%2Climit_0">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/message-queue20210507200944439.png">
+<meta property="article:published_time" content="2023-10-09T02:22:19.073Z">
+<meta property="article:modified_time" content="2023-11-01T01:55:43.882Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss.javaguide.cn/github/javaguide/java/io/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9pcy1jbG91ZC5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70.jpeg">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets"></div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Java%E9%9D%A2%E8%AF%95/">Java面试</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-09T02:22:19.073Z">2023-10-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2023-11-01T01:55:43.882Z">2023-11-01</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>面试题精选（二）</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<p>Java后端面试题精选。</p>
+<span id="more"></span>
+
+<h2 id="Java-I-O"><a href="#Java-I-O" class="headerlink" title="Java I&#x2F;O"></a>Java I&#x2F;O</h2><h3 id="1、何为-I-O"><a href="#1、何为-I-O" class="headerlink" title="1、何为 I&#x2F;O?"></a>1、何为 I&#x2F;O?</h3><p>I&#x2F;O（<strong>I</strong>nput&#x2F;<strong>O</strong>utpu） 即<strong>输入／输出</strong> 。</p>
+<p><strong>我们先从计算机结构的角度来解读一下 I&#x2F;O。</strong></p>
+<p>根据冯.诺依曼结构，计算机结构分为 5 大部分：运算器、控制器、存储器、输入设备、输出设备。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/java/io/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9pcy1jbG91ZC5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70.jpeg" alt="冯诺依曼体系结构"></p>
+<p><strong>从计算机结构的视角来看的话， I&#x2F;O 描述了计算机系统与外部设备之间通信的过程。</strong></p>
+<p><strong>我们再先从应用程序的角度来解读一下 I&#x2F;O。</strong></p>
+<p>为了保证操作系统的稳定性和安全性，一个进程的地址空间划分为 <strong>用户空间（User space）</strong> 和 <strong>内核空间（Kernel space ）</strong> 。</p>
+<p>像我们平常运行的应用程序都是运行在用户空间，只有内核空间才能进行系统态级别的资源有关的操作，比如文件管理、进程通信、内存管理等等。也就是说，我们想要进行 IO 操作，一定是要依赖内核空间的能力。并且，用户空间的程序不能直接访问内核空间。</p>
+<p>当想要执行 IO 操作时，由于没有执行这些操作的权限，只能发起系统调用请求操作系统帮忙完成。因此，用户进程想要执行 IO 操作的话，必须通过 <strong>系统调用</strong> 来间接访问内核空间。</p>
+<p>我们在平常开发过程中接触最多的就是 <strong>磁盘 IO（读写文件）</strong> 和 <strong>网络 IO（网络请求和响应）</strong>。</p>
+<p><strong>从应用程序的视角来看的话，我们的应用程序对操作系统的内核发起 IO 调用（系统调用），操作系统负责的内核执行具体的 IO 操作。也就是说，我们的应用程序实际上只是发起了 IO 操作的调用而已，具体 IO 的执行是由操作系统的内核来完成的。</strong></p>
+<p>当应用程序发起 I&#x2F;O 调用后，会经历两个步骤：</p>
+<ol>
+<li><p>内核等待 I&#x2F;O 设备准备好数据。</p>
+</li>
+<li><p>内核将数据从内核空间拷贝到用户空间。</p>
+</li>
+</ol>
+<h3 id="2、有哪些常见的-IO-模型"><a href="#2、有哪些常见的-IO-模型" class="headerlink" title="2、有哪些常见的 IO 模型?"></a>2、有哪些常见的 IO 模型?</h3><p>UNIX 系统下， IO 模型一共有 5 种：<strong>同步阻塞 I&#x2F;O</strong>、<strong>同步非阻塞 I&#x2F;O</strong>、<strong>I&#x2F;O 多路复用</strong>、<strong>信号驱动 I&#x2F;O</strong> 和<strong>异步 I&#x2F;O</strong>。</p>
+<h4 id="（1）BIO-Blocking-I-O"><a href="#（1）BIO-Blocking-I-O" class="headerlink" title="（1）BIO (Blocking I&#x2F;O)"></a>（1）BIO (Blocking I&#x2F;O)</h4><p><strong>BIO 属于同步阻塞 IO 模型</strong> 。</p>
+<p>同步阻塞 IO 模型中，应用程序发起 read 调用后，会一直阻塞，直到内核把数据拷贝到用户空间。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/p3-juejin/6a9e704af49b4380bb686f0c96d33b81~tplv-k3u1fbpfcp-watermark.png" alt="图源：《深入拆解Tomcat & Jetty》" style="zoom: 67%;" />
+
+<p>在客户端连接数量不高的情况下，是没问题的。但是，当面对十万甚至百万级连接的时候，传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I&#x2F;O 处理模型来应对更高的并发量。</p>
+<h4 id="（2）NIO-Non-blocking-I-O"><a href="#（2）NIO-Non-blocking-I-O" class="headerlink" title="（2）NIO (Non-blocking I&#x2F;O)"></a>（2）NIO (Non-blocking I&#x2F;O)</h4><p>Java 中的 NIO 提供了 <code>Channel</code> , <code>Selector</code>，<code>Buffer</code> 等抽象。NIO 中的 N 可以理解为 Non-blocking，不单纯是 New。它是支持面向缓冲的，基于通道的 I&#x2F;O 操作方法。 对于高负载、高并发的（网络）应用，应使用 NIO 。</p>
+<p>Java 中的 NIO 可以看作是 <strong>I&#x2F;O 多路复用模型</strong>。也有很多人认为，Java 中的 NIO 属于同步非阻塞 IO 模型。</p>
+<p>我们先来看看 <strong>同步非阻塞 IO 模型</strong>。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/p3-juejin/bb174e22dbe04bb79fe3fc126aed0c61~tplv-k3u1fbpfcp-watermark.png" alt="图源：《深入拆解Tomcat & Jetty》" style="zoom: 67%;" />
+
+<p>同步非阻塞 IO 模型中，应用程序会一直发起 read 调用，等待数据从内核空间拷贝到用户空间的这段时间里，线程依然是阻塞的，直到在内核把数据拷贝到用户空间。</p>
+<p>相比于同步阻塞 IO 模型，同步非阻塞 IO 模型确实有了很大改进。通过轮询操作，避免了一直阻塞。</p>
+<p>但是，这种 IO 模型同样存在问题：<strong>应用程序不断进行 I&#x2F;O 系统调用轮询数据是否已经准备好的过程是十分消耗 CPU 资源的。</strong></p>
+<p>这个时候，<strong>I&#x2F;O 多路复用模型</strong> 就上场了。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/java/io/88ff862764024c3b8567367df11df6ab~tplv-k3u1fbpfcp-watermark.png" alt="img" style="zoom: 67%;" />
+
+<p>IO 多路复用模型中，线程首先发起 select 调用，询问内核数据是否准备就绪，等内核把数据准备好了，用户线程再发起 read 调用。read 调用的过程（数据从内核空间 -&gt; 用户空间）还是阻塞的。</p>
+<blockquote>
+<p>目前支持 IO 多路复用的系统调用，有 select，epoll 等等。select 系统调用，目前几乎在所有的操作系统上都有支持。</p>
+<ul>
+<li><strong>select 调用</strong>：内核提供的系统调用，它支持一次查询多个系统调用的可用状态。几乎所有的操作系统都支持。</li>
+<li><strong>epoll 调用</strong>：linux 2.6 内核，属于 select 调用的增强版本，优化了 IO 的执行效率。</li>
+</ul>
+</blockquote>
+<p><strong>IO 多路复用模型，通过减少无效的系统调用，减少了对 CPU 资源的消耗。</strong></p>
+<p>Java 中的 NIO ，有一个非常重要的<strong>选择器 ( Selector )</strong> 的概念，也可以被称为 <strong>多路复用器</strong>。通过它，只需要一个线程便可以管理多个客户端连接。当客户端数据到了之后，才会为其服务。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/java/nio/channel-buffer-selector.png" alt="Buffer、Channel和Selector三者之间的关系" style="zoom: 67%;" />
+
+
+
+<h4 id="（3）AIO-Asynchronous-I-O"><a href="#（3）AIO-Asynchronous-I-O" class="headerlink" title="（3）AIO (Asynchronous I&#x2F;O)"></a>（3）AIO (Asynchronous I&#x2F;O)</h4><p>AIO 也就是 NIO 2。Java 7 中引入了 NIO 的改进版 NIO 2,它是异步 IO 模型。</p>
+<p>异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/java/io/3077e72a1af049559e81d18205b56fd7~tplv-k3u1fbpfcp-watermark.png" alt="img" style="zoom:67%;" />
+
+<p>目前来说 AIO 的应用还不是很广泛。Netty 之前也尝试使用过 AIO，不过又放弃了。这是因为，Netty 使用了 AIO 之后，在 Linux 系统上的性能并没有多少提升。</p>
+<h2 id="Netty"><a href="#Netty" class="headerlink" title="Netty"></a>Netty</h2><h3 id="1、Netty-是什么？"><a href="#1、Netty-是什么？" class="headerlink" title="1、Netty 是什么？"></a>1、Netty 是什么？</h3><ol>
+<li>Netty 是⼀个 基于 NIO 的 client-server(客户端服务器)框架，使用它可以快速简单地开发网络应用程序。</li>
+<li>它极大地简化并优化了 TCP 和 UDP 套接字服务器等网络编程,并且性能以及安全性等很多方面甚至都要更好。</li>
+<li>支持多种协议 如 FTP，SMTP，HTTP 以及各种二进制和基于文本的传统协议。</li>
+</ol>
+<h3 id="2、为什么要用-Netty？"><a href="#2、为什么要用-Netty？" class="headerlink" title="2、为什么要用 Netty？"></a>2、为什么要用 Netty？</h3><p>Netty 具有下面这些优点，并且相比于直接使用 JDK 自带的 NIO 相关的 API 来说更加易用。</p>
+<ul>
+<li>统一的 API，支持多种传输类型，阻塞和非阻塞的。</li>
+<li>简单而强大的线程模型。</li>
+<li>自带编解码器解决 TCP 粘包&#x2F;拆包问题。</li>
+<li>自带各种协议栈。</li>
+<li>真正的无连接数据包套接字支持。</li>
+<li>比直接使用 Java 核心 API 有更高的吞吐量、更低的延迟、更低的资源消耗和更少的内存复制。</li>
+<li>安全性不错，有完整的 SSL&#x2F;TLS 以及 StartTLS 支持。</li>
+<li>社区活跃</li>
+<li>成熟稳定，经历了大型项目的使用和考验，而且很多开源项目都使用到了 Netty， 比如我们经常接触的 Dubbo、RocketMQ 等等。</li>
+</ul>
+<h3 id="3、Netty-应用场景了解么？"><a href="#3、Netty-应用场景了解么？" class="headerlink" title="3、Netty 应用场景了解么？"></a>3、Netty 应用场景了解么？</h3><p>Netty 主要用来做<strong>网络通信</strong> :</p>
+<ol>
+<li><strong>作为 RPC 框架的网络通信工具</strong> ：我们在分布式系统中，不同服务节点之间经常需要相互调用，这个时候就需要 RPC 框架了。不同服务节点之间的通信是如何做的呢？可以使用 Netty 来做。比如我调用另外一个节点的方法的话，至少是要让对方知道我调用的是哪个类中的哪个方法以及相关参数吧！</li>
+<li><strong>实现一个自己的 HTTP 服务器</strong> ：通过 Netty 我们可以自己实现一个简单的 HTTP 服务器，这个大家应该不陌生。说到 HTTP 服务器的话，作为 Java 后端开发，我们一般使用 Tomcat 比较多。一个最基本的 HTTP 服务器可要以处理常见的 HTTP Method 的请求，比如 POST 请求、GET 请求等等。</li>
+<li><strong>实现一个即时通讯系统</strong> ：使用 Netty 我们可以实现一个可以聊天类似微信的即时通讯系统，这方面的开源项目还蛮多的，可以自行去 Github 找一找。</li>
+<li><strong>实现消息推送系统</strong> ：市面上有很多消息推送系统都是基于 Netty 来做的。</li>
+</ol>
+<h3 id="4、Netty-核心组件与作用"><a href="#4、Netty-核心组件与作用" class="headerlink" title="4、Netty 核心组件与作用"></a>4、Netty 核心组件与作用</h3><p><strong>（1）Bytebuf（字节容器）</strong>  </p>
+<p>网络通信最终都是通过字节流进行传输的。 ByteBuf 就是 Netty 提供的⼀个字节容器，其内部是⼀个字节数组。 当我们通过 Netty 传输数据的时候，就是通过 ByteBuf 进行的。我们可以将 ByteBuf 看作是 Netty 对 Java NIO 提供了 ByteBuffer 字节容器的封装和抽象。 </p>
+<p><strong>（2）Bootstrap 和 ServerBootstrap（启动引导类）</strong>  </p>
+<p>Bootstrap 是客户端的启动引导类&#x2F;辅助类  ，ServerBootstrap 是服务端的启动引导类&#x2F;辅助类 。</p>
+<ol>
+<li><p>Bootstrap 通常使用 connect() 方法连接到远程的主机和端口，作为⼀个 Netty TCP 协议通信中的客户端。另外， Bootstrap 也可以通过 bind()方法绑定本地的⼀个端口，作为 UDP 协议通信中的⼀端。</p>
+</li>
+<li><p>ServerBootstrap 通常使用bind() 方法绑定本地的端口上，然后等待客户端的连接。</p>
+</li>
+<li><p>Bootstrap 只需要配置⼀个线程组EventLoopGroup , 而 ServerBootstrap 需要配置两个线程组EventLoopGroup ，⼀个用于接收连接，⼀个用于具体的 IO 处理。</p>
+</li>
+</ol>
+<p><strong>（3）Channel</strong></p>
+<p>Channel 接口是 Netty 对网络操作的抽象类。通过 Channel 我们可以进行 I&#x2F;O 操作。⼀旦客户端成功连接服务端，就会新建⼀个 Channel 同该用户端进行绑定。  </p>
+<p>比较常用的 Channel 接口实现类是 ：NioServerSocketChannel （服务端）、NioSocketChannel （客户端），这两个 Channel 可以和 BIO 编程模型中的 ServerSocket 以及 Socket 两个概念对应上。  </p>
+<p><strong>（4）EventLoop（事件循环）</strong>  </p>
+<p>EventLoop 的主要作用实际就是责监听网络事件并调用事件处理器进行相关 I&#x2F;O 操作（读写）的处理。</p>
+<p><strong>Channel 和 EventLoop 的关系？</strong></p>
+<p>Channel 为 Netty 网络操作(读写等操作)抽象类， EventLoop 负责处理注册到其上的 Channel 的 I&#x2F;O 操作，两者配合进行 I&#x2F;O 操作。   </p>
+<p><strong>EventloopGroup 和 EventLoop 的关系？</strong>  </p>
+<p>EventLoopGroup 包含多个 EventLoop （每⼀个 EventLoop 通常内部包含⼀个线程），它管理着所有的 EventLoop 的生命周期。并且， EventLoop 处理的 I&#x2F;O 事件都将在它专有的 Thread 上被处理，即 Thread 和 EventLoop 属于 1 : 1 的关系，从而保证线程安全。  </p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/img_convert/af43835447d6d467f9fe659c88854e0a.png" alt="image-20220221133237066" style="zoom:67%;" />
+
+
+
+<p><strong>（5）ChannelHandler（消息处理器） 和 ChannelPipeline（ChannelHandler 对象链表）</strong>  </p>
+<p>ChannelHandler 是消息的具体处理器，主要负责处理客户端&#x2F;服务端接收和发送的数据。  </p>
+<p>当Channel被创建时，它会自动地分配到它专属的ChannelPipeline。一个Channel包含一个ChannelPipeline。ChannelPipeline是ChannelHandler的链，一个pipeline上可以有很多的ChannelHandler。</p>
+<p>可以在ChannelPipeline上通过addLast（）方法添加一个或者多个ChannelHandler（一个数据或者事件可能会被多个Handler处理）。当一个ChannelHandler处理完之后就会将数据交给下一个ChannelHandler。</p>
+<p>当ChannelHandler被添加到ChannelPipeline，它会有一个CHannelHandlerContext，代表一个ChannelHandler和ChannelPipeline之间的“绑定”。ChannelPipeline通过ChannelHandlerContext来间接管理ChannelHandler。</p>
+<p><strong>（6）ChannelFuture操作执行结果</strong></p>
+<p>Netty中所有的IO操作都为异步的，我们不能立刻得到操作是否执行成功。</p>
+<p>但是可以通过ChannelFuture接口的addListener（）方法注册一个ChannelFutureListener，当操作执行成功或者失败时，监听就会自动触发返回结果。</p>
+<p>并且，你还可以通过 ChannelFuture 的 channel() 方法获取连接相关联的 Channel 。  另外，我们还可以通过 ChannelFuture 接口的 sync() 方法让异步的操作编程同步的。  </p>
+<p><strong>（7）NioEventLoopGroup 默认的构造函数会起多少线程？</strong>  </p>
+<p>NioEventLoopGroup 默认的构造函数实际会起的线程数为 CPU核心数*2。</p>
+<p>另外，如果你继续深入下去看构造函数的话，你会发现每个 NioEventLoopGroup 对象内部都会分配⼀组 NioEventLoop ，其大小是 nThreads , 这样就构成了⼀个线程池， ⼀个 NIOEventLoop 和⼀个线程相对应，这<br>和我们上面说的 EventloopGroup 和 EventLoop 关系这部分内容相对应。  </p>
+<h3 id="5、Reactor线程模型"><a href="#5、Reactor线程模型" class="headerlink" title="5、Reactor线程模型"></a>5、Reactor线程模型</h3><p>Reactor是一种经典的线程模型，Reactor模式基于事件驱动，特别适合海量的IO事件。</p>
+<p>Reactor线程模型分为单线程模型、多线程模型以及主从多线程模型。</p>
+<p><strong>（1）单线程Reactor</strong></p>
+<p>所有的 IO 操作都由同⼀个 NIO 线程处理。  </p>
+<p>单线程 Reactor 的优点是对系统资源消耗特别小，但是，没办法支撑大量请求的应用场景并且处理请求的时间可能非常慢，项目中一般不使用 。</p>
+<p><strong>（2）多线程Reactor</strong></p>
+<p>⼀个线程负责接受请求，⼀组 NIO 线程处理 IO 操作。  </p>
+<p>大部分场景下多线程 Reactor 模型是没有问题的，但是在⼀些并发连接数比较多（如百万并发）的场景下，⼀个线程负责接受客户端请求就存在性能问题了。  </p>
+<p><strong>（3）主从多线程Reactor</strong></p>
+<p>一组NIO线程负责接受请求，一组NIO线程处理IO操作。</p>
+<h3 id="6、什么是TCP粘包、拆包？"><a href="#6、什么是TCP粘包、拆包？" class="headerlink" title="6、什么是TCP粘包、拆包？"></a>6、什么是TCP粘包、拆包？</h3><p><strong>1）粘包拆包发生场景</strong></p>
+<p>因为TCP是面向流，没有边界，而操作系统在发送TCP数据时，会通过缓冲区来进行优化，例如缓冲区为1024个字节大小。</p>
+<p>如果一次请求发送的数据量比较小，没达到缓冲区大小，TCP则会将多个请求合并为同一个请求进行发送，这就形成了粘包问题。</p>
+<p>如果一次请求发送的数据量比较大，超过了缓冲区大小，TCP就会将其拆分为多次发送，这就是拆包。</p>
+<p><strong>2）常见的解决方案</strong></p>
+<p>对于粘包和拆包问题，常见的解决方案有四种：</p>
+<ul>
+<li>发送端将每个包都封装成固定的长度，比如100字节大小。如果不足100字节可通过补0或空等进行填充到指定长度；</li>
+<li>发送端在每个包的末尾使用固定的分隔符，例如\r\n。如果发生拆包需等待多个包发送过来之后再找到其中的\r\n进行合并；例如，FTP协议；</li>
+<li>将消息分为头部和消息体，头部中保存整个消息的长度，只有读取到足够长度的消息之后才算是读到了一个完整的消息；</li>
+<li>通过自定义协议进行粘包和拆包的处理。</li>
+</ul>
+<p><strong>3）Netty对粘包和拆包问题的处理</strong></p>
+<p>Netty对解决粘包和拆包的方案做了抽象，提供了一些解码器（Decoder）来解决粘包和拆包的问题。如：</p>
+<ul>
+<li>LineBasedFrameDecoder：以行为单位进行数据包的解码；</li>
+<li>DelimiterBasedFrameDecoder：以特殊的符号作为分隔来进行数据包的解码；</li>
+<li>FixedLengthFrameDecoder：以固定长度进行数据包的解码；</li>
+<li>LenghtFieldBasedFrameDecode：适用于消息头包含消息长度的协议（最常用）；</li>
+</ul>
+<p>基于Netty进行网络读写的程序，可以直接使用这些Decoder来完成数据包的解码。对于高并发、大流量的系统来说，每个数据包都不应该传输多余的数据（所以补齐的方式不可取），LenghtFieldBasedFrameDecode更适合这样的场景。</p>
+<h3 id="7、Netty的长连接和心跳机制"><a href="#7、Netty的长连接和心跳机制" class="headerlink" title="7、Netty的长连接和心跳机制"></a>7、Netty的长连接和心跳机制</h3><p><strong>（1）TCP长连接和短连接</strong></p>
+<p>TCP在进行读写之前，server与client之间必须提前建立一个连接。建立连接的过程，需要三次握手，释放连接时需要四次挥手。这个过程是比较消耗网络资源并且有时间延迟的。</p>
+<p><strong>短连接</strong>：server端与client端建立连接之后，读写完成之后就关闭掉连接，如果下一次再要互相发送消息，就要重新连接。</p>
+<p>优点：管理和实现比较简单，</p>
+<p>缺点：每一次的读写都要建立连接必然会带来大量网络资源消耗，并且连接的建立也需要耗费时间。</p>
+<p><strong>长连接</strong>：client向server双方建立连接之后，即使client与server完成一次读写，他们之间的连接也不会主动关闭，后续的读写操作会继续使用这个连接。</p>
+<p>长连接可以省去较多的TCP建立和关闭的操作，降低对网络资源的依赖，节约时间。对于拼房请求资源的客户来说，非常适合长连接。</p>
+<p><strong>（2）心跳机制</strong></p>
+<p>在TCP保持长连接的过程中，可能会出现断网等网络异常出现，异常发生的时候，client与server之间如果没有交互的话，他们是无法发现对方已经掉线的，为了解决这个问题，引入了心跳机制。</p>
+<p><strong>心跳机制的工作原理</strong>：在client与server之间在一定时间内没有数据交互时，即处于idle状态时，客户端或服务端就会发送一个特殊的数据包给对方，当接收方收到这个数据报文后，也立即发送一个特殊的数据报文回应给对方，这就是一个PING+PONG交互。所以当某一端收到心跳信息后，就知道对方仍然在线，这就确保了TCP连接的有效性。</p>
+<p>TCP实际上自带的就有长连接选项，本身也有心跳包机制，也就是TCP的选项：SO_KEEP_ALIVE。但是，TCP协议层面的长连接灵活性不够，所以，一般情况下我们都是在应用层协议之上实现自定义心跳机制，也就是在Netty层面通过编码实现。通过Netty实现心跳机制，核心类时IdleStateHandler。</p>
+<h3 id="8、Netty的零拷贝"><a href="#8、Netty的零拷贝" class="headerlink" title="8、Netty的零拷贝"></a>8、Netty的零拷贝</h3><p>在 OS 层⾯上的 Zero-copy 通常指避免在用户态(User-space) 与 内核态(Kernel-space) 之间来回拷贝数据。而在 Netty 层面 ，零拷贝主要体现在对于数据操作的优化。  </p>
+<p>零拷贝技术的核心思想是将数据从内核空间直接传输到网络适配器的缓冲区，避免了数据在内核空间和用户空间之间的复制。在使用零拷贝技术时，应用程序通过调用操作系统提供的API（如sendfile、mmap等）将数据直接映射到网络适配器的缓冲区，然后通过网络传输到远程主机。这样，数据只需要经过一次复制操作，从而大大提高了数据传输的效率和性能。 </p>
+<p>Netty 中的零拷贝体现在以下几个方面：</p>
+<ol>
+<li>使用 Netty 提供的 CompositeByteBuf 类，可以将多个 ByteBuf 合并为⼀个逻辑上的 ByteBuf ，避免了各个 ByteBuf 之间的拷贝。</li>
+<li>ByteBuf 支持 slice 操作，因此可以将 ByteBuf 分解为多个共享同⼀个存储区域的 ByteBuf ，避免了内存的拷贝。</li>
+<li>通过 FileRegion 包装的 FileChannel.tranferTo 实现文件传输，可以直接将文件缓冲区的数据发送到目标 Channel ，避免了传统通过循环 write 方式导致的内存拷贝问题。</li>
+</ol>
+<h2 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h2><h3 id="1、什么是RPC？"><a href="#1、什么是RPC？" class="headerlink" title="1、什么是RPC？"></a>1、什么是RPC？</h3><p>RPC就是<strong>远程方法调用</strong>，和本地方法调用不同，本地方法调用指的是进程内部的方法调用，而远程方法调用指的是两个进程内的方法互相调用。</p>
+<p>要实现远程方法调用，必然通过网络进行数据传输，于是就有了：</p>
+<ul>
+<li>RPC &amp; HTTP：通过HTTP协议传输数据；</li>
+<li>RPC &amp; TCP：通过TCP协议传输数据；</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/distributed-system/rpc/http&rpc.html">有了 HTTP 协议，为什么还要有 RPC ？</a> </p>
+<h3 id="2、什么是Dubbo？"><a href="#2、什么是Dubbo？" class="headerlink" title="2、什么是Dubbo？"></a>2、什么是Dubbo？</h3><p>目前，官网上是这么介绍的：Apache Dubbo 是⼀款⾼性能、轻量级的开源 Java 服务框架。<br>在几个月前，官网的介绍是：Apache Dubbo 是⼀款⾼性能、轻量级的开源 Java RPC框架。</p>
+<p>为什么会将RPC改为服务？ </p>
+<p>Dubbo⼀开始的定位就是RPC，专注于两个服务之间的调用。但随着微服务的盛行，除了服务调用之外，<br>Dubbo也在逐步的涉猎服务治理、服务监控、服务网关等等，所以现在的Dubbo目标已经不止是RPC框架<br>了，而是和Spring Cloud类似想成为了⼀个服务框架。 </p>
+<p>Dubbo 内置支持 Dubbo2、Triple 两款高性能通信协议。其中</p>
+<ul>
+<li>Dubbo2 是基于 TCP 传输协议之上构建的二进制私有 RPC 通信协议，是一款非常简单、紧凑、高效的通信协议。</li>
+<li>Triple 是基于 HTTP&#x2F;2 的新一代 RPC 通信协议，在网关穿透性、通用性以及 Streaming 通信上具备优势，Triple 完全兼容 gRPC 协议。</li>
+</ul>
+<h3 id="3、原理"><a href="#3、原理" class="headerlink" title="3、原理"></a>3、原理</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695281033516-9865afd5-8f03-4994-8022-afd975f94a13.png" alt="img"></p>
+<h3 id="4、服务发现"><a href="#4、服务发现" class="headerlink" title="4、服务发现"></a>4、服务发现</h3><p>Dubbo 提供的是一种 Client-Based 的服务发现机制，依赖第三方注册中心组件来协调服务发现过程，支持常用的注册中心如 Nacos、Consul、Zookeeper 等。</p>
+<p>以下是 Dubbo 服务发现机制的基本工作原理图：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695285687342-c2faeb86-cc94-4860-94f1-ce7f4513b19f.png" alt="img"></p>
+<p>服务发现包含提供者、消费者和注册中心三个参与角色，其中，Dubbo 提供者实例注册 URL 地址到注册中心，注册中心负责对数据进行聚合，Dubbo 消费者从注册中心读取地址列表并订阅变更，每当地址列表发生变化，注册中心将最新的列表通知到所有订阅的消费者实例。</p>
+<p>配置Nacos注册中心：</p>
+<p><a target="_blank" rel="noopener" href="https://cn.dubbo.apache.org/zh-cn/overview/mannual/java-sdk/reference-manual/registry/nacos/">Nacos</a> ：Nacos 注册中心的基本使用和工作原理。</p>
+<h3 id="5、负载均衡"><a href="#5、负载均衡" class="headerlink" title="5、负载均衡"></a>5、负载均衡</h3><p>在集群负载均衡时，Dubbo 提供了多种均衡策略，缺省为 weighted random 基于权重的随机负载均衡策略。</p>
+<p>具体实现上，Dubbo 提供的是客户端负载均衡，即由 Consumer 通过负载均衡算法得出需要将请求提交到哪个 Provider 实例。</p>
+<p><strong>负载均衡策略</strong></p>
+<p>目前 Dubbo 内置了如下负载均衡算法，可通过调整配置项启用。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286299801-3d1a298d-7492-426f-af73-79b8d258ff11.png" alt="img"></p>
+<p>使用方式</p>
+<p>只需要调整 loadbalance 相应取值即可，每种负载均衡策略取值请参见文档最上方表格。</p>
+<ul>
+<li><strong>服务端服务级别</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;...&quot;</span> <span class="attr">loadbalance</span>=<span class="string">&quot;roundrobin&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>客户端服务级别</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">interface</span>=<span class="string">&quot;...&quot;</span> <span class="attr">loadbalance</span>=<span class="string">&quot;roundrobin&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>服务端方法级别</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:method</span> <span class="attr">name</span>=<span class="string">&quot;...&quot;</span> <span class="attr">loadbalance</span>=<span class="string">&quot;roundrobin&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>客户端方法级别</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">interface</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:method</span> <span class="attr">name</span>=<span class="string">&quot;...&quot;</span> <span class="attr">loadbalance</span>=<span class="string">&quot;roundrobin&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:reference</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6、流量管控"><a href="#6、流量管控" class="headerlink" title="6、流量管控"></a>6、流量管控</h3><p>Dubbo 的流量管控规则可以基于应用、服务、方法、参数等粒度精准的控制流量走向，根据请求的目标服务、方法以及请求体中的其他附加参数进行匹配，符合匹配条件的流量会进一步的按照特定规则转发到一个地址子集。流量管控规则有以下几种：</p>
+<ul>
+<li>条件路由规则</li>
+<li>标签路由规则</li>
+<li>脚本路由规则</li>
+<li>动态配置规则</li>
+</ul>
+<p>具体见文档：<a target="_blank" rel="noopener" href="https://cn.dubbo.apache.org/zh-cn/overview/core-features/traffic/">https://cn.dubbo.apache.org/zh-cn/overview/core-features/traffic/</a></p>
+<h3 id="7、通信协议"><a href="#7、通信协议" class="headerlink" title="7、通信协议"></a>7、通信协议</h3><p>Dubbo 框架提供了自定义的高性能 RPC 通信协议：基于 HTTP&#x2F;2 的 Triple 协议 和 基于 TCP 的 Dubbo2 协议。除此之外，Dubbo 框架支持任意第三方通信协议，如官方支持的 gRPC、Thrift、REST、JsonRPC、Hessian2 等，更多协议可以通过自定义扩展实现。这对于微服务实践中经常要处理的多协议通信场景非常有用。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286983657-73661062-3c1f-4f1c-8cdf-662354547abf.png" alt="img"></p>
+<p>具体见文档：<a target="_blank" rel="noopener" href="https://cn.dubbo.apache.org/zh-cn/overview/core-features/protocols/">https://cn.dubbo.apache.org/zh-cn/overview/core-features/protocols/</a></p>
+<h3 id="8、SPI机制"><a href="#8、SPI机制" class="headerlink" title="8、SPI机制"></a>8、SPI机制</h3><p>spi， 简单来说， 就是 service provider interface， 说白了是什么意思呢， 比如你有个接口， 现在这个接口有 3 个实现类， 那么在系统运行的时候对这个接口到底选择哪个实现类呢？ 这就需要 spi 了， 需要根据指定的配置或者是默认的配置， 去找到对应的实现类加载进来， 然后用这个实现类的实例对象。</p>
+<blockquote>
+<p>举个栗子。<br>你有一个接口 A。 A1&#x2F;A2&#x2F;A3 分别是接口 A 的不同实现。 你通过配置 接口 A &#x3D; 实现 A2， 那么在系统实际<br>运行的时候， 会加载你的配置， 用实现 A2 实例化一个对象来提供服务。</p>
+</blockquote>
+<p>spi 机制一般用在哪儿？ 插件扩展的场景， 比如说你开发了一个给别人使用的开源框架， 如果你想让别人自<br>己写个插件， 插到你的开源框架里面， 从而扩展某个功能， 这个时候 spi 思想就用上了。  </p>
+<h3 id="9、使用示例"><a href="#9、使用示例" class="headerlink" title="9、使用示例"></a>9、使用示例</h3><p>Dubbo使用的具体操作步骤如下：</p>
+<ol>
+<li>定义接口：<ul>
+<li>首先，你需要定义服务接口，即提供给其他模块调用的方法和参数。</li>
+</ul>
+</li>
+<li>实现接口：<ul>
+<li>编写接口的具体实现类，实现接口中定义的方法。</li>
+</ul>
+</li>
+<li>配置提供者：<ul>
+<li>创建一个Dubbo的配置文件，例如dubbo-provider.xml。</li>
+<li>在配置文件中配置服务提供者的相关信息，包括注册中心地址、端口号、服务接口、实现类等。</li>
+</ul>
+</li>
+<li>启动提供者：<ul>
+<li>在提供者端启动应用程序，加载Dubbo的配置文件。</li>
+<li>这样提供者就可以将自己注册到注册中心，并提供服务。</li>
+</ul>
+</li>
+<li>配置消费者：<ul>
+<li>创建一个Dubbo的配置文件，例如dubbo-consumer.xml。</li>
+<li>在配置文件中配置服务消费者的相关信息，包括注册中心地址、超时时间、服务接口等。</li>
+</ul>
+</li>
+<li>引用服务：<ul>
+<li>在消费者端，通过Dubbo的引用机制，引用提供者提供的服务。</li>
+<li>在消费者的配置文件中，配置引用的服务接口、版本号、负载均衡策略等。</li>
+</ul>
+</li>
+<li>调用服务：<ul>
+<li>在消费者端，通过引用的服务接口，调用提供者提供的方法。</li>
+</ul>
+</li>
+<li>监控和管理：<ul>
+<li>Dubbo提供了控制台用于监控和管理服务。</li>
+<li>配置控制台的相关参数，例如注册中心地址、端口号等。</li>
+<li>在控制台中，你可以查看服务的调用情况、性能指标等。</li>
+</ul>
+</li>
+</ol>
+<p>以上是Dubbo的基本使用步骤。你可以根据实际需求和具体情况，进行相应的配置和调整。同时，你也可以参考Dubbo的官方文档和示例代码，以获取更详细的操作指南。</p>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/901826">Dubbo两小时快速上手教程</a></p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="1、什么是负载均衡？"><a href="#1、什么是负载均衡？" class="headerlink" title="1、什么是负载均衡？"></a>1、什么是负载均衡？</h3><p><strong>负载均衡</strong> 指的是将用户请求分摊到不同的服务器上处理，以提高系统整体的并发处理能力以及可靠性。负载均衡服务可以有由专门的软件或者硬件来完成，一般情况下，硬件的性能更好，软件的价格更便宜。</p>
+<h3 id="2、负载均衡分为哪几种？"><a href="#2、负载均衡分为哪几种？" class="headerlink" title="2、负载均衡分为哪几种？"></a>2、负载均衡分为哪几种？</h3><p>负载均衡可以简单分为 <strong>服务端负载均衡</strong> 和 <strong>客户端负载均衡</strong> 这两种。</p>
+<h4 id="（1）服务端负载均衡"><a href="#（1）服务端负载均衡" class="headerlink" title="（1）服务端负载均衡"></a>（1）服务端负载均衡</h4><p><strong>服务端负载均衡</strong> 主要应用在 <strong>系统外部请求</strong> 和 <strong>网关层</strong> 之间，可以使用 <strong>软件</strong> 或者 <strong>硬件</strong> 实现。</p>
+<p>下图是我画的一个简单的基于 Nginx 的服务端负载均衡示意图：</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/server-load-balancing.png" alt="基于 Nginx 的服务端负载均衡" style="zoom:67%;" />
+
+<p>根据 OSI 模型，服务端负载均衡还可以分为：</p>
+<ul>
+<li>二层负载均衡</li>
+<li>三层负载均衡</li>
+<li>四层负载均衡</li>
+<li>七层负载均衡</li>
+</ul>
+<p>最常见的是四层和七层负载均衡。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/cs-basics/network/osi-7-model.png" alt="OSI 七层模型" style="zoom:67%;" />
+
+<p><strong>四层负载均衡</strong> 工作在 OSI 模型第四层，也就是传输层，这一层的主要协议是 TCP&#x2F;UDP，负载均衡器在这一层能够看到数据包里的源端口地址以及目的端口地址，会基于这些信息通过一定的负载均衡算法将数据包转发到后端真实服务器。也就是说，四层负载均衡的核心就是 IP+端口层面的负载均衡，不涉及具体的报文内容。</p>
+<p><strong>七层负载均衡</strong> 工作在 OSI 模型第七层，也就是应用层，这一层的主要协议是 HTTP 。这一层的负载均衡比四层负载均衡路由网络请求的方式更加复杂，它会读取报文的数据部分（比如说我们的 HTTP 部分的报文），然后根据读取到的数据内容（如 URL、Cookie）做出负载均衡决策。也就是说，七层负载均衡器的核心是报文内容（如 URL、Cookie）层面的负载均衡，执行第七层负载均衡的设备通常被称为 <strong>反向代理服务器</strong> 。</p>
+<h4 id="（2）客户端负载均衡"><a href="#（2）客户端负载均衡" class="headerlink" title="（2）客户端负载均衡"></a>（2）客户端负载均衡</h4><p><strong>客户端负载均衡</strong> 主要应用于系统内部的不同的服务之间，可以使用现成的负载均衡组件来实现。</p>
+<p>在客户端负载均衡中，客户端会自己维护一份服务器的地址列表，发送请求之前，客户端会根据对应的负载均衡算法来选择具体某一台服务器处理请求。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/spring-cloud-lb-gateway.png" alt="img" style="zoom:67%;" />
+
+
+
+<h3 id="3、负载均衡常见的算法有哪些？"><a href="#3、负载均衡常见的算法有哪些？" class="headerlink" title="3、负载均衡常见的算法有哪些？"></a>3、负载均衡常见的算法有哪些？</h3><h4 id="（1）随机法"><a href="#（1）随机法" class="headerlink" title="（1）随机法"></a>（1）随机法</h4><p><strong>随机法</strong> 是最简单粗暴的负载均衡算法。</p>
+<p>如果没有配置权重的话，所有的服务器被访问到的概率都是相同的。如果配置权重的话，权重越高的服务器被访问的概率就越大。</p>
+<h4 id="（2）轮询法"><a href="#（2）轮询法" class="headerlink" title="（2）轮询法"></a>（2）轮询法</h4><p>轮询法是挨个轮询服务器处理，也可以设置权重。</p>
+<p>如果没有配置权重的话，每个请求按时间顺序逐一分配到不同的服务器处理。如果配置权重的话，权重越高的服务器被访问的次数就越多。</p>
+<h4 id="（3）一致性-Hash-法"><a href="#（3）一致性-Hash-法" class="headerlink" title="（3）一致性 Hash 法"></a>（3）一致性 Hash 法</h4><p>相同参数的请求总是发到同一台服务器处理，比如同个 IP 的请求。</p>
+<h4 id="（4）最小连接法"><a href="#（4）最小连接法" class="headerlink" title="（4）最小连接法"></a>（4）最小连接法</h4><p>当有新的请求出现时，遍历服务器节点列表并选取其中活动连接数最小的一台服务器来响应当前请求。活动连接数可以理解为当前正在处理的请求数。</p>
+<p>最小连接法可以尽可能最大地使请求分配更加合理化，提高服务器的利用率。</p>
+<h3 id="4、七层负载均衡可以怎么做？"><a href="#4、七层负载均衡可以怎么做？" class="headerlink" title="4、七层负载均衡可以怎么做？"></a>4、七层负载均衡可以怎么做？</h3><p>简单介绍两种项目中常用的七层负载均衡解决方案：DNS 解析和反向代理。</p>
+<h4 id="（1）DNS解析"><a href="#（1）DNS解析" class="headerlink" title="（1）DNS解析"></a>（1）DNS解析</h4><p>DNS 解析实现负载均衡的原理是这样的：在 DNS 服务器中为同一个主机记录配置多个 IP 地址，这些 IP 地址对应不同的服务器。当用户请求域名的时候，DNS 服务器采用轮询算法返回 IP 地址，这样就实现了轮询版负载均衡。</p>
+<h4 id="（2）反向代理"><a href="#（2）反向代理" class="headerlink" title="（2）反向代理"></a>（2）反向代理</h4><p>客户端将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器，获取数据后再返回给客户端。对外暴露的是反向代理服务器地址，隐藏了真实服务器 IP 地址。</p>
+<h2 id="数据库优化"><a href="#数据库优化" class="headerlink" title="数据库优化"></a>数据库优化</h2><h3 id="1、读写分离"><a href="#1、读写分离" class="headerlink" title="1、读写分离"></a>1、读写分离</h3><h4 id="（1）什么是读写分离？"><a href="#（1）什么是读写分离？" class="headerlink" title="（1）什么是读写分离？"></a>（1）什么是读写分离？</h4><p>见名思意，根据读写分离的名字，我们就可以知道：<strong>读写分离主要是为了将对数据库的读写操作分散到不同的数据库节点上。</strong> 这样的话，就能够小幅提升写性能，大幅提升读性能。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/read-and-write-separation-and-library-subtable/read-and-write-separation.png" alt="读写分离示意图" style="zoom:67%;" />
+
+
+
+<p>一般情况下，我们都会选择一主多从，也就是一台主数据库负责写，其他的从数据库负责读。主库和从库之间会进行数据同步，以保证从库中数据的准确性。</p>
+<h4 id="（2）读写分离会带来什么问题？"><a href="#（2）读写分离会带来什么问题？" class="headerlink" title="（2）读写分离会带来什么问题？"></a>（2）读写分离会带来什么问题？</h4><p>读写分离对于提升数据库的并发非常有效，但是，同时也会引来一个问题：主库和从库的数据存在延迟，比如你写完主库之后，主库的数据同步到从库是需要时间的，这个时间差就导致了主库和从库的数据不一致性问题。这也就是我们经常说的 <strong>主从同步延迟</strong> 。</p>
+<p>解决方案：</p>
+<p><strong>1、强制将读请求路由到主库处理</strong></p>
+<p>既然从库的数据过期了，那我就直接从主库读取嘛！这种方案虽然会增加主库的压力，但是，实现起来比较简单。</p>
+<p><strong>2、延迟读取</strong></p>
+<p>对于一些对数据比较敏感的场景，你可以在完成写请求之后，避免立即进行请求操作。比如你支付成功之后，跳转到一个支付成功的页面，当你点击返回之后才返回自己的账户。</p>
+<h4 id="（3）如何实现读写分离？"><a href="#（3）如何实现读写分离？" class="headerlink" title="（3）如何实现读写分离？"></a>（3）如何实现读写分离？</h4><p><strong>1、代理方式</strong></p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/read-and-write-separation-and-library-subtable/read-and-write-separation-proxy.png" alt="代理方式实现读写分离" style="zoom:67%;" />
+
+<p>我们可以在应用和数据中间加了一个代理层。应用程序所有的数据请求都交给代理层处理，代理层负责分离读写请求，将它们路由到对应的数据库中。</p>
+<p>提供类似功能的中间件有 <strong>MySQL Router</strong>（官方）、<strong>Atlas</strong>（基于 MySQL Proxy）、<strong>MaxScale</strong>、<strong>MyCat</strong>。</p>
+<p><strong>2、组件方式</strong></p>
+<p>在这种方式中，我们可以通过引入第三方组件来帮助我们读写请求。</p>
+<p>这也是我比较推荐的一种方式。这种方式目前在各种互联网公司中用的最多的，相关的实际的案例也非常多。如果你要采用这种方式的话，推荐使用 <code>sharding-jdbc</code> ，直接引入 jar 包即可使用，非常方便。同时，也节省了很多运维的成本。</p>
+<h4 id="（4）主从复制原理是什么？"><a href="#（4）主从复制原理是什么？" class="headerlink" title="（4）主从复制原理是什么？"></a>（4）主从复制原理是什么？</h4><ol>
+<li>主库将数据库中数据的变化写入到 binlog</li>
+<li>从库连接主库</li>
+<li>从库会创建一个 I&#x2F;O 线程向主库请求更新的 binlog</li>
+<li>主库会创建一个 binlog dump 线程来发送 binlog ，从库中的 I&#x2F;O 线程负责接收</li>
+<li>从库的 I&#x2F;O 线程将接收的 binlog 写入到 relay log 中。</li>
+<li>从库的 SQL 线程读取 relay log 同步数据本地（也就是再执行一遍 SQL ）。</li>
+</ol>
+<blockquote>
+<p>MySQL 主从复制是依赖于 binlog 。另外，常见的一些同步 MySQL 数据到其他数据源的工具（比如 canal）的底层一般也是依赖 binlog。</p>
+</blockquote>
+<h3 id="2、分库分表"><a href="#2、分库分表" class="headerlink" title="2、分库分表"></a>2、分库分表</h3><p>读写分离主要应对的是数据库读并发，没有解决数据库存储问题。试想一下：<strong>如果 MySQL 一张表的数据量过大怎么办?<strong>换言之，</strong>我们该如何解决 MySQL 的存储压力呢？</strong></p>
+<p>答案之一就是 <strong>分库分表</strong>。</p>
+<h4 id="（1）什么是分库？"><a href="#（1）什么是分库？" class="headerlink" title="（1）什么是分库？"></a>（1）什么是分库？</h4><p><strong>分库</strong> 就是将数据库中的数据分散到不同的数据库上，可以垂直分库，也可以水平分库。</p>
+<p><strong>垂直分库</strong> 就是把单一数据库按照业务进行划分，不同的业务使用不同的数据库，进而将一个数据库的压力分担到多个数据库。</p>
+<p>举个例子：将数据库中的用户表、订单表和商品表分别单独拆分为用户数据库、订单数据库和商品数据库。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696840251691-8c599f2f-8a7d-4503-95ce-04449f4fcf12.png" alt="image.png"></p>
+<p><strong>水平分库</strong> 是把同一个表按一定规则拆分到不同的数据库中，每个库可以位于不同的服务器上，这样就实现了水平扩展，解决了单表的存储和性能瓶颈的问题。</p>
+<p>举个例子：订单表数据量太大，你对订单表进行了水平切分（水平分表），然后将切分后的 2 张订单表分别放在两个不同的数据库。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1696840359616-e56d101a-be31-4e4a-95f1-f2f1423857ee.png?x-oss-process=image%2Fresize%2Cw_741%2Climit_0" alt="img" style="zoom:80%;" />
+
+
+
+<h4 id="（2）什么是分表？"><a href="#（2）什么是分表？" class="headerlink" title="（2）什么是分表？"></a>（2）什么是分表？</h4><p><strong>分表</strong> 就是对单表的数据进行拆分，可以是垂直拆分，也可以是水平拆分。</p>
+<p><strong>垂直分表</strong> 是对数据表列的拆分，把一张列比较多的表拆分为多张表。</p>
+<p>举个例子：我们可以将用户信息表中的一些列单独抽出来作为一个表。</p>
+<p><strong>水平分表</strong> 是对数据表行的拆分，把一张行比较多的表拆分为多张表，可以解决单一表数据量过大的问题。</p>
+<p>举个例子：我们可以将用户信息表拆分成多个用户信息表，这样就可以避免单一表数据量过大对性能造成影响。</p>
+<p>水平拆分只能解决单表数据量大的问题，为了提升性能，我们通常会选择将拆分后的多张表放在不同的数据库中。也就是说，水平分表通常和水平分库同时出现。</p>
+<h4 id="（3）什么情况下需要分库分表？"><a href="#（3）什么情况下需要分库分表？" class="headerlink" title="（3）什么情况下需要分库分表？"></a>（3）什么情况下需要分库分表？</h4><p>遇到下面几种场景可以考虑分库分表：</p>
+<ul>
+<li>单表的数据达到千万级别以上，数据库读写速度比较缓慢。</li>
+<li>数据库中的数据占用的空间越来越大，备份时间越来越长。</li>
+<li>应用的并发量太大。</li>
+</ul>
+<h4 id="（4）常见的分片算法有哪些？"><a href="#（4）常见的分片算法有哪些？" class="headerlink" title="（4）常见的分片算法有哪些？"></a>（4）常见的分片算法有哪些？</h4><p>分片算法主要解决了数据被水平分片之后，数据究竟该存放在哪个表的问题。</p>
+<ul>
+<li><strong>哈希分片</strong>：求指定 key（比如 id） 的哈希，然后根据哈希值确定数据应被放置在哪个表中。哈希分片比较适合随机读写的场景，不太适合经常需要范围查询的场景。</li>
+<li><strong>范围分片</strong>：按照特性的范围区间（比如时间区间、ID 区间）来分配数据，比如 将 <code>id</code> 为 <code>1~299999</code> 的记录分到第一个库， <code>300000~599999</code> 的分到第二个库。范围分片适合需要经常进行范围查找的场景，不太适合随机读写的场景（数据未被分散，容易出现热点数据的问题）。</li>
+<li><strong>地理位置分片</strong>：很多 NewSQL 数据库都支持地理位置分片算法，也就是根据地理位置（如城市、地域）来分配数据。</li>
+<li><strong>融合算法</strong>：灵活组合多种分片算法，比如将哈希分片和范围分片组合。</li>
+</ul>
+<h4 id="（5）分库分表会带来什么问题呢？"><a href="#（5）分库分表会带来什么问题呢？" class="headerlink" title="（5）分库分表会带来什么问题呢？"></a>（5）分库分表会带来什么问题呢？</h4><p><strong>join 操作</strong>：同一个数据库中的表分布在了不同的数据库中，导致无法使用 join 操作。这样就导致我们需要手动进行数据的封装，比如你在一个数据库中查询到一个数据之后，再根据这个数据去另外一个数据库中找对应的数据。不过，很多大厂的资深 DBA 都是建议尽量不要使用 join 操作。因为 join 的效率低，并且会对分库分表造成影响。</p>
+<p><strong>事务问题</strong>：同一个数据库中的表分布在了不同的数据库中，如果单个操作涉及到多个数据库，那么数据库自带的事务就无法满足我们的要求了。这个时候，我们就需要引入分布式事务了。</p>
+<p><strong>分布式 ID</strong>：分库之后， 数据遍布在不同服务器上的数据库，数据库的自增主键已经没办法满足生成的主键唯一了。我们如何为不同的数据节点生成全局唯一主键呢？这个时候，我们就需要为我们的系统引入分布式 ID 了。</p>
+<p><strong>跨库聚合查询问题</strong>：分库分表会导致常规聚合查询操作，如 group by，order by 等变得异常复杂。这是因为这些操作需要在多个分片上进行数据汇总和排序，而不是在单个数据库上进行。为了实现这些操作，需要编写复杂的业务代码，或者使用中间件来协调分片间的通信和数据传输。</p>
+<h4 id="（6）分库分表比较推荐的方案？"><a href="#（6）分库分表比较推荐的方案？" class="headerlink" title="（6）分库分表比较推荐的方案？"></a>（6）分库分表比较推荐的方案？</h4><p>Apache ShardingSphere 是一款分布式的数据库生态系统， 可以将任意数据库转换为分布式数据库，并通过数据分片、弹性伸缩、加密等能力对原有数据库进行增强。</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/shardingsphere-features.png" alt="ShardingSphere 提供的功能" style="zoom:67%;" />
+
+<p>分库分表的实战文章：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/A2MYOFT7SP-7kGOon8qJaw">《芋道 Spring Boot 分库分表入门》</a></p>
+<p><strong>mycat</strong><br>基于 cobar 改造的， 属于 proxy 层方案， 支持的功能非常完善， 而且目前应该是非常火的而且不断流行的数据库中间件， 社区很活跃， 也有一些公司开始在用了。 但是确实相比于 sharding jdbc 来说， 年轻一些， 经历的锤炼少一些。  </p>
+<p><strong>总结：</strong></p>
+<p>sharding-jdbc 这种 client 层方案的优点在于不用部署， 运维成本低， 不需要代理层的二次转发请求， 性能很高， 但是如果遇到升级啥的需要各个系统都重新升级版本再发布， 各个系统都需要耦合 sharding-jdbc 的依赖；</p>
+<p>mycat 这种 proxy 层方案的缺点在于需要部署， 自己运维一套中间件， 运维成本高， 但是好处在于对于各个项目是透明的， 如果遇到升级之类的都是自己中间件那里搞就行了。  </p>
+<h4 id="（7）分库分表后，数据怎么迁移呢？"><a href="#（7）分库分表后，数据怎么迁移呢？" class="headerlink" title="（7）分库分表后，数据怎么迁移呢？"></a>（7）分库分表后，数据怎么迁移呢？</h4><p>分库分表之后，我们如何将老库（单库单表）的数据迁移到新库（分库分表后的数据库系统）呢？</p>
+<p>比较简单同时也是非常常用的方案就是<strong>停机迁移</strong>，写个脚本老库的数据写到新库中。比如你在凌晨 2 点，系统使用的人数非常少的时候，挂一个公告说系统要维护升级预计 1 小时。然后，你写一个脚本将老库的数据都同步到新库中。</p>
+<p>如果你不想停机迁移数据的话，也可以考虑<strong>双写方案</strong>。双写方案是针对那种不能停机迁移的场景，实现起来要稍微麻烦一些。具体原理是这样的：</p>
+<ul>
+<li><p>我们对老库的更新操作（增删改），同时也要写入新库（双写）。如果操作的数据不存在于新库的话，需要插入到新库中。 这样就能保证，咱们新库里的数据是最新的。</p>
+</li>
+<li><p>在迁移过程，双写只会让被更新操作过的老库中的数据同步到新库，我们还需要自己写脚本将老库中的数据和新库的数据做比对。如果新库中没有，那咱们就把数据插入到新库。如果新库有，旧库没有，就把新库对应的数据删除（冗余数据清理）。</p>
+</li>
+<li><p>重复上一步的操作，直到老库和新库的数据一致为止。</p>
+</li>
+</ul>
+<p>想要在项目中实施双写还是比较麻烦的，很容易会出现问题。我们可以借助上面提到的数据库同步工具 Canal 做增量数据迁移（还是依赖 binlog，开发和维护成本较低）。</p>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h3 id="1、消息队列选型"><a href="#1、消息队列选型" class="headerlink" title="1、消息队列选型"></a>1、消息队列选型</h3><p>Kafka、 ActiveMQ、 RabbitMQ、 RocketMQ 有什么优缺点？  </p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1697247192909-b475b66c-cf87-4f59-b5fd-17734fe1f140.png?x-oss-process=image%2Fresize%2Cw_739%2Climit_0" alt="image.png" style="zoom: 67%;" />
+
+
+
+<h3 id="2、Kafka-核心概念"><a href="#2、Kafka-核心概念" class="headerlink" title="2、Kafka 核心概念"></a>2、Kafka 核心概念</h3><h4 id="（1）什么是-Producer、Consumer、Broker、Topic、Partition？"><a href="#（1）什么是-Producer、Consumer、Broker、Topic、Partition？" class="headerlink" title="（1）什么是 Producer、Consumer、Broker、Topic、Partition？"></a>（1）什么是 Producer、Consumer、Broker、Topic、Partition？</h4><p>Kafka 将生产者发布的消息发送到 <strong>Topic（主题）</strong> 中，需要这些消息的消费者可以订阅这些 <strong>Topic（主题）</strong>，如下图所示：</p>
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://oss.javaguide.cn/github/javaguide/high-performance/message-queue20210507200944439.png" alt="img" style="zoom:67%;" />
+
+<ol>
+<li><p><strong>Producer（生产者）</strong> : 生产消息的一方。</p>
+</li>
+<li><p><strong>Consumer（消费者）</strong> : 消费消息的一方。</p>
+</li>
+<li><p><strong>Broker（代理）</strong> : 可以看作是一个独立的 Kafka 实例。多个 Kafka Broker 组成一个 Kafka Cluster。</p>
+</li>
+<li><p><strong>Topic（主题）</strong> : Producer 将消息发送到特定的主题，Consumer 通过订阅特定的 Topic(主题) 来消费消息。</p>
+</li>
+<li><p><strong>Partition（分区）</strong> : Partition 属于 Topic 的一部分。一个 Topic 可以有多个 Partition ，并且同一 Topic 下的 Partition 可以分布在不同的 Broker 上，这也就表明一个 Topic 可以横跨多个 Broker 。</p>
+<blockquote>
+<p>Kafka 中的 Partition（分区） 实际上可以对应成为消息队列中的队列。</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="（2）Kafka-的多副本机制"><a href="#（2）Kafka-的多副本机制" class="headerlink" title="（2）Kafka 的多副本机制"></a>（2）Kafka 的多副本机制</h4><p>Kafka 为分区（Partition）引入了多副本（Replica）机制。分区（Partition）中的多个副本之间会有一个叫做 leader 的家伙，其他副本称为 follower。我们发送的消息会被发送到 leader 副本，然后 follower 副本才能从 leader 副本中拉取消息进行同步。</p>
+<blockquote>
+<p>生产者和消费者只与 leader 副本交互。你可以理解为其他副本只是 leader 副本的拷贝，它们的存在只是为了保证消息存储的安全性。当 leader 副本发生故障时会从 follower 中选举出一个 leader,但是 follower 中如果有和 leader 同步程度达不到要求的参加不了 leader 的竞选。</p>
+</blockquote>
+<p><strong>带来的好处：</strong></p>
+<ol>
+<li>Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力（负载均衡）。</li>
+<li>Partition 可以指定对应的 Replica 数, 这也极大地提高了消息存储的安全性, 提高了容灾能力，不过也相应的增加了所需要的存储空间。</li>
+</ol>
+<h3 id="3、Kafka-消费顺序、消息丢失和重复消费"><a href="#3、Kafka-消费顺序、消息丢失和重复消费" class="headerlink" title="3、Kafka 消费顺序、消息丢失和重复消费"></a>3、Kafka 消费顺序、消息丢失和重复消费</h3><h4 id="（1）Kafka-如何保证消息的消费顺序？"><a href="#（1）Kafka-如何保证消息的消费顺序？" class="headerlink" title="（1）Kafka 如何保证消息的消费顺序？"></a>（1）Kafka 如何保证消息的消费顺序？</h4><p>我们知道 Kafka 中 Partition(分区)是真正保存消息的地方，我们发送的消息都被放在了这里。而我们的 Partition(分区) 又存在于 Topic(主题) 这个概念中，并且我们可以给特定 Topic 指定多个 Partition。</p>
+<p>每次添加消息到 Partition(分区) 的时候都会采用尾加法。 <strong>Kafka 只能为我们保证 Partition(分区) 中的消息有序。</strong></p>
+<blockquote>
+<p>消息在被追加到 Partition(分区)的时候都会分配一个特定的偏移量（offset）。Kafka 通过偏移量（offset）来保证消息在分区内的顺序性。</p>
+</blockquote>
+<p>所以，我们就有一种很简单的保证消息消费顺序的方法：<strong>1 个 Topic 只对应一个 Partition</strong>。这样当然可以解决问题，但是破坏了 Kafka 的设计初衷。</p>
+<p>Kafka 中发送 1 条消息的时候，可以指定 topic, partition, key,data（数据） 4 个参数。如果你发送消息的时候指定了 Partition 的话，所有消息都会被发送到指定的 Partition。并且，同一个 key 的消息可以保证只发送到同一个 partition，这个我们可以采用表&#x2F;对象的 id 来作为 key 。</p>
+<p>总结一下，对于如何保证 Kafka 中消息消费的顺序，有了下面两种方法：</p>
+<ol>
+<li>1 个 Topic 只对应一个 Partition。</li>
+<li>（推荐）发送消息的时候指定 key&#x2F;Partition，然后对于 N 个消费方线程，每个线程分别消费一个Partition 即可，这样就能保证顺序性。</li>
+</ol>
+<h4 id="（2）Kafka-如何保证消息不丢失？"><a href="#（2）Kafka-如何保证消息不丢失？" class="headerlink" title="（2）Kafka 如何保证消息不丢失？"></a>（2）Kafka 如何保证消息不丢失？</h4><p>1、<strong>生产者丢失消息的情况</strong></p>
+<p>生产者(Producer) 调用<code>send</code>方法发送消息之后，消息可能因为网络问题并没有发送过去。</p>
+<p>为了确定消息是发送成功，我们要判断消息发送的结果。我们可以通过 <code>get()</code>方法获取调用结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ListenableFuture&lt;SendResult&lt;String, Object&gt;&gt; future = kafkaTemplate.send(topic, o);</span><br><span class="line">        future.addCallback(result -&gt; logger.info(<span class="string">&quot;生产者成功发送消息到topic:&#123;&#125; partition:&#123;&#125;的消息&quot;</span>, result.getRecordMetadata().topic(), result.getRecordMetadata().partition()),</span><br><span class="line">                ex -&gt; logger.error(<span class="string">&quot;生产者发送消失败，原因：&#123;&#125;&quot;</span>, ex.getMessage()));</span><br></pre></td></tr></table></figure>
+
+<p>如果消息发送失败的话，我们检查失败的原因之后重新发送即可！</p>
+<p><strong>解决办法：</strong></p>
+<p>设置acks&#x3D;all， 一定不会丢， 要求是， 你的 leader 接收到消息， 所有的 follower都同步到了消息之后， 才认为本次写成功了。 如果没满足这个条件， 生产者会自动不断的重试， 重试无限次。  </p>
+<p><strong>2、消费者丢失消息的情况</strong></p>
+<p>消息在被追加到 Partition(分区)的时候都会分配一个特定的偏移量（offset）。偏移量（offset)表示 Consumer 当前消费到的 Partition(分区)的所在的位置。Kafka 通过偏移量（offset）可以保证消息在分区内的顺序性。</p>
+<p>当消费者拉取到了分区的某个消息之后，消费者会自动提交了 offset。自动提交的话会有一个问题，试想一下，当消费者刚拿到这个消息准备进行真正消费的时候，突然挂掉了，消息实际上并没有被消费，但是 offset 却被自动提交了。</p>
+<p><strong>解决办法也比较粗暴，我们手动关闭自动提交 offset，每次在真正消费完消息之后再自己手动提交 offset 。</strong></p>
+<p>但是，细心的朋友一定会发现，这样会带来消息被重新消费的问题。比如你刚刚消费完消息之后，还没提交offset，结果自己挂掉了，那么这个消息理论上就会被消费两次。</p>
+<p><strong>3、Kafka 弄丢了消息</strong></p>
+<p>我们知道 Kafka 为分区（Partition）引入了多副本（Replica）机制。分区（Partition）中的多个副本之间会有一个叫做 leader 的家伙，其他副本称为 follower。我们发送的消息会被发送到 leader 副本，然后 follower 副本才能从 leader 副本中拉取消息进行同步。生产者和消费者只与 leader 副本交互。你可以理解为其他副本只是 leader 副本的拷贝，它们的存在只是为了保证消息存储的安全性。</p>
+<p><strong>试想一种情况：假如 leader 副本所在的 broker 突然挂掉，那么就要从 follower 副本重新选出一个 leader ，但是 leader 的数据还有一些没有被 follower 副本的同步的话，就会造成消息丢失。</strong></p>
+<p><strong>设置 acks &#x3D; all</strong>，解决办法就是我们设置 <strong>acks &#x3D; all</strong>。</p>
+<p><strong>设置 replication.factor &gt;&#x3D; 3</strong></p>
+<p>为了保证 leader 副本能有 follower 副本能同步消息，我们一般会为 topic 设置 <strong>replication.factor &gt;&#x3D; 3</strong>。这样就可以保证每个 分区(partition) 至少有 3 个副本。虽然造成了数据冗余，但是带来了数据的安全性。</p>
+<p><strong>设置 min.insync.replicas &gt; 1</strong></p>
+<p>一般情况下我们还需要设置 <strong>min.insync.replicas&gt; 1</strong> ，这样配置代表消息至少要被写入到 2 个副本才算是被成功发送。<strong>min.insync.replicas</strong> 的默认值为 1 ，在实际生产中应尽量避免默认值 1。另外需要确保需要确保 <strong>replication.factor &gt; min.insync.replicas</strong>。</p>
+<h4 id="（3）Kafka-如何保证消息不重复消费？"><a href="#（3）Kafka-如何保证消息不重复消费？" class="headerlink" title="（3）Kafka 如何保证消息不重复消费？"></a>（3）Kafka 如何保证消息不重复消费？</h4><p><strong>kafka 出现消息重复消费的原因：</strong></p>
+<ul>
+<li>服务端侧已经消费的数据没有成功提交 offset（根本原因）。</li>
+<li>Kafka 侧 由于服务端处理业务时间长或者网络链接等等原因让 Kafka 认为服务假死，触发了分区 rebalance。</li>
+</ul>
+<blockquote>
+<p>1、kafka的rebalance机制：consumer group中的消费者与topic下的partion重新匹配的过程</p>
+<p>2、何时会产生rebalance：<br>consumer group中的成员个数发生变化<br>consumer消费超时<br>group订阅的topic个数发生变化<br>group订阅的topic的分区数发生变化  </p>
+</blockquote>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li><p>消费消息服务做幂等校验，比如 Redis 的 set、MySQL 的主键等天然的幂等功能。这种方法最有效。</p>
+</li>
+<li><p>将 <code>enable.auto.commit</code>参数设置为 false，关闭自动提交，开发者在代码中手动提交 offset。那么这里会有个问题：</p>
+<p>什么时候提交 offset 合适？</p>
+<ul>
+<li>处理完消息再提交：依旧有消息重复消费的风险，和自动提交一样</li>
+<li>拉取到消息即提交：会有消息丢失的风险。允许消息延时的场景，一般会采用这种方式。然后，通过定时任务在业务不繁忙（比如凌晨）的时候做数据兜底</li>
+</ul>
+</li>
+</ul>
+<h4 id="（4）大量消息在-MQ-里长时间积压，该如何解决？"><a href="#（4）大量消息在-MQ-里长时间积压，该如何解决？" class="headerlink" title="（4）大量消息在 MQ 里长时间积压，该如何解决？"></a>（4）大量消息在 MQ 里长时间积压，该如何解决？</h4><p>一般这个时候， 只能临时紧急扩容了， 具体操作步骤和思路如下： </p>
+<ul>
+<li><p>先修复 consumer 的问题， 确保其恢复消费速度， 然后将现有 consumer 都停掉。 </p>
+</li>
+<li><p>新建一个 topic， partition 是原来的 10 倍， 临时建立好原先 10 倍的 queue 数量。 </p>
+</li>
+<li><p>然后写一个临时的分发数据的 consumer 程序， 这个程序部署上去消费积压的数据， 消费之后不做耗时的处理， 直接均匀轮询写入临时建立好的 10 倍数量的 queue。 </p>
+</li>
+<li><p>接着临时征用 10 倍的机器来部署 consumer， 每一批 consumer 消费一个临时 queue 的数据。 这种做法相当<br>于是临时将 queue 资源和 consumer 资源扩大 10 倍， 以正常的 10 倍速度来消费数据。 </p>
+</li>
+<li><p>等快速消费完积压数据之后， 得恢复原先部署的架构， 重新用原先的 consumer 机器来消费消息。</p>
+</li>
+</ul>
+<h2 id="海量数据处理"><a href="#海量数据处理" class="headerlink" title="海量数据处理"></a>海量数据处理</h2><h3 id="1、Bitmap"><a href="#1、Bitmap" class="headerlink" title="1、Bitmap"></a>1、Bitmap</h3><p>bitmap是什么？ 在计算机中一个字节(byte) &#x3D; 8位(bit), 这里的bit就是位，数据的最小表示单位，map一般是表示地图或者映射，加一起叫作位图。</p>
+<p>简单回顾一下二进制的一些知识：</p>
+<p>1byte &#x3D; 8bit</p>
+<p>一个bit有2种状态，0 或者 1</p>
+<p>所以1个byte可以表示0000 0000 -&gt; 1111 1111, 也就是十进制的 0 到 255。</p>
+<blockquote>
+<p>有10亿个不重复的无序的数字，如何快速排序？</p>
+</blockquote>
+<p>在大部分编程语言里面，int类型一般的都是占4个byte，也是32位，不管你这个数字是1 或者是1亿你都得占32位，所以如果你现在有10亿数字需要存放在内存里面，需要多少内存呢？</p>
+<p>1000000000 * 4 &#x2F; 1024 &#x2F; 1024 &#x3D; 3800MB，大概需要3800MB内存。</p>
+<p>为了解决这个问题，bitmap采用了一种映射机制，举个例子，假如有 1，3, 7，2, 5 这5个数字需要存放，正常情况下你需要5*4&#x3D;20byte，但bitmap只需要1byte，它是咋做到呢？</p>
+<p>假设下面是1byte，首先将所有位置为0：</p>
+<p>0 0 0 0 0 0 0</p>
+<p>从第一个0开始数数，把对应数字的位置置为1，比如说第一个1那就是第2个位置置为1，第二个3就是把第4个位置置为1，依此论推…</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1 =&gt; 0 1 0 0 0 0 0 0</span><br><span class="line">3 =&gt; 0 0 0 1 0 0 0 0</span><br><span class="line">7 =&gt; 0 0 0 0 0 0 0 1</span><br><span class="line">2 =&gt; 0 0 1 0 0 0 0 0</span><br><span class="line">5 =&gt; 0 0 0 0 0 1 0 0</span><br></pre></td></tr></table></figure>
+
+<p>叠加起来最终的串就是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 1 1 1 0 1 0 1</span><br></pre></td></tr></table></figure>
+
+<p>其实最终的数字和二进制没有什么关系，纯粹是数数，这个串就可以代表最大到7的数字，然后我们就开始数数，从0开始：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">比如第1个位置是1，那就记个1</span><br><span class="line">比如第2个位置是1，那就记个2</span><br><span class="line">比如第3个位置是1，那就记个3</span><br><span class="line">比如第5个位置是1，那就记个5</span><br><span class="line">比如第7个位置是1，那就记个7</span><br></pre></td></tr></table></figure>
+
+<p>结果就是 1 2 3 5 7，不仅仅排序了，而且还去重了！</p>
+<h3 id="2、问题一：统计不同号码的个数"><a href="#2、问题一：统计不同号码的个数" class="headerlink" title="2、问题一：统计不同号码的个数"></a>2、问题一：统计不同号码的个数</h3><p>这类题目其实是求解数据重复的问题。对于这类问题，可以使用<strong>位图法</strong>处理</p>
+<p>8位电话号码可以表示的范围为00000000～99999999。如果用 bit表示一个号码，那么总共需要1亿个bit，总共需要大约<strong>10MB</strong>的内存。</p>
+<ol>
+<li>创建一个长度为10^8的位图（Bitmap），每个位代表一个电话号码是否出现过。初始时，所有位都设置为0</li>
+<li>读取文件中的每个电话号码，将其转换为整数。   </li>
+<li>对于每个电话号码，检查对应的位图位置是否为0。如果为0，则将该位置的位图设置为1，表示该号码已经出现过。   </li>
+<li>继续读取下一个电话号码，重复步骤3，直到读取完所有号码。   </li>
+<li>统计位图中值为1的位的个数，即为不同号码的个数。</li>
+</ol>
+<h3 id="3、问题二：出现频率最高的100个词"><a href="#3、问题二：出现频率最高的100个词" class="headerlink" title="3、问题二：出现频率最高的100个词"></a>3、问题二：出现频率最高的100个词</h3><p>假如有一个<strong>1G</strong>大小的文件，文件里每一行是一个词，每个词的大小不超过<strong>16byte</strong>，要求返回出现频率最高的100个词。内存大小限制是<strong>10M</strong></p>
+<p>方案：</p>
+<p>由于内存限制，我们无法直接将大文件的所有词一次性读到内存中。</p>
+<p>可以采用<strong>分治策略</strong>，把一个大文件分解成多个小文件，保证每个文件的大小小于10M，进而直接将单个小文件读取到内存中进行处理。</p>
+<p><strong>第一步</strong>，首先遍历大文件，对遍历到的每个词x，执行 <code>hash(x) % 500</code>，将结果为i的词存放到文件f(i)中，遍历结束后，可以得到500个小文件，每个小文件的大小为2M左右；</p>
+<p><strong>第二步</strong>，接着统计每个小文件中出现频数最高的100个词。可以使用HashMap来实现，其中key为词，value为该词出现的频率。</p>
+<p><strong>第三步</strong>，在第二步中找出了每个文件出现频率最高的100个词之后，通过维护一个<strong>小顶堆</strong>来找出所有小文件中出现频率最高的100个词。</p>
+<h3 id="4、问题三：查找两个大文件共同的URL"><a href="#4、问题三：查找两个大文件共同的URL" class="headerlink" title="4、问题三：查找两个大文件共同的URL"></a>4、问题三：查找两个大文件共同的URL</h3><p>给定 a、b 两个文件，各存放 50 亿个 URL，每个 URL 各占 64B，找出 a、b 两个文件共同的 URL。内存限制是 4G。</p>
+<p>方案：</p>
+<p>每个 URL 占 64B，那么 50 亿个 URL占用的空间大小约为 320GB。5,000,000,000 * 64B ≈ 320GB</p>
+<p>由于内存大小只有 4G，因此，不可能一次性把所有 URL 加载到内存中处理。</p>
+<p>可以采用分治策略，也就是把一个文件中的 URL 按照某个特征划分为多个小文件，使得每个小文件大小不超过 4G，这样就可以把这个小文件读到内存中进行处理了。</p>
+<p>首先遍历文件a，对遍历到的 URL 进行哈希取余 <code>hash(URL) % 1000</code>，根据计算结果把遍历到的 URL 存储到 a0, a1,a2, …, a999，这样每个大小约为 300MB。使用同样的方法遍历文件 b，把文件 b 中的 URL 分别存储到文件 b0, b1, b2, …, b999 中。这样处理过后，所有可能相同的 URL 都在对应的小文件中，即 a0 对应 b0, …, a999 对应 b999，不对应的小文件不可能有相同的 URL。那么接下来，我们只需要求出这 1000 对小文件中相同的 URL 就好了。</p>
+<p>接着遍历 ai( <code>i∈[0,999]</code>)，把 URL 存储到一个 HashSet 集合中。然后遍历 bi 中每个 URL，看在 HashSet 集合中是否存在，若存在，说明这就是共同的 URL，可以把这个 URL 保存到一个单独的文件中。</p>
+<p>最后总结一下：</p>
+<ol>
+<li>分而治之，进行哈希取余；</li>
+<li>对每个子文件进行 HashSet 统计。</li>
+</ol>
+<p>更多：<a target="_blank" rel="noopener" href="https://topjavaer.cn/mass-data/8-topk-template.html">数据中 TopK 问题的常用套路 </a></p>
+<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><h3 id="1、Maven依赖冲突及解决"><a href="#1、Maven依赖冲突及解决" class="headerlink" title="1、Maven依赖冲突及解决"></a>1、Maven依赖冲突及解决</h3><p>Maven是一个常用的构建和项目管理工具，它可以帮助我们管理项目的依赖关系。在使用Maven构建项目时，可能会遇到依赖冲突的问题，即不同的依赖项引入了同一个类或版本不一致的类。</p>
+<p>以下是几种常见的解决依赖冲突的方法：</p>
+<ol>
+<li>排除冲突依赖：在pom.xml文件中，可以通过 <code>&lt;exclusions&gt;</code> 标签排除某个依赖项的特定传递依赖。例如：</li>
+</ol>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>example-artifact<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>conflicting-group<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>conflicting-artifact<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>引入统一版本：如果项目中引入了多个依赖项，且它们引用了相同的库但版本不同，可以通过在pom.xml中显式指定一个统一的版本来解决冲突。例如：</li>
+</ol>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>conflicting-group<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>conflicting-artifact<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>another-group<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>another-artifact<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>使用dependencyManagement：在父项目的pom.xml中，可以使用 <code>&lt;dependencyManagement&gt;</code> 标签来集中管理依赖项的版本。子项目可以继承父项目的依赖管理，确保所有子项目使用相同的依赖版本。</p>
+</li>
+<li><p>使用Maven插件：Maven提供了一些插件来解决依赖冲突问题，如Maven Dependency Plugin和Maven Enforcer Plugin。这些插件可以帮助分析和解决依赖冲突，提供冲突报告和冲突解决策略。</p>
+</li>
+<li><p>手动调整依赖：在某些情况下，可能需要手动调整项目的依赖关系，例如移除冲突的依赖项或选择合适的替代依赖项。</p>
+</li>
+</ol>
+<p>解决依赖冲突问题需要根据具体情况进行分析和调整。在解决冲突时，建议使用最新的稳定版本，并确保依赖项的版本兼容性。同时，及时更新和维护项目的依赖关系，以避免潜在的冲突问题。</p>
+<h2 id="场景问题设计"><a href="#场景问题设计" class="headerlink" title="场景问题设计"></a>场景问题设计</h2><h3 id="1、对于高并发数据量，10亿级，怎么实现一个redis排行榜"><a href="#1、对于高并发数据量，10亿级，怎么实现一个redis排行榜" class="headerlink" title="1、对于高并发数据量，10亿级，怎么实现一个redis排行榜"></a>1、对于高并发数据量，10亿级，怎么实现一个redis排行榜</h3><p>对于高并发数据量，10亿级的情况下，实现一个Redis排行榜可以采取以下策略：   </p>
+<ol>
+<li><strong>使用有序集合（Sorted Set）</strong>：Redis的有序集合数据结构非常适合实现排行榜。可以将每个元素作为有序集合的成员，分数作为排序依据。分数可以是用户的得分、点击量、浏览量等。   </li>
+<li><strong>分片存储</strong>：将数据按照一定的规则进行分片存储，将不同的排行榜数据分散到不同的Redis节点上。这样可以降低单个Redis节点的负载压力，提高并发处理能力。   </li>
+<li><strong>合理设置过期时间</strong>：根据业务需求，合理设置排行榜数据的过期时间，避免长时间无效数据的积累。可以使用Redis的过期时间功能，自动清理过期的排行榜数据。 </li>
+<li><strong>使用批量操作</strong>：对于大量的数据插入或更新操作，可以使用Redis的批量操作命令（如 <code>ZADD</code> ）来一次性处理多个元素，减少网络开销和提高效率。   </li>
+<li><strong>使用Redis集群或分布式部署</strong>：当数据量非常大时，可以考虑使用Redis集群或将数据分布到多个Redis实例中。这样可以水平扩展Redis的处理能力，提高并发处理和数据存储的能力。  </li>
+<li>合理选择数据结构和算法：根据具体的排行榜需求，选择合适的数据结构和算法。例如，如果需要支持按照时间范围查询排行榜，可以使用Redis的有序集合结合时间戳作为分数，使用 <code>ZREVRANGEBYSCORE</code> 命令来查询指定时间范围内的排行榜数据。   </li>
+<li>监控和优化：定期监控Redis的性能指标，如QPS（Queries Per Second）、内存使用情况等，并进行优化。可以使用Redis的性能监控工具或第三方监控工具来帮助发现性能瓶颈和优化点。   需要根据具体的业务需求和系统架构选择适合的实现方式，并进行性能测试和调优，以确保Redis排行榜的高并发处理能力和稳定性。</li>
+</ol>
+<h3 id="2、实现用户多设备同时登录"><a href="#2、实现用户多设备同时登录" class="headerlink" title="2、实现用户多设备同时登录"></a>2、实现用户多设备同时登录</h3><p>要实现用户多设备同时登录的功能，可以使用Java中的会话管理和并发控制机制来实现。以下是一个基本的实现方案：   </p>
+<ol>
+<li>用户登录时，生成一个唯一的会话ID，并将该会话ID与用户绑定。可以使用UUID类生成唯一的会话ID。   </li>
+<li>将会话ID存储在后端服务器的会话管理器中，可以使用内存存储、数据库或缓存等方式。   </li>
+<li>每次用户在新设备上登录时，生成一个新的会话ID，并将其与用户绑定。   </li>
+<li>在用户每次请求时，将会话ID作为请求的一部分发送到后端服务器。   </li>
+<li>后端服务器接收到请求后，根据会话ID验证用户的身份，并进行相应的处理。   </li>
+<li>对于并发登录控制，可以使用读写锁（ReentrantReadWriteLock）来实现。在用户登录时，获取写锁，防止其他线程同时修改会话信息。在用户请求时，获取读锁，允许多个线程同时读取会话信息。   </li>
+<li>可以使用定时任务或心跳机制来定期清理过期的会话，以释放资源并保持会话的有效性。   需要根据具体的业务需求和系统架构选择适合的实现方式。同时，为了保证用户登录的安全性，还需考虑加密、防护攻击等安全措施。</li>
+</ol>
+
+
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2023/10/14/SQL%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80/">SQL语法基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2023/10/07/LeetCode%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E5%BD%95/">LeetCode算法刷题录</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-I-O"><span class="toc-text">Java I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BD%95%E4%B8%BA-I-O"><span class="toc-text">1、何为 I&#x2F;O?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E7%9A%84-IO-%E6%A8%A1%E5%9E%8B"><span class="toc-text">2、有哪些常见的 IO 模型?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89BIO-Blocking-I-O"><span class="toc-text">（1）BIO (Blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89NIO-Non-blocking-I-O"><span class="toc-text">（2）NIO (Non-blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89AIO-Asynchronous-I-O"><span class="toc-text">（3）AIO (Asynchronous I&#x2F;O)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Netty"><span class="toc-text">Netty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Netty-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">1、Netty 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Netty%EF%BC%9F"><span class="toc-text">2、为什么要用 Netty？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Netty-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F"><span class="toc-text">3、Netty 应用场景了解么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81Netty-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E4%B8%8E%E4%BD%9C%E7%94%A8"><span class="toc-text">4、Netty 核心组件与作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81Reactor%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">5、Reactor线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFTCP%E7%B2%98%E5%8C%85%E3%80%81%E6%8B%86%E5%8C%85%EF%BC%9F"><span class="toc-text">6、什么是TCP粘包、拆包？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81Netty%E7%9A%84%E9%95%BF%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6"><span class="toc-text">7、Netty的长连接和心跳机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81Netty%E7%9A%84%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="toc-text">8、Netty的零拷贝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo"><span class="toc-text">Dubbo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFRPC%EF%BC%9F"><span class="toc-text">1、什么是RPC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFDubbo%EF%BC%9F"><span class="toc-text">2、什么是Dubbo？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E7%90%86"><span class="toc-text">3、原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-text">4、服务发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">5、负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E6%B5%81%E9%87%8F%E7%AE%A1%E6%8E%A7"><span class="toc-text">6、流量管控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-text">7、通信协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81SPI%E6%9C%BA%E5%88%B6"><span class="toc-text">8、SPI机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">9、使用示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F"><span class="toc-text">1、什么是负载均衡？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%88%86%E4%B8%BA%E5%93%AA%E5%87%A0%E7%A7%8D%EF%BC%9F"><span class="toc-text">2、负载均衡分为哪几种？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（1）服务端负载均衡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（2）客户端负载均衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">3、负载均衡常见的算法有哪些？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%9A%8F%E6%9C%BA%E6%B3%95"><span class="toc-text">（1）随机法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%BD%AE%E8%AF%A2%E6%B3%95"><span class="toc-text">（2）轮询法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%B8%80%E8%87%B4%E6%80%A7-Hash-%E6%B3%95"><span class="toc-text">（3）一致性 Hash 法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E6%9C%80%E5%B0%8F%E8%BF%9E%E6%8E%A5%E6%B3%95"><span class="toc-text">（4）最小连接法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%83%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-text">4、七层负载均衡可以怎么做？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89DNS%E8%A7%A3%E6%9E%90"><span class="toc-text">（1）DNS解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">（2）反向代理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96"><span class="toc-text">数据库优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-text">1、读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（1）什么是读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">（2）读写分离会带来什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（3）如何实现读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">（4）主从复制原理是什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">2、分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%BA%93%EF%BC%9F"><span class="toc-text">（1）什么是分库？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（2）什么是分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E9%9C%80%E8%A6%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（3）什么情况下需要分库分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">（4）常见的分片算法有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E5%91%A2%EF%BC%9F"><span class="toc-text">（5）分库分表会带来什么问题呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%886%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%AF%94%E8%BE%83%E6%8E%A8%E8%8D%90%E7%9A%84%E6%96%B9%E6%A1%88%EF%BC%9F"><span class="toc-text">（6）分库分表比较推荐的方案？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%887%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%8E%EF%BC%8C%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%BF%81%E7%A7%BB%E5%91%A2%EF%BC%9F"><span class="toc-text">（7）分库分表后，数据怎么迁移呢？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-text">消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B"><span class="toc-text">1、消息队列选型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Kafka-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-text">2、Kafka 核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF-Producer%E3%80%81Consumer%E3%80%81Broker%E3%80%81Topic%E3%80%81Partition%EF%BC%9F"><span class="toc-text">（1）什么是 Producer、Consumer、Broker、Topic、Partition？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E7%9A%84%E5%A4%9A%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-text">（2）Kafka 的多副本机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Kafka-%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E3%80%81%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E5%92%8C%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-text">3、Kafka 消费顺序、消息丢失和重复消费</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%EF%BC%9F"><span class="toc-text">（1）Kafka 如何保证消息的消费顺序？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%EF%BC%9F"><span class="toc-text">（2）Kafka 如何保证消息不丢失？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F"><span class="toc-text">（3）Kafka 如何保证消息不重复消费？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%A4%A7%E9%87%8F%E6%B6%88%E6%81%AF%E5%9C%A8-MQ-%E9%87%8C%E9%95%BF%E6%97%B6%E9%97%B4%E7%A7%AF%E5%8E%8B%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="toc-text">（4）大量消息在 MQ 里长时间积压，该如何解决？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">海量数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Bitmap"><span class="toc-text">1、Bitmap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9A%E7%BB%9F%E8%AE%A1%E4%B8%8D%E5%90%8C%E5%8F%B7%E7%A0%81%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-text">2、问题一：统计不同号码的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9A%E5%87%BA%E7%8E%B0%E9%A2%91%E7%8E%87%E6%9C%80%E9%AB%98%E7%9A%84100%E4%B8%AA%E8%AF%8D"><span class="toc-text">3、问题二：出现频率最高的100个词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%89%EF%BC%9A%E6%9F%A5%E6%89%BE%E4%B8%A4%E4%B8%AA%E5%A4%A7%E6%96%87%E4%BB%B6%E5%85%B1%E5%90%8C%E7%9A%84URL"><span class="toc-text">4、问题三：查找两个大文件共同的URL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven"><span class="toc-text">Maven</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81%E5%8F%8A%E8%A7%A3%E5%86%B3"><span class="toc-text">1、Maven依赖冲突及解决</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E9%97%AE%E9%A2%98%E8%AE%BE%E8%AE%A1"><span class="toc-text">场景问题设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AF%B9%E4%BA%8E%E9%AB%98%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%87%8F%EF%BC%8C10%E4%BA%BF%E7%BA%A7%EF%BC%8C%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AAredis%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="toc-text">1、对于高并发数据量，10亿级，怎么实现一个redis排行榜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95"><span class="toc-text">2、实现用户多设备同时登录</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
