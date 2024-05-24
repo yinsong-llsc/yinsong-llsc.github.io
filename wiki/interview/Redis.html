@@ -17,16 +17,18 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   
-  <title>愔颂</title>
+  <title>面試記：Redis - 愔颂</title>
 
   
-    <meta name="description" content="愔颂">
+    <meta name="description" content="在线文章一、图解Redis 二、缓存-Redis 站内文章一、Redis核心技术与原理">
 <meta property="og:type" content="website">
-<meta property="og:title" content="愔颂">
-<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/index.html">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/interview/Redis.html">
 <meta property="og:site_name" content="愔颂">
-<meta property="og:description" content="愔颂">
+<meta property="og:description" content="在线文章一、图解Redis 二、缓存-Redis 站内文章一、Redis核心技术与原理">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-22T13:52:47.263Z">
+<meta property="article:modified_time" content="2024-05-22T13:52:47.263Z">
 <meta property="article:author" content="远岫">
 <meta name="twitter:card" content="summary">
   
@@ -54,38 +56,71 @@
 </head>
 <body>
 
-<div class="l_body s:aa index tech" id="start" layout="index_wiki" ><aside class="l_left"><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html"><div class="main" ff="title">面試記</div></a></div></header>
 
 <div class="nav-area">
-<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/interview/" placeholder="在 interview 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
 
 
 <nav class="menu dis-select"><a class="nav-item" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item active" title="空间" href="/wiki/" style="color:#006633"><span>空间</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
 </div>
 <div class="widgets">
 
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">面试指南</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html#start"><span class="toc-text">面试题知识手册</span></a></div><div class="widget-header dis-select"><span class="name">计算机基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html"><span class="toc-text">计算机网络&操作系统</span></a></div><div class="widget-header dis-select"><span class="name">Java基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/JVM%E7%AF%87.html"><span class="toc-text">JVM篇</span></a></div><div class="widget-header dis-select"><span class="name">数据库</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/MySQL.html"><span class="toc-text">MySQL</span></a><a class="link active" href="/wiki/interview/Redis.html"><span class="toc-text">Redis</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/interview/HBase.html"><span class="toc-text">HBase</span></a></div><div class="widget-header dis-select"><span class="name">Spring/框架</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html"><span class="toc-text">Spring知识点汇总</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97MQ.html"><span class="toc-text">消息队列MQ</span></a></div><div class="widget-header dis-select"><span class="name">场景架构设计</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html"><span class="toc-text">场景题设计优化文章汇总</span></a><a class="link" href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html"><span class="toc-text">秒杀技术总结</span></a><a class="link" href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html"><span class="toc-text">分库分表和分布式事务解决方案</span></a></div><div class="widget-header dis-select"><span class="name">开发随记</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html"><span class="toc-text">正则表达式入门</span></a><a class="link" href="/wiki/interview/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9A%8F%E8%AE%B0.html"><span class="toc-text">常用命令随记</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s1.ax1x.com/2022/11/12/ziJjfK.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">愔颂</div></a></div></header>
 
 
 
 
-<div class="navbar top"><nav class="wiki"><a class="active" href="/wiki">所有栏目</a></a></nav></div>
-<div class="post-list wiki"><a class="post-card wiki" href="/wiki/gallery/scenery.html">
-<article class="md-text"><div class="preview"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://pic.imgdb.cn/item/6647132ed9c307b7e906b413.jpg"/></div><div class="excerpt"><h2 class="post-title">山川风物两相宜</h2><p>山川碧色漾开的不朽画卷和岁时风土的向阳而歌</p></div></article>
-</a></div><div class="post-list wiki"><a class="post-card wiki" href="/wiki/poem/%E5%8F%A4%E4%BA%BA%E8%AF%8D%E6%8A%84.html">
-<article class="md-text"><div class="preview"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://pic.imgdb.cn/item/663f8a200ea9cb1403929334.jpg"/></div><div class="excerpt"><h2 class="post-title">读诗·行路·寻找旷古痴念的前因</h2><p>在诗歌的语言中探寻世间无穷之美和生命的圆满自洽</p></div></article>
-</a></div><div class="post-list wiki"><a class="post-card wiki" href="/wiki/life/%E5%85%A5%E5%A4%8F%E8%AE%B0.html">
-<article class="md-text"><div class="preview"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s11.ax1x.com/2023/10/21/piF5HuF.jpg"/></div><div class="excerpt"><h2 class="post-title">细雨流光证前尘</h2><p>细雨流光间的过往留影与山川湖海的虔诚追寻</p></div></article>
-</a></div><div class="post-list wiki"><a class="post-card wiki" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">
-<article class="md-text"><div class="preview"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png"/></div><div class="excerpt"><h2 class="post-title">面試問題記錄與提升</h2><p>職業生涯中的成長與進步之旅</p></div></article>
-</a></div>
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-22T13:52:47.263Z">2024-05-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Redis</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<h2 id="在线文章"><a href="#在线文章" class="headerlink" title="在线文章"></a>在线文章</h2><p><a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/redis/">一、图解Redis</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.developers.pub/wiki/1002310/1011918">二、缓存-Redis</a></p>
+<h2 id="站内文章"><a href="#站内文章" class="headerlink" title="站内文章"></a>站内文章</h2><p><a href="https://yinsong-llsc.github.io/2023/10/05/Redis%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%8E%9F%E7%90%86/">一、Redis核心技术与原理</a></p>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/interview/MySQL.html">MySQL</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/interview/HBase.html">HBase</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><center>
 </br>
 <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
@@ -113,7 +148,14 @@ show_runtime();
 </center>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel blur'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E6%96%87%E7%AB%A0"><span class="toc-text">在线文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0"><span class="toc-text">站内文章</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
@@ -343,6 +385,30 @@ show_runtime();
 <script src="/js/main.js?v=1.28.1" async></script>
 
 <!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
 
 
 

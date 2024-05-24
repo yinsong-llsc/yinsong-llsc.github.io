@@ -1,0 +1,650 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>面試記：HBase - 愔颂</title>
+
+  
+    <meta name="description" content="一. HBase概述HBase（Hadoop Database）是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统。HBase 本质上是一个数据模型，可以提供快速随机访问海量结构化数据。利用 Hadoop 的文件系统（HDFS）提供的容错能力。它是 Hadoop 的生态系统，使用 HBase 在 HDFS 读取消费&#x2F;随机访问数据，是 Hadoop 文件系统的一部分。HBase 是">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HBase">
+<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/interview/HBase.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="一. HBase概述HBase（Hadoop Database）是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统。HBase 本质上是一个数据模型，可以提供快速随机访问海量结构化数据。利用 Hadoop 的文件系统（HDFS）提供的容错能力。它是 Hadoop 的生态系统，使用 HBase 在 HDFS 读取消费&#x2F;随机访问数据，是 Hadoop 文件系统的一部分。HBase 是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034299061-835a1cf9-4b0a-4922-af42-648ec8fe5ad7.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034298978-35701cd9-c95a-4223-aab0-4daf1ccfdef3.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034299003-5a8f1fab-47f9-4e94-bf5d-9f9b1e5a714e.webp">
+<meta property="article:published_time" content="2024-05-22T13:59:12.051Z">
+<meta property="article:modified_time" content="2024-05-22T13:59:12.051Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034299061-835a1cf9-4b0a-4922-af42-648ec8fe5ad7.webp">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html"><div class="main" ff="title">面試記</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/interview/" placeholder="在 interview 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item active" title="空间" href="/wiki/" style="color:#006633"><span>空间</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">面试指南</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html#start"><span class="toc-text">面试题知识手册</span></a></div><div class="widget-header dis-select"><span class="name">计算机基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html"><span class="toc-text">计算机网络&操作系统</span></a></div><div class="widget-header dis-select"><span class="name">Java基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/JVM%E7%AF%87.html"><span class="toc-text">JVM篇</span></a></div><div class="widget-header dis-select"><span class="name">数据库</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/MySQL.html"><span class="toc-text">MySQL</span></a><a class="link" href="/wiki/interview/Redis.html"><span class="toc-text">Redis</span></a><a class="link active" href="/wiki/interview/HBase.html"><span class="toc-text">HBase</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a></div><div class="widget-header dis-select"><span class="name">Spring/框架</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html"><span class="toc-text">Spring知识点汇总</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97MQ.html"><span class="toc-text">消息队列MQ</span></a></div><div class="widget-header dis-select"><span class="name">场景架构设计</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html"><span class="toc-text">场景题设计优化文章汇总</span></a><a class="link" href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html"><span class="toc-text">秒杀技术总结</span></a><a class="link" href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html"><span class="toc-text">分库分表和分布式事务解决方案</span></a></div><div class="widget-header dis-select"><span class="name">开发随记</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html"><span class="toc-text">正则表达式入门</span></a><a class="link" href="/wiki/interview/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9A%8F%E8%AE%B0.html"><span class="toc-text">常用命令随记</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-22T13:59:12.051Z">2024-05-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>HBase</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<h2 id="一-HBase概述"><a href="#一-HBase概述" class="headerlink" title="一. HBase概述"></a>一. HBase概述</h2><p>HBase（Hadoop Database）是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统。HBase 本质上是一个数据模型，可以提供快速随机访问海量结构化数据。利用 Hadoop 的文件系统（HDFS）提供的容错能力。它是 Hadoop 的生态系统，使用 HBase 在 HDFS 读取消费&#x2F;随机访问数据，是 Hadoop 文件系统的一部分。HBase 是一个面向列的数据库，在表中它由行排序。</p>
+<p>Hbase的适用场景为</p>
+<ol>
+<li>写密集型应用，每天写入量巨大，而相对读数量较小的应用，比如IM的历史消息，游戏的日志等等。</li>
+<li>不需要复杂查询条件来查询数据的应用，HBase只支持基于rowkey的查询，对于HBase来说，单条记录或者小范围的查询是可以接受的，大范围的查询由于分布式的原因，可能在性能上有点影响，而对于像SQL的join等查询，HBase无法支持。</li>
+<li>对性能和可靠性要求非常高的应用，由于HBase本身没有单点故障，可用性非常高。</li>
+</ol>
+<h2 id="二-HBase逻辑模型"><a href="#二-HBase逻辑模型" class="headerlink" title="二. HBase逻辑模型"></a>二. HBase逻辑模型</h2><p>1.表(table)：</p>
+<p>表的作用将存储在HBase的数据组织起来。</p>
+<p>2.行健(rowkey):</p>
+<p>行的唯一标示类似于主键; 按照字典序进行排序储存;最大长度是64KB，但是建议长度是10-100byte。</p>
+<p>3.列族(column family):</p>
+<p>在行中的数据都是根据列族分组；</p>
+<p>在HBase想要使用列，必须要指定列族，列必须要归属于某一个列族;</p>
+<p>4.列族需要在表定义的时候预先给出，而列不需要；</p>
+<p>列族是存储，权限控制，调优的最小单元。</p>
+<p>5.时间戳（timestamp）：</p>
+<p>时间戳是给定值的一个版本号标识，每一个值都会对应一个时间戳，时间戳是和每一个值同时写入HBase存储系统中的。在默认情况下，时间戳表示数据服务在写入数据时的系统时间。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034299061-835a1cf9-4b0a-4922-af42-648ec8fe5ad7.webp" alt="img"></p>
+<p>在实际的HDFS存储中，以及存储每个字段数据所对应的完成的键值对：</p>
+<p>｛row key，column family，column name，timestamp｝－&gt;value</p>
+<p>如上图key3行Address字段下t2时间戳下的数值Shanghai，存储的完整键值对是：</p>
+<p>｛key3，PersonalInfo，Address，t2｝-&gt;Shanghai</p>
+<p>也就是说Hbase真实是不存在行列的概念，只有键值对的概念。其行的概念是通过相邻的键值对的数据比较构建出来的。所以其物理上不是二维表的概念。</p>
+<h2 id="三-HBase物理模型"><a href="#三-HBase物理模型" class="headerlink" title="三. HBase物理模型"></a>三. HBase物理模型</h2><p>对于HBase 的物理模型包括Table的分割、Region的拆分、Region的分布，Region的构成。</p>
+<p><strong>Table的分割</strong>  是指Table 中的所有行都按照 rowkey 的字典序排列，Table 在行的方向上分割为多个Region，一个Region在同一时刻只能被同一个RegionServer管理，RegionServer可以管理多个Region（一对多），</p>
+<p><strong>Region的拆分</strong> Region是按大小分割的，新创建的表只有一个region（数据为空），随着数据增多，region不断增大，当增大到一个阀值时，region就会拆分为两个新的region，之后会有越来越多的region。</p>
+<p><strong>Region 的分布</strong> Region 是 HBase 中分布式存储和负载均衡的最小单元，不同的Region分布到不同的RegionServer上。</p>
+<p><strong>Region的构成</strong> Region虽然是分布式分布式存储的最小单元，但并不是存储的最小单元，Store是存储的最小单元，Region由一个或者多个Store组成，每个Store会保存一个Column Family；每个Store又由一个MemStore或0至多个StoreFile组成；MemStore存储在内存中，StoreFile存储在HDFS中。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034298978-35701cd9-c95a-4223-aab0-4daf1ccfdef3.webp" alt="img"></p>
+<p>如上图所示，Hbase一张表由一个或多个Region组成,一个ReginServer可以存储一或多个Region,一个Region只能由一个机器存储。记录之间按照Row Key的字典序排列。Region按大小分割的，每个表一开始只有一个Region，随着数据不断插 入表，Region不断增大，当增大到一个阀值的时候，Region就会等分会 两个新的Hregion。当table中的行不断增多，就会有越来越多的 Region。</p>
+<h2 id="四-Hbase架构"><a href="#四-Hbase架构" class="headerlink" title="四. Hbase架构"></a>四. Hbase架构</h2><p>HBase采用Master&#x2F;Slave架构搭建集群，它隶属于Hadoop生态系统，由一下类型节点组成：HMaster节点、HRegionServer节点、ZooKeeper集群，而在底层，它将数据存储于HDFS中，因而涉及到HDFS的NameNode、DataNode等，总体结构如下：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1714034299003-5a8f1fab-47f9-4e94-bf5d-9f9b1e5a714e.webp" alt="img"></p>
+<p>1、Client</p>
+<p>提供了访问HBase的一系列API接口，如Java Native API、Rest风格http API、Thrift API、scala等，并维护cache来加快对HBase的访问。</p>
+<p>2、Zookeeper</p>
+<p>（1）保证任何时候，集群中只有一个master</p>
+<p>（2）存贮所有Region的寻址入口。</p>
+<p>（3）实时监控Region server的上线和下线信息，并实时通知Master</p>
+<p>（4）存储HBase的schema和table元数据</p>
+<p>3、Master</p>
+<p>（1）为Region server分配region</p>
+<p>（2）负责Region server的负载均衡</p>
+<p>（3）发现失效的RegionServer并重新分配其上的region</p>
+<p>（4）管理用户对table的增删改操作</p>
+<p>4、RegionServer</p>
+<p>Region server维护region，处理对这些region的IO请求，向HDFS文件系统中读写数据。一个RegionServer由多个region组成，一个region由多个store组成，一个store对应一个CF（列族），而一个store包括位于内存中的memstore和位于磁盘的storefile，每个storefile以HFile格式保存在HDFS上。写操作先写入memstore，当memstore中的数据达到某个阈值时，RegionServer会启动flashcache进程写入storefile，每次写入形成单独的一个storefile。</p>
+<h2 id="五-HBase-RowKey设计"><a href="#五-HBase-RowKey设计" class="headerlink" title="五.HBase RowKey设计"></a>五.HBase RowKey设计</h2><p>rowkey是一个二进制码流，可以是任意字符串，最大长度64kb ，实际应用中一般为10-100bytes，以 byte[] 形式保存，一般设计成定长。建议越短越好，不要超过16个字节，原因如下：</p>
+<ol>
+<li>数据的持久化文件HFile中是按照KeyValue存储的，如果rowkey过长，比如超过100字节，1000w行数据，光rowkey就要占用100*1000w&#x3D;10亿个字节，将近1G数据，这样会极大影响HFile的存储效率；</li>
+<li>MemStore将缓存部分数据到内存，如果rowkey字段过长，内存的有效利用率就会降低，系统不能缓存更多的数据，这样会降低检索效率。</li>
+<li>目前操作系统都是64位系统，内存8字节对齐，控制在16个字节，8字节的整数倍利用了操作系统的最佳特性。</li>
+</ol>
+<h3 id="rowkey散列原则"><a href="#rowkey散列原则" class="headerlink" title="rowkey散列原则"></a>rowkey散列原则</h3><p>如果rowkey按照时间戳的方式递增，不要将时间放在二进制码的前面，建议将rowkey的高位作为散列字段，由程序随机生成，低位放时间字段，这样将提高数据均衡分布在每个RegionServer，以实现负载均衡的几率。如果没有散列字段，首字段直接是时间信息，所有的数据都会集中在一个RegionServer上，这样在数据检索的时候负载会集中在个别的RegionServer上，造成热点问题，会降低查询效率。</p>
+<h3 id="rowkey唯一原则"><a href="#rowkey唯一原则" class="headerlink" title="rowkey唯一原则"></a>rowkey唯一原则</h3><p>必须在设计上保证其唯一性，rowkey是按照字典顺序排序存储的，因此，设计rowkey的时候，要充分利用这个排序的特点，将经常读取的数据存储到一块，将最近可能会被访问的数据放到一块。</p>
+<h3 id="热点问题"><a href="#热点问题" class="headerlink" title="热点问题"></a>热点问题</h3><p>HBase中的行是按照rowkey的字典顺序排序的，这种设计优化了scan操作，可以将相关的行以及会被一起读取的行存取在临近位置，便于scan。然而糟糕的rowkey设计是热点的源头。 热点发生在大量的client直接访问集群的一个或极少数个节点（访问可能是读，写或者其他操作）。大量访问会使热点region所在的单个机器超出自身承受能力，引起性能下降甚至region不可用，这也会影响同一个RegionServer上的其他region，由于主机无法服务其他region的请求。 设计良好的数据访问模式以使集群被充分，均衡的利用。为了避免写热点，设计rowkey使得不同行在同一个region，但是在更多数据情况下，数据应该被写入集群的多个region，而不是一个。</p>
+<p>下面是一些常见的避免热点的方法以及它们的优缺点：</p>
+<h4 id="加盐"><a href="#加盐" class="headerlink" title="加盐"></a>加盐</h4><p>这里所说的加盐不是密码学中的加盐，而是在rowkey的前面增加随机数，具体就是给rowkey分配一个随机前缀以使得它和之前的rowkey的开头不同。分配的前缀种类数量应该和你想使用数据分散到不同的region的数量一致。加盐之后的rowkey就会根据随机生成的前缀分散到各个region上，以避免热点。</p>
+<h4 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h4><p>哈希会使同一行永远用一个前缀加盐。哈希也可以使负载分散到整个集群，但是读却是可以预测的。使用确定的哈希可以让客户端重构完整的rowkey，可以使用get操作准确获取某一个行数据。</p>
+<h4 id="反转"><a href="#反转" class="headerlink" title="反转"></a>反转</h4><p>第三种防止热点的方法时反转固定长度或者数字格式的rowkey。这样可以使得rowkey中经常改变的部分（最没有意义的部分）放在前面。这样可以有效的随机rowkey，但是牺牲了rowkey的有序性。反转rowkey的例子以手机号为rowkey，可以将手机号反转后的字符串作为rowkey，这样的就避免了以手机号那样比较固定开头导致热点问题。</p>
+<p>hbase的rowkey设计决定了数据的分区和查询的方式，是使用hbase前一定要想清楚的，以下简单列举了设计hbase rowkey时需要考虑的问题</p>
+<h3 id="1-rowkey是唯一的吗？"><a href="#1-rowkey是唯一的吗？" class="headerlink" title="1. rowkey是唯一的吗？"></a>1. rowkey是唯一的吗？</h3><p>rowkey相同的记录在hbase里被认为是同一条数据的多个版本，查询时默认返回最新版本的数据，所以通常rowkey都需要保证唯一，除非用到多版本特性</p>
+<p>最佳设计实践：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rowkey就好比数据库的里的主键，他唯一确定了一条记录，它可以是一个字段也可以是多个字段拼接起来:</span><br><span class="line">每个用户只有一条记录： [userid]</span><br><span class="line">每个用户有多条交易记录：[userid][orderid]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-满足查询场景吗？"><a href="#2-满足查询场景吗？" class="headerlink" title="2. 满足查询场景吗？"></a>2. 满足查询场景吗？</h3><p>rowkey的设计限制了数据的查询方式，hbase只有两种查询方式：</p>
+<ol>
+<li>根据完整的rowkey查询（get）<br>类似传统DB的sql:<br>select * from table where rowkey &#x3D; ‘abcde’<br>这种查询方式需要知道完整的rowkey，即组成rowkey的所有字段的值都是确定的</li>
+<li>根据rowkey的范围查询（scan):<br>类似传统DB的sql:<br>select * from table where ‘abc’ &lt; rowkey &lt;’abcx’<br>这种查询方式需要知道数据rowkey左边的值，就好像一本英文字典，你可以查询pre开头的所有单词，也可以查询prefi开头的所有单词，但是没办法查询中间是efi或结尾是ix的所有单词，除非翻阅整个字典。</li>
+</ol>
+<p>最佳设计实践：</p>
+<p><strong>在有限的查询方式下如何实现复杂查询：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.再建另外一张表作为索引表，应用双写</span><br><span class="line">2.使用filter，在服务端过滤掉不需要的数据</span><br><span class="line">3.使用二级索引</span><br><span class="line">4.如何实现倒序（新的数据排在前面，如：order by orderTime desc）：</span><br><span class="line">   使用反向scan：scan.setReverse(true)</span><br><span class="line">  #反向scan的性能比正常scan要差，如果倒序的场景占大头可以设计上就把数据倒序：</span><br><span class="line">  [hostname][log-event][timestamp]  =&gt; [hostname][log-event][Long.MAX_VALUE – timestamp]</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据足够分散，会产生热点吗？"><a href="#3-数据足够分散，会产生热点吗？" class="headerlink" title="3. 数据足够分散，会产生热点吗？"></a>3. 数据足够分散，会产生热点吗？</h3><p>散列的目的是数据可以分散到不同的分区，不至于产生热点，把某一台服务器累死，其他服务器闲置，充分发挥分布式和并发的优势</p>
+<p>最佳设计实践：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1.md5</span><br><span class="line">   [userId][orderid]  =&gt;   [md5(userid).subStr(0,4)][userId][orderid] </span><br><span class="line">2.反转</span><br><span class="line">   [userId][orderid] =&gt; [reverse(userid)][orderid]</span><br><span class="line">3.取模</span><br><span class="line">   [timestamp][hostname][log-event]  =&gt; [bucket][timestamp][hostname][log-event]</span><br><span class="line">   long bucket = timestamp % numBuckets;</span><br><span class="line">4.增加随机数</span><br><span class="line">   [userId][orderid] =&gt; [userId][orderid][random(100)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-rowkey可以再短点吗"><a href="#4-rowkey可以再短点吗" class="headerlink" title="4. rowkey可以再短点吗?"></a>4. rowkey可以再短点吗?</h3><p>短的rowkey可以减少数据量 ，提高查询写入性能</p>
+<p>最佳设计实践：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 使用long或int型代替String</span><br><span class="line">   如： &#x27;2015122410&#x27; =&gt; Long(2015122410)</span><br><span class="line">2. 使用编码代替名称</span><br><span class="line">   如：’淘宝‘ =&gt; tb</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-scan时会不会查询出不需要的数据？"><a href="#5-scan时会不会查询出不需要的数据？" class="headerlink" title="5. scan时会不会查询出不需要的数据？"></a>5. scan时会不会查询出不需要的数据？</h3><p>假设有以下场景：<br>table1的rowkey是: colume1+ colume2+ colume3<br>现在需要查询colume1&#x3D; host1 的所有数据：</p>
+<p>scan ‘table1’,{startkey&#x3D;&gt; ‘host1’,endkey&#x3D;&gt; ‘host2’}<br>此时如果有一条记录colume1&#x3D;host12，这条记录也会被查询出来：因为:<br>‘host1’ &lt; ‘host12’ &lt; ‘host2’<br>但显然这条记录不是我们想要的</p>
+<p>最佳设计实践：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 字段定长</span><br><span class="line">  [colume1][colume2] =&gt; [rpad(colume1,&#x27;x&#x27;,20)][colume2]</span><br><span class="line">2. 添加分隔符</span><br><span class="line">   [colume1][colume2] =&gt; [colume1][_][colume2]</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见设计实例："><a href="#常见设计实例：" class="headerlink" title="常见设计实例："></a>常见设计实例：</h2><h3 id="日志类、时间序列数据"><a href="#日志类、时间序列数据" class="headerlink" title="日志类、时间序列数据"></a>日志类、时间序列数据</h3><p>查询场景：<br>1.查询某台机器某个指标某段时间内的数据<br>[hostname][log-event][timestamp]</p>
+<p>2.查询某台机器某个指标最新的几条数据<br>timestamp &#x3D; Long.MAX_VALUE – timestamp<br>[hostname][log-event][timestamp]</p>
+<p>3.数据只有时间一个维度或某一个维度数据量特别大<br>long bucket &#x3D; timestamp % numBuckets;<br>[bucket][timestamp][hostname][log-event]</p>
+<h3 id="交易类数据"><a href="#交易类数据" class="headerlink" title="交易类数据"></a>交易类数据</h3><p>查询场景：<br>1.查询某个卖家某段时间内的交易记录<br>[seller id][timestmap][order number]</p>
+<p>2.查询某个买家某段时间内的交易记录<br>[buyer id][timestmap][order number]</p>
+<p>3.根据订单号查询<br>[order number]</p>
+<p>4.同时满足1，2，3<br>三张表：<br>一张买家维度表，rowkey为：<br>[buyer id][timestmap][order number]<br>一张卖家维度表，rowkey为：<br>[seller id][timestmap][order number]<br>一张订单索引表，rowkey为：<br>[order number]</p>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/interview/Redis.html">Redis</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html">Spring知识点汇总</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-HBase%E6%A6%82%E8%BF%B0"><span class="toc-text">一. HBase概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-HBase%E9%80%BB%E8%BE%91%E6%A8%A1%E5%9E%8B"><span class="toc-text">二. HBase逻辑模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-HBase%E7%89%A9%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="toc-text">三. HBase物理模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-Hbase%E6%9E%B6%E6%9E%84"><span class="toc-text">四. Hbase架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-HBase-RowKey%E8%AE%BE%E8%AE%A1"><span class="toc-text">五.HBase RowKey设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rowkey%E6%95%A3%E5%88%97%E5%8E%9F%E5%88%99"><span class="toc-text">rowkey散列原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rowkey%E5%94%AF%E4%B8%80%E5%8E%9F%E5%88%99"><span class="toc-text">rowkey唯一原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E7%82%B9%E9%97%AE%E9%A2%98"><span class="toc-text">热点问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E7%9B%90"><span class="toc-text">加盐</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%88%E5%B8%8C"><span class="toc-text">哈希</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E8%BD%AC"><span class="toc-text">反转</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-rowkey%E6%98%AF%E5%94%AF%E4%B8%80%E7%9A%84%E5%90%97%EF%BC%9F"><span class="toc-text">1. rowkey是唯一的吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%BB%A1%E8%B6%B3%E6%9F%A5%E8%AF%A2%E5%9C%BA%E6%99%AF%E5%90%97%EF%BC%9F"><span class="toc-text">2. 满足查询场景吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%95%B0%E6%8D%AE%E8%B6%B3%E5%A4%9F%E5%88%86%E6%95%A3%EF%BC%8C%E4%BC%9A%E4%BA%A7%E7%94%9F%E7%83%AD%E7%82%B9%E5%90%97%EF%BC%9F"><span class="toc-text">3. 数据足够分散，会产生热点吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-rowkey%E5%8F%AF%E4%BB%A5%E5%86%8D%E7%9F%AD%E7%82%B9%E5%90%97"><span class="toc-text">4. rowkey可以再短点吗?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-scan%E6%97%B6%E4%BC%9A%E4%B8%8D%E4%BC%9A%E6%9F%A5%E8%AF%A2%E5%87%BA%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="toc-text">5. scan时会不会查询出不需要的数据？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%AE%BE%E8%AE%A1%E5%AE%9E%E4%BE%8B%EF%BC%9A"><span class="toc-text">常见设计实例：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E7%B1%BB%E3%80%81%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE"><span class="toc-text">日志类、时间序列数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E7%B1%BB%E6%95%B0%E6%8D%AE"><span class="toc-text">交易类数据</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

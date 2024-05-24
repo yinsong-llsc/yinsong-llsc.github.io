@@ -1,0 +1,805 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>面試記：MySQL - 愔颂</title>
+
+  
+    <meta name="description" content="在线文章一、图解MySQL 站内汇总一、SQL语法基础 常见面试题1. 能说下myisam 和 innodb的区别吗？myisam引擎是5.1版本之前的默认引擎，支持全文检索、压缩、空间函数等，但是不支持事务和行级锁，所以一般用于有大量查询少量插入的场景来使用，而且myisam不支持外键，并且索引和数据是分开存储的。 innodb是基于聚簇索引建立的，和myisam相反它支持事务、外键，并且通">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MySQL">
+<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/interview/MySQL.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="在线文章一、图解MySQL 站内汇总一、SQL语法基础 常见面试题1. 能说下myisam 和 innodb的区别吗？myisam引擎是5.1版本之前的默认引擎，支持全文检索、压缩、空间函数等，但是不支持事务和行级锁，所以一般用于有大量查询少量插入的场景来使用，而且myisam不支持外键，并且索引和数据是分开存储的。 innodb是基于聚簇索引建立的，和myisam相反它支持事务、外键，并且通">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811087-3482d673-e8c6-44a2-a33b-0a9009e6f0a2.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811083-fdf8d20b-005a-42d0-8549-df0bfea52f0f.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811566-0ba49212-64d5-4029-8c34-67b7330883e8.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811564-1c2e99ae-2bdb-4c53-8e92-5dea21d3e8b6.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811624-d27d67d0-5ba4-45a0-b8a0-4d87f54ea0bd.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811710-2f364043-d641-4428-8c6b-03c406eefe30.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811796-58a789cc-331b-4fc0-9b39-5bda4ce4f8d5.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811933-ca7a6aeb-ce2d-4618-a316-2e691a9fe5f9.webp">
+<meta property="article:published_time" content="2024-05-22T12:54:09.546Z">
+<meta property="article:modified_time" content="2024-05-22T12:54:09.546Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811087-3482d673-e8c6-44a2-a33b-0a9009e6f0a2.webp">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html"><div class="main" ff="title">面試記</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/interview/" placeholder="在 interview 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item active" title="空间" href="/wiki/" style="color:#006633"><span>空间</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">面试指南</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html#start"><span class="toc-text">面试题知识手册</span></a></div><div class="widget-header dis-select"><span class="name">计算机基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html"><span class="toc-text">计算机网络&操作系统</span></a></div><div class="widget-header dis-select"><span class="name">Java基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/JVM%E7%AF%87.html"><span class="toc-text">JVM篇</span></a></div><div class="widget-header dis-select"><span class="name">数据库</span></div><div class="widget-body fs14"><a class="link active" href="/wiki/interview/MySQL.html"><span class="toc-text">MySQL</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/interview/Redis.html"><span class="toc-text">Redis</span></a><a class="link" href="/wiki/interview/HBase.html"><span class="toc-text">HBase</span></a></div><div class="widget-header dis-select"><span class="name">Spring/框架</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html"><span class="toc-text">Spring知识点汇总</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97MQ.html"><span class="toc-text">消息队列MQ</span></a></div><div class="widget-header dis-select"><span class="name">场景架构设计</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html"><span class="toc-text">场景题设计优化文章汇总</span></a><a class="link" href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html"><span class="toc-text">秒杀技术总结</span></a><a class="link" href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html"><span class="toc-text">分库分表和分布式事务解决方案</span></a></div><div class="widget-header dis-select"><span class="name">开发随记</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html"><span class="toc-text">正则表达式入门</span></a><a class="link" href="/wiki/interview/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9A%8F%E8%AE%B0.html"><span class="toc-text">常用命令随记</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-22T12:54:09.546Z">2024-05-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>MySQL</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<h2 id="在线文章"><a href="#在线文章" class="headerlink" title="在线文章"></a>在线文章</h2><p><a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/mysql/">一、图解MySQL</a></p>
+<h2 id="站内汇总"><a href="#站内汇总" class="headerlink" title="站内汇总"></a>站内汇总</h2><p><a href="https://yinsong-llsc.github.io/2023/10/14/SQL%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80/">一、SQL语法基础</a></p>
+<h2 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h2><h3 id="1-能说下myisam-和-innodb的区别吗？"><a href="#1-能说下myisam-和-innodb的区别吗？" class="headerlink" title="1. 能说下myisam 和 innodb的区别吗？"></a>1. 能说下myisam 和 innodb的区别吗？</h3><p>myisam引擎是5.1版本之前的默认引擎，支持全文检索、压缩、空间函数等，但是不支持事务和行级锁，所以一般用于有大量查询少量插入的场景来使用，而且myisam不支持外键，并且索引和数据是分开存储的。</p>
+<p>innodb是基于聚簇索引建立的，和myisam相反它支持事务、外键，并且通过MVCC来支持高并发，索引和数据存储在一起。</p>
+<h3 id="2-说下mysql的索引有哪些吧，聚簇和非聚簇索引又是什么？"><a href="#2-说下mysql的索引有哪些吧，聚簇和非聚簇索引又是什么？" class="headerlink" title="2. 说下mysql的索引有哪些吧，聚簇和非聚簇索引又是什么？"></a>2. 说下mysql的索引有哪些吧，聚簇和非聚簇索引又是什么？</h3><p>索引按照数据结构来说主要包含B+树和Hash索引。</p>
+<p>假设我们有张表，结构如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(</span><br><span class="line">    id <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  age <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">  <span class="keyword">primary</span> key(id),</span><br><span class="line">  key(age)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>B+树是左小右大的顺序存储结构，节点只包含id索引列，而叶子节点包含索引列和数据，这种数据和索引在一起存储的索引方式叫做聚簇索引，一张表只能有一个聚簇索引。假设没有定义主键，InnoDB会选择一个唯一的非空索引代替，如果没有的话则会隐式定义一个主键作为聚簇索引。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811087-3482d673-e8c6-44a2-a33b-0a9009e6f0a2.webp" alt="img"></p>
+<p>这是主键聚簇索引存储的结构，那么非聚簇索引的结构是什么样子呢？非聚簇索引(二级索引)保存的是主键id值，这一点和myisam保存的是数据地址是不同的。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811083-fdf8d20b-005a-42d0-8549-df0bfea52f0f.webp" alt="img"></p>
+<p>最终，我们一张图看看InnoDB和Myisam聚簇和非聚簇索引的区别</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811566-0ba49212-64d5-4029-8c34-67b7330883e8.webp" alt="img"></p>
+<h3 id="3-那你知道什么是覆盖索引和回表吗？"><a href="#3-那你知道什么是覆盖索引和回表吗？" class="headerlink" title="3. 那你知道什么是覆盖索引和回表吗？"></a>3. 那你知道什么是覆盖索引和回表吗？</h3><p>覆盖索引指的是在一次查询中，如果一个索引包含或者说覆盖所有需要查询的字段的值，我们就称之为覆盖索引，而不再需要回表查询。</p>
+<p>而要确定一个查询是否是覆盖索引，我们只需要explain sql语句看Extra的结果是否是“Using index”即可。</p>
+<p>以上面的user表来举例，我们再增加一个name字段，然后做一些查询试试。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> age<span class="operator">=</span><span class="number">1</span>; <span class="operator">/</span><span class="operator">/</span>查询的name无法从索引数据获取</span><br><span class="line">explain <span class="keyword">select</span> id,age <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> age<span class="operator">=</span><span class="number">1</span>; <span class="operator">/</span><span class="operator">/</span>可以直接从索引获取</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-锁的类型有哪些呢"><a href="#4-锁的类型有哪些呢" class="headerlink" title="4. 锁的类型有哪些呢"></a>4. 锁的类型有哪些呢</h3><p>mysql锁分为<strong>共享锁</strong>和<strong>排他锁</strong>，也叫做读锁和写锁。</p>
+<p>读锁是共享的，可以通过lock in share mode实现，这时候只能读不能写。</p>
+<p>写锁是排他的，它会阻塞其他的写锁和读锁。从颗粒度来区分，可以分为<strong>表锁</strong>和<strong>行锁</strong>两种。</p>
+<p>表锁会锁定整张表并且阻塞其他用户对该表的所有读写操作，比如alter修改表结构的时候会锁表。</p>
+<p>行锁又可以分为<strong>乐观锁</strong>和<strong>悲观锁</strong>，悲观锁可以通过for update实现，乐观锁则通过版本号实现。</p>
+<h3 id="5-你能说下事务的基本特性和隔离级别吗？"><a href="#5-你能说下事务的基本特性和隔离级别吗？" class="headerlink" title="5. 你能说下事务的基本特性和隔离级别吗？"></a>5. 你能说下事务的基本特性和隔离级别吗？</h3><p>事务基本特性ACID分别是：</p>
+<p><strong>原子性</strong>：指的是一个事务中的操作要么全部成功，要么全部失败。</p>
+<p><strong>一致性</strong>：指的是数据库总是从一个一致性的状态转换到另外一个一致性的状态。比如A转账给B100块钱，假设中间sql执行过程中系统崩溃A也不会损失100块，因为事务没有提交，修改也就不会保存到数据库。</p>
+<p><strong>隔离性</strong>：指的是一个事务的修改在最终提交前，对其他事务是不可见的。</p>
+<p><strong>持久性</strong>：指的是一旦事务提交，所做的修改就会永久保存到数据库中。</p>
+<p>而隔离性有4个隔离级别，分别是：</p>
+<p><strong>read uncommit</strong> 读未提交，可能会读到其他事务未提交的数据，也叫做脏读。</p>
+<p>用户本来应该读取到id&#x3D;1的用户age应该是10，结果读取到了其他事务还没有提交的事务，结果读取结果age&#x3D;20，这就是脏读。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811564-1c2e99ae-2bdb-4c53-8e92-5dea21d3e8b6.webp" alt="img"></p>
+<p><strong>read commit</strong> 读已提交，两次读取结果不一致，叫做不可重复读。</p>
+<p>不可重复读解决了脏读的问题，他只会读取已经提交的事务。</p>
+<p>用户开启事务读取id&#x3D;1用户，查询到age&#x3D;10，再次读取发现结果&#x3D;20，在同一个事务里同一个查询读取到不同的结果叫做不可重复读。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811624-d27d67d0-5ba4-45a0-b8a0-4d87f54ea0bd.webp" alt="img"></p>
+<p><strong>repeatable read</strong> 可重复复读，这是mysql的默认级别，就是每次读取结果都一样，但是有可能产生幻读。</p>
+<p><strong>serializable</strong> 串行，一般是不会使用的，他会给每一行读取的数据加锁，会导致大量超时和锁竞争的问题。</p>
+<h3 id="6-那ACID靠什么保证的呢？"><a href="#6-那ACID靠什么保证的呢？" class="headerlink" title="6. 那ACID靠什么保证的呢？"></a>6. 那ACID靠什么保证的呢？</h3><p>A原子性由undo log日志保证，它记录了需要回滚的日志信息，事务回滚时撤销已经执行成功的sql</p>
+<p>C一致性一般由代码层面来保证</p>
+<p>I隔离性由MVCC来保证</p>
+<p>D持久性由内存+redo log来保证，mysql修改数据同时在内存和redo log记录这次操作，事务提交的时候通过redo log刷盘，宕机的时候可以从redo log恢复</p>
+<h3 id="7-那你说说什么是幻读，什么是MVCC？"><a href="#7-那你说说什么是幻读，什么是MVCC？" class="headerlink" title="7. 那你说说什么是幻读，什么是MVCC？"></a>7. 那你说说什么是幻读，什么是MVCC？</h3><p>要说幻读，首先要了解MVCC，MVCC叫做多版本并发控制，实际上就是保存了数据在某个时间节点的快照。</p>
+<p>我们每行数据实际上隐藏了两列，创建时间版本号，过期(删除)时间版本号，每开始一个新的事务，版本号都会自动递增。</p>
+<p>还是拿上面的user表举例子，假设我们插入两条数据，他们实际上应该长这样。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>create_version</th>
+<th>delete_version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>张三</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>这时候假设小明去执行查询，此时current_version&#x3D;3</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id<span class="operator">&lt;=</span><span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同时，小红在这时候开启事务去修改id&#x3D;1的记录，current_version&#x3D;4</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> name<span class="operator">=</span><span class="string">&#x27;张三三&#x27;</span> <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行成功后的结果是这样的</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>create_version</th>
+<th>delete_version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>张三</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>张三三</td>
+<td>4</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>如果这时候还有小黑在删除id&#x3D;2的数据，current_version&#x3D;5，执行后结果是这样的。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>create_version</th>
+<th>delete_version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>张三</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>张三三</td>
+<td>4</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>由于MVCC的原理是查找创建版本小于或等于当前事务版本，删除版本为空或者大于当前事务版本，小明的真实的查询应该是这样</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id<span class="operator">&lt;=</span><span class="number">3</span> <span class="keyword">and</span> create_version<span class="operator">&lt;=</span><span class="number">3</span> <span class="keyword">and</span> (delete_version<span class="operator">&gt;</span><span class="number">3</span> <span class="keyword">or</span> delete_version <span class="keyword">is</span> <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p>所以小明最后查询到的id&#x3D;1的名字还是’张三’，并且id&#x3D;2的记录也能查询到。这样做是<strong>为了保证事务读取的数据是在事务开始前就已经存在的，要么是事务自己插入或者修改的</strong>。</p>
+<p>明白MVCC原理，我们来说什么是幻读就简单多了。举一个常见的场景，用户注册时，我们先查询用户名是否存在，不存在就插入，假定用户名是唯一索引。</p>
+<ol>
+<li>小明开启事务current_version&#x3D;6查询名字为’王五’的记录，发现不存在。</li>
+<li>小红开启事务current_version&#x3D;7插入一条数据，结果是这样：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>Name</th>
+<th>create_version</th>
+<th>delete_version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>张三</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>李四</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>王五</td>
+<td>7</td>
+<td></td>
+</tr>
+</tbody></table>
+<ol>
+<li>小明执行插入名字’王五’的记录，发现唯一索引冲突，无法插入，这就是幻读。</li>
+</ol>
+<h3 id="8-那你知道什么是间隙锁吗？"><a href="#8-那你知道什么是间隙锁吗？" class="headerlink" title="8. 那你知道什么是间隙锁吗？"></a>8. 那你知道什么是间隙锁吗？</h3><p>间隙锁是可重复读级别下才会有的锁，结合MVCC和间隙锁可以解决幻读的问题。我们还是以user举例，假设现在user表有几条记录</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>Age</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>20</td>
+</tr>
+<tr>
+<td>3</td>
+<td>30</td>
+</tr>
+</tbody></table>
+<p>当我们执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> age<span class="operator">=</span><span class="number">20</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(age) <span class="keyword">values</span>(<span class="number">10</span>); #成功</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(age) <span class="keyword">values</span>(<span class="number">11</span>); #失败</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(age) <span class="keyword">values</span>(<span class="number">20</span>); #失败</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(age) <span class="keyword">values</span>(<span class="number">21</span>); #失败</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">user</span>(age) <span class="keyword">values</span>(<span class="number">30</span>); #失败</span><br></pre></td></tr></table></figure>
+
+<p>只有10可以插入成功，那么因为表的间隙mysql自动帮我们生成了区间(左开右闭)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(negative infinity，10],(10,20],(20,30],(30,positive infinity)</span><br></pre></td></tr></table></figure>
+
+<p>由于20存在记录，所以(10,20]，(20,30]区间都被锁定了无法插入、删除。</p>
+<p>如果查询21呢？就会根据21定位到(20,30)的区间(都是开区间)。</p>
+<p>需要注意的是唯一索引是不会有间隙索引的。</p>
+<h3 id="9-你们数据量级多大？分库分表怎么做的？"><a href="#9-你们数据量级多大？分库分表怎么做的？" class="headerlink" title="9. 你们数据量级多大？分库分表怎么做的？"></a>9. 你们数据量级多大？分库分表怎么做的？</h3><p>首先分库分表分为垂直和水平两个方式，一般来说我们拆分的顺序是先垂直后水平。</p>
+<p><strong>垂直分库</strong></p>
+<p>基于现在微服务拆分来说，都是已经做到了垂直分库了</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811710-2f364043-d641-4428-8c6b-03c406eefe30.webp" alt="img"></p>
+<p><strong>垂直分表</strong></p>
+<p>如果表字段比较多，将不常用的、数据较大的等等做拆分</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811796-58a789cc-331b-4fc0-9b39-5bda4ce4f8d5.webp" alt="img"></p>
+<p><strong>水平分表</strong></p>
+<p>首先根据业务场景来决定使用什么字段作为分表字段(sharding_key)，比如我们现在日订单1000万，我们大部分的场景来源于C端，我们可以用user_id作为sharding_key，数据查询支持到最近3个月的订单，超过3个月的做归档处理，那么3个月的数据量就是9亿，可以分1024张表，那么每张表的数据大概就在100万左右。</p>
+<p>比如用户id为100，那我们都经过hash(100)，然后对1024取模，就可以落到对应的表上了。</p>
+<h3 id="10-那分表后的ID怎么保证唯一性的呢？"><a href="#10-那分表后的ID怎么保证唯一性的呢？" class="headerlink" title="10. 那分表后的ID怎么保证唯一性的呢？"></a>10. 那分表后的ID怎么保证唯一性的呢？</h3><p>因为我们主键默认都是自增的，那么分表之后的主键在不同表就肯定会有冲突了。有几个办法考虑：</p>
+<ol>
+<li>设定步长，比如1-1024张表我们设定1024的基础步长，这样主键落到不同的表就不会冲突了。</li>
+<li>分布式ID，自己实现一套分布式ID生成算法或者使用开源的比如雪花算法这种</li>
+<li>分表后不使用主键作为查询依据，而是每张表单独新增一个字段作为唯一主键使用，比如订单表订单号是唯一的，不管最终落在哪张表都基于订单号作为查询依据，更新也一样。</li>
+</ol>
+<h3 id="11-分表后非sharding-key的查询怎么处理呢？"><a href="#11-分表后非sharding-key的查询怎么处理呢？" class="headerlink" title="11. 分表后非sharding_key的查询怎么处理呢？"></a>11. 分表后非sharding_key的查询怎么处理呢？</h3><ol>
+<li>可以做一个mapping表，比如这时候商家要查询订单列表怎么办呢？不带user_id查询的话你总不能扫全表吧？所以我们可以做一个映射关系表，保存商家和用户的关系，查询的时候先通过商家查询到用户列表，再通过user_id去查询。</li>
+<li>打宽表，一般而言，商户端对数据实时性要求并不是很高，比如查询订单列表，可以把订单表同步到离线（实时）数仓，再基于数仓去做成一张宽表，再基于其他如es提供查询服务。</li>
+<li>数据量不是很大的话，比如后台的一些查询之类的，也可以通过多线程扫表，然后再聚合结果的方式来做。或者异步的形式也是可以的。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Callable&lt;List&lt;User&gt;&gt;&gt; taskList = Lists.newArrayList();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">shardingIndex</span> <span class="operator">=</span> <span class="number">0</span>; shardingIndex &lt; <span class="number">1024</span>; shardingIndex++) &#123;</span><br><span class="line">    taskList.add(() -&gt; (userMapper.getProcessingAccountList(shardingIndex)));</span><br><span class="line">&#125;</span><br><span class="line">List&lt;ThirdAccountInfo&gt; list = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    list = taskExecutor.executeTask(taskList);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TaskExecutor</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">executeTask</span><span class="params">(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        List&lt;T&gt; result = Lists.newArrayList();</span><br><span class="line">        List&lt;Future&lt;T&gt;&gt; futures = ExecutorUtil.invokeAll(tasks);</span><br><span class="line">        <span class="keyword">for</span> (Future&lt;T&gt; future : futures) &#123;</span><br><span class="line">            result.add(future.get());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-说说mysql主从同步怎么做的吧？"><a href="#12-说说mysql主从同步怎么做的吧？" class="headerlink" title="12. 说说mysql主从同步怎么做的吧？"></a>12. 说说mysql主从同步怎么做的吧？</h3><p>首先先了解mysql主从同步的原理</p>
+<ol>
+<li>master提交完事务后，写入binlog</li>
+<li>slave连接到master，获取binlog</li>
+<li>master创建dump线程，推送binglog到slave</li>
+<li>slave启动一个IO线程读取同步过来的master的binlog，记录到relay log中继日志中</li>
+<li>slave再开启一个sql线程读取relay log事件并在slave执行，完成同步</li>
+<li>slave记录自己的binglog</li>
+</ol>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759811933-ca7a6aeb-ce2d-4618-a316-2e691a9fe5f9.webp" alt="img"></p>
+<p>由于mysql默认的复制方式是异步的，主库把日志发送给从库后不关心从库是否已经处理，这样会产生一个问题就是假设主库挂了，从库处理失败了，这时候从库升为主库后，日志就丢失了。由此产生两个概念。</p>
+<p><strong>全同步复制</strong></p>
+<p>主库写入binlog后强制同步日志到从库，所有的从库都执行完成后才返回给客户端，但是很显然这个方式的话性能会受到严重影响。</p>
+<p><strong>半同步复制</strong></p>
+<p>和全同步不同的是，半同步复制的逻辑是这样，从库写入日志成功后返回ACK确认给主库，主库收到至少一个从库的确认就认为写操作完成。</p>
+<h3 id="13-那主从的延迟怎么解决呢？"><a href="#13-那主从的延迟怎么解决呢？" class="headerlink" title="13. 那主从的延迟怎么解决呢？"></a>13. 那主从的延迟怎么解决呢？</h3><ol>
+<li>针对特定的业务场景，读写请求都强制走主库</li>
+<li>读请求走从库，如果没有数据，去主库做二次查询</li>
+</ol>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/interview/JVM%E7%AF%87.html">JVM篇</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/interview/Redis.html">Redis</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E6%96%87%E7%AB%A0"><span class="toc-text">在线文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%99%E5%86%85%E6%B1%87%E6%80%BB"><span class="toc-text">站内汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">常见面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%83%BD%E8%AF%B4%E4%B8%8Bmyisam-%E5%92%8C-innodb%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97%EF%BC%9F"><span class="toc-text">1. 能说下myisam 和 innodb的区别吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AF%B4%E4%B8%8Bmysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%9C%89%E5%93%AA%E4%BA%9B%E5%90%A7%EF%BC%8C%E8%81%9A%E7%B0%87%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%8F%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2. 说下mysql的索引有哪些吧，聚簇和非聚簇索引又是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%82%A3%E4%BD%A0%E7%9F%A5%E9%81%93%E4%BB%80%E4%B9%88%E6%98%AF%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E5%92%8C%E5%9B%9E%E8%A1%A8%E5%90%97%EF%BC%9F"><span class="toc-text">3. 那你知道什么是覆盖索引和回表吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%94%81%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%9C%89%E5%93%AA%E4%BA%9B%E5%91%A2"><span class="toc-text">4. 锁的类型有哪些呢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BD%A0%E8%83%BD%E8%AF%B4%E4%B8%8B%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E5%92%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%90%97%EF%BC%9F"><span class="toc-text">5. 你能说下事务的基本特性和隔离级别吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%82%A3ACID%E9%9D%A0%E4%BB%80%E4%B9%88%E4%BF%9D%E8%AF%81%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="toc-text">6. 那ACID靠什么保证的呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E9%82%A3%E4%BD%A0%E8%AF%B4%E8%AF%B4%E4%BB%80%E4%B9%88%E6%98%AF%E5%B9%BB%E8%AF%BB%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AFMVCC%EF%BC%9F"><span class="toc-text">7. 那你说说什么是幻读，什么是MVCC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E9%82%A3%E4%BD%A0%E7%9F%A5%E9%81%93%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%B4%E9%9A%99%E9%94%81%E5%90%97%EF%BC%9F"><span class="toc-text">8. 那你知道什么是间隙锁吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E4%BD%A0%E4%BB%AC%E6%95%B0%E6%8D%AE%E9%87%8F%E7%BA%A7%E5%A4%9A%E5%A4%A7%EF%BC%9F%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%80%8E%E4%B9%88%E5%81%9A%E7%9A%84%EF%BC%9F"><span class="toc-text">9. 你们数据量级多大？分库分表怎么做的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E9%82%A3%E5%88%86%E8%A1%A8%E5%90%8E%E7%9A%84ID%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E5%94%AF%E4%B8%80%E6%80%A7%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="toc-text">10. 那分表后的ID怎么保证唯一性的呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%88%86%E8%A1%A8%E5%90%8E%E9%9D%9Esharding-key%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E5%91%A2%EF%BC%9F"><span class="toc-text">11. 分表后非sharding_key的查询怎么处理呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E8%AF%B4%E8%AF%B4mysql%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E6%80%8E%E4%B9%88%E5%81%9A%E7%9A%84%E5%90%A7%EF%BC%9F"><span class="toc-text">12. 说说mysql主从同步怎么做的吧？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E9%82%A3%E4%B8%BB%E4%BB%8E%E7%9A%84%E5%BB%B6%E8%BF%9F%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E5%91%A2%EF%BC%9F"><span class="toc-text">13. 那主从的延迟怎么解决呢？</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

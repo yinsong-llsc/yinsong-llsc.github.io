@@ -1,0 +1,643 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>面試記：秒杀技术总结 - 愔颂</title>
+
+  
+    <meta name="description" content="什么是秒杀？在电商领域，存在着典型的秒杀业务场景，那何谓秒杀场景呢。简单的来说就是一件商品的购买人数远远大于这件商品的库存，而且这件商品在很短的时间内就会被抢购一空。 比如每年的618、双11大促，小米新品促销等业务场景，就是典型的秒杀业务场景。 秒杀有什么特点？对于秒杀系统来说，我们可以从业务和技术两个角度来阐述其自身存在的一些特点。 业务特点：（1）限时、限量、限价 （2）活动预热 （3）">
+<meta property="og:type" content="website">
+<meta property="og:title" content="秒杀技术总结">
+<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:description" content="什么是秒杀？在电商领域，存在着典型的秒杀业务场景，那何谓秒杀场景呢。简单的来说就是一件商品的购买人数远远大于这件商品的库存，而且这件商品在很短的时间内就会被抢购一空。 比如每年的618、双11大促，小米新品促销等业务场景，就是典型的秒杀业务场景。 秒杀有什么特点？对于秒杀系统来说，我们可以从业务和技术两个角度来阐述其自身存在的一些特点。 业务特点：（1）限时、限量、限价 （2）活动预热 （3）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441077-643f5aea-6b28-4f3f-8d90-ae19b5cbfb10.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441100-4e4ab885-da5b-434b-8c5c-6f876cb709ad.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441261-5694b7e6-3135-4ffa-9241-660fef8d1f40.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441104-e6695a66-33c0-4601-bf54-e1e5b24e5a3e.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441217-4c3ae4db-c05a-4c6e-bb7e-5da7dc730f5a.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441917-aa9ba94f-60e6-4f60-b331-0434b90a0bb8.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442060-773f92f5-7d2c-4303-bf49-d2691187cd6d.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442113-ce5f5c44-1e80-4f8a-9be9-3238343ad5f5.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442073-804f09f6-baaf-4fbf-aea9-cbfcb43da92e.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442101-a1356fc9-041a-4a8a-a4bc-cea5890befa4.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442287-18b353c9-9153-4ae2-9e2c-b041e9225a19.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442879-3197d41d-077e-4578-bedd-87f0bb8e7148.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442807-584f39c2-c364-423d-80df-460b9f40b96a.webp">
+<meta property="article:published_time" content="2024-05-23T08:58:09.980Z">
+<meta property="article:modified_time" content="2024-05-23T08:58:09.980Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441077-643f5aea-6b28-4f3f-8d90-ae19b5cbfb10.webp">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html"><div class="main" ff="title">面試記</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/interview/" placeholder="在 interview 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item active" title="空间" href="/wiki/" style="color:#006633"><span>空间</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">面试指南</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html#start"><span class="toc-text">面试题知识手册</span></a></div><div class="widget-header dis-select"><span class="name">计算机基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html"><span class="toc-text">计算机网络&操作系统</span></a></div><div class="widget-header dis-select"><span class="name">Java基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/JVM%E7%AF%87.html"><span class="toc-text">JVM篇</span></a></div><div class="widget-header dis-select"><span class="name">数据库</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/MySQL.html"><span class="toc-text">MySQL</span></a><a class="link" href="/wiki/interview/Redis.html"><span class="toc-text">Redis</span></a><a class="link" href="/wiki/interview/HBase.html"><span class="toc-text">HBase</span></a></div><div class="widget-header dis-select"><span class="name">Spring/框架</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html"><span class="toc-text">Spring知识点汇总</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97MQ.html"><span class="toc-text">消息队列MQ</span></a></div><div class="widget-header dis-select"><span class="name">场景架构设计</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html"><span class="toc-text">场景题设计优化文章汇总</span></a><a class="link active" href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html"><span class="toc-text">秒杀技术总结</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html"><span class="toc-text">分库分表和分布式事务解决方案</span></a></div><div class="widget-header dis-select"><span class="name">开发随记</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html"><span class="toc-text">正则表达式入门</span></a><a class="link" href="/wiki/interview/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9A%8F%E8%AE%B0.html"><span class="toc-text">常用命令随记</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-23T08:58:09.980Z">2024-05-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>秒杀技术总结</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="什么是秒杀？"><a href="#什么是秒杀？" class="headerlink" title="什么是秒杀？"></a>什么是秒杀？</h1><p>在电商领域，存在着典型的秒杀业务场景，那何谓秒杀场景呢。简单的来说就是一件商品的购买人数远远大于这件商品的库存，而且这件商品在很短的时间内就会被抢购一空。 比如每年的618、双11大促，小米新品促销等业务场景，就是典型的秒杀业务场景。</p>
+<h1 id="秒杀有什么特点？"><a href="#秒杀有什么特点？" class="headerlink" title="秒杀有什么特点？"></a>秒杀有什么特点？</h1><p>对于秒杀系统来说，我们可以从业务和技术两个角度来阐述其自身存在的一些特点。</p>
+<h2 id="业务特点："><a href="#业务特点：" class="headerlink" title="业务特点："></a>业务特点：</h2><p>（1）限时、限量、限价</p>
+<p>（2）活动预热</p>
+<p>（3）持续时间短</p>
+<h2 id="技术特点："><a href="#技术特点：" class="headerlink" title="技术特点："></a>技术特点：</h2><p>（1）瞬时并发量非常高</p>
+<p>（2）读多写少</p>
+<p>（3）流程简单</p>
+<h1 id="秒杀的技术挑战"><a href="#秒杀的技术挑战" class="headerlink" title="秒杀的技术挑战"></a>秒杀的技术挑战</h1><h2 id="1-对现有业务冲击"><a href="#1-对现有业务冲击" class="headerlink" title="1: 对现有业务冲击"></a>1: 对现有业务冲击</h2><p>秒杀活动具有时间短，并发访问量大的特点，如果和网站原有应用部署在一起，必然会对现有业务造成冲击，稍有不慎可能导致整个网站瘫痪。</p>
+<p>解决思路：服务隔离，业务隔离，数据库隔离。秒杀服务单独部署，秒杀涉及的数据库也要单独部署，以防止影响其他业务</p>
+<h2 id="2：高并发的应用，对数据库压力大"><a href="#2：高并发的应用，对数据库压力大" class="headerlink" title="2：高并发的应用，对数据库压力大"></a>2：高并发的应用，对数据库压力大</h2><p>秒杀主流程，查商品详情 -&gt; 查库存 -&gt; 请求扣减库存 -&gt; 下单。 其中查商品详情页的在秒杀开始前的几分钟，用户会疯狂的刷新详情页，导致查询的请求量巨大，如果处理不当，有可能导致秒杀开始前，应用就瘫痪。</p>
+<p>解决思路：上层应用缓存商品详情，最好的方法是静态化页面，定时推送到CDN上，商品详情页直接访问CDN。</p>
+<h2 id="3：商品超卖"><a href="#3：商品超卖" class="headerlink" title="3：商品超卖"></a>3：商品超卖</h2><p>秒杀开始时，同时会有很多用户请求秒杀接口，如果查询库存 -&gt; 扣减库存 这两步操作如果不能保证原子操作。一定会导致超卖问题，造成资损。</p>
+<p>解决思路：秒杀开始前，初始化库存到缓存中，在缓存中预减库存，下单失败再归还库存。</p>
+<h1 id="秒杀架构原则"><a href="#秒杀架构原则" class="headerlink" title="秒杀架构原则"></a>秒杀架构原则</h1><h2 id="1：尽量把请求拦截在上游，分散用户的并发时间。"><a href="#1：尽量把请求拦截在上游，分散用户的并发时间。" class="headerlink" title="1：尽量把请求拦截在上游，分散用户的并发时间。"></a>1：尽量把请求拦截在上游，分散用户的并发时间。</h2><h3 id="第一层：客户端拦截"><a href="#第一层：客户端拦截" class="headerlink" title="第一层：客户端拦截"></a>第一层：客户端拦截</h3><p>1： 输入验证码，图形验证码(12306)</p>
+<p>2: 答题</p>
+<p>3：客户端限制用户点击秒杀按钮的频率，强制用户等待。</p>
+<h3 id="第二层：后端拦截"><a href="#第二层：后端拦截" class="headerlink" title="第二层：后端拦截"></a>第二层：后端拦截</h3><p>1：通过在缓存中预减库存（秒杀库存远小于请求秒杀的用户数），能拦截掉大量无效请求。</p>
+<p>2：防刷控制</p>
+<p>3：使用metaq 消峰，把大量的并发请求转换为排队请求。</p>
+<h2 id="2：把数据放在离用户最近的地方"><a href="#2：把数据放在离用户最近的地方" class="headerlink" title="2：把数据放在离用户最近的地方"></a>2：把数据放在离用户最近的地方</h2><p>1：使用CDN静态化秒杀商品数据</p>
+<p>2：优先使用本地缓存</p>
+<h1 id="秒杀后端架构设计"><a href="#秒杀后端架构设计" class="headerlink" title="秒杀后端架构设计"></a>秒杀后端架构设计</h1><h2 id="1：全异步方案："><a href="#1：全异步方案：" class="headerlink" title="1：全异步方案："></a>1：全异步方案：</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441077-643f5aea-6b28-4f3f-8d90-ae19b5cbfb10.webp" alt="img"></p>
+<h3 id="1：用户发起秒杀请求"><a href="#1：用户发起秒杀请求" class="headerlink" title="1：用户发起秒杀请求"></a>1：用户发起秒杀请求</h3><p>用户发起秒杀请求后，商城服务会经过如下业务流程。</p>
+<h4 id="（1）检测验证码是否正确"><a href="#（1）检测验证码是否正确" class="headerlink" title="（1）检测验证码是否正确"></a>（1）检测验证码是否正确</h4><p>用户发起秒杀请求时，会将验证码一同发送过来，系统会检验验证码是否有效，并且是否正确。</p>
+<h4 id="（2）是否限流"><a href="#（2）是否限流" class="headerlink" title="（2）是否限流"></a>（2）是否限流</h4><p>系统会对用户的请求进行是否限流的判断，这里，我们可以通过判断消息队列的长度来进行判断。因为我们将用户的请求放在了消息队列中，消息队列中堆积的是用户的请求，我们可以根据当前消息队列中存在的待处理的请求数量来判断是否需要对用户的请求进行限流处理。</p>
+<p>例如，在秒杀活动中，我们出售1000件商品，此时在消息队列中存在1000个请求，如果后续仍然有用户发起秒杀请求，则后续的请求我们可以不再处理，直接向用户返回商品已售完的提示。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441100-4e4ab885-da5b-434b-8c5c-6f876cb709ad.webp" alt="img"></p>
+<p>所以，使用限流后，我们可以更快的处理用户的请求和释放连接的资源。这个地方存在一些问题：如果多个秒杀商品共用一个消息队列主题，就无法使用判断队列长度的方式来限流。</p>
+<h4 id="（3）发送MQ"><a href="#（3）发送MQ" class="headerlink" title="（3）发送MQ"></a>（3）发送MQ</h4><p>用户的秒杀请求通过前面的验证后，我们就可以将用户的请求参数等信息发送到MQ中进行异步处理，同时，向用户响应结果信息。在商城服务中，会有专门的异步任务处理模块来消费消息队列中的请求，并处理后续的异步流程。</p>
+<p>在用户发起秒杀请求时，异步下单流程比同步下单流程处理的业务操作更少，它将后续的操作通过MQ发送给异步处理模块进行处理，并迅速向用户返回响应结果，释放请求连接。</p>
+<h3 id="2：异步处理"><a href="#2：异步处理" class="headerlink" title="2：异步处理"></a>2：异步处理</h3><p>我们可以将下单流程的如下操作进行异步处理。</p>
+<p>（1）判断活动是否已经结束</p>
+<p>（2）判断本次请求是否处于系统黑名单，为了防止电商领域同行的恶意竞争可以为系统增加黑名单机制，将恶意的请求放入系统的黑名单中。可以使用拦截器统计访问频次来实现。</p>
+<p>（3）扣减缓存中的秒杀商品的库存数量。</p>
+<p>（4）生成秒杀Token，这个Token是绑定当前用户和当前秒杀活动的，只有生成了秒杀Token的请求才有资格进行秒杀活动。</p>
+<p>这里我们引入了异步处理机制，在异步处理中，系统使用多少资源，分配多少线程来处理相应的任务，是可以进行控制的。</p>
+<h3 id="3：轮询结果"><a href="#3：轮询结果" class="headerlink" title="3：轮询结果"></a>3：轮询结果</h3><p>这里，可以采取客户端短轮询查询是否获得秒杀资格的方案。例如，客户端可以每隔3秒钟轮询请求服务器，查询是否获得秒杀资格，这里，我们在服务器的处理就是判断当前用户是否存在秒杀Token，如果服务器为当前用户生成了秒杀Token，则当前用户存在秒杀资格。否则继续轮询查询，直到超时或者服务器返回商品已售完或者无秒杀资格等信息为止。</p>
+<p>采用短轮询查询秒杀结果时，在页面上我们同样可以提示用户排队处理中，但是此时客户端会每隔几秒轮询服务器查询秒杀资格的状态，相比于同步下单流程来说，无需长时间占用请求连接。</p>
+<p>此时，可能会有网友会问：采用短轮询查询的方式，会不会存在直到超时也查询不到是否具有秒杀资格的状态呢？答案是：有可能！ 这里我们试想一下秒杀的真实场景，商家参加秒杀活动本质上不是为了赚钱，而是提升商品的销量和商家的知名度，吸引更多的用户来买自己的商品。所以，我们不必保证用户能够100%的查询到是否具有秒杀资格的状态。</p>
+<h3 id="4：秒杀结算"><a href="#4：秒杀结算" class="headerlink" title="4：秒杀结算"></a>4：秒杀结算</h3><h4 id="（1）验证下单Token"><a href="#（1）验证下单Token" class="headerlink" title="（1）验证下单Token"></a>（1）验证下单Token</h4><p>客户端提交秒杀结算时，会将秒杀Token一同提交到服务器，商城服务会验证当前的秒杀Token是否有效。</p>
+<h4 id="（2）加入秒杀购物车"><a href="#（2）加入秒杀购物车" class="headerlink" title="（2）加入秒杀购物车"></a>（2）加入秒杀购物车</h4><p>商城服务在验证秒杀Token合法并有效后，会将用户秒杀的商品添加到秒杀购物车。</p>
+<h3 id="5：提交订单"><a href="#5：提交订单" class="headerlink" title="5：提交订单"></a>5：提交订单</h3><h4 id="（1）订单入库"><a href="#（1）订单入库" class="headerlink" title="（1）订单入库"></a>（1）订单入库</h4><p>将用户提交的订单信息保存到数据库中。</p>
+<h4 id="（2）删除Token"><a href="#（2）删除Token" class="headerlink" title="（2）删除Token"></a>（2）删除Token</h4><p>秒杀商品订单入库成功后，删除秒杀Token。</p>
+<p>这里大家可以思考一个问题：我们为什么只在异步下单流程的粉色部分采用异步处理，而没有在其他部分采取异步削峰和填谷的措施呢？</p>
+<p>这是因为在异步下单流程的设计中，无论是在产品设计上还是在接口设计上，我们在用户发起秒杀请求阶段对用户的请求进行了限流操作，可以说，系统的限流操作是非常前置的。在用户发起秒杀请求时进行了限流，系统的高峰流量已经被平滑解决了，再往后走，其实系统的并发量和系统流量并不是非常高了。</p>
+<p>所以，网上很多的文章和帖子中在介绍秒杀系统时，说是在下单时使用异步削峰来进行一些限流操作，那都是在扯淡！ 因为下单操作在整个秒杀系统的流程中属于比较靠后的操作了，限流操作一定要前置处理，在秒杀业务后面的流程中做限流操作是没啥卵用的。</p>
+<h3 id="异步方案缺点："><a href="#异步方案缺点：" class="headerlink" title="异步方案缺点："></a>异步方案缺点：</h3><p>1：token的保存，所有的用户都需要轮询保存token的缓存，如果库存过大，本地缓存可能存不下甚至还需要做本地缓存同步，如果都查询远程缓存(redis)，也会造成热点key问题。</p>
+<p>2：没有秒杀成功的用户需要等待轮询超时</p>
+<h2 id="2：同步方案"><a href="#2：同步方案" class="headerlink" title="2：同步方案"></a>2：同步方案</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441261-5694b7e6-3135-4ffa-9241-660fef8d1f40.webp" alt="img"></p>
+<p>同步方案和异步方案的区别点就是不再使用MQ来做限流降级，而是使用本地缓存实现库存扣减，本地缓存扣减成功才扣减远程缓存(redis) 只有两个缓存都扣减成功才算真正扣减库存成功，才给用户返回秒杀成功的token。</p>
+<h3 id="具体的扣库存原理如下（拿买火车票举例）："><a href="#具体的扣库存原理如下（拿买火车票举例）：" class="headerlink" title="具体的扣库存原理如下（拿买火车票举例）："></a>具体的扣库存原理如下（拿买火车票举例）：</h3><p><strong>本地扣库存</strong>。我们把一定的库存量分配到本地机器，直接在内存中减库存，然后按照之前的逻辑异步创建订单。改进过之后的单机系统是这样的:</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441104-e6695a66-33c0-4601-bf54-e1e5b24e5a3e.webp" alt="img"></p>
+<p>这样就避免了对数据库频繁的IO操作，只在内存中做运算，极大的提高了单机抗并发的能力。但是百万的用户请求量单机是无论如何也抗不住的，虽然nginx处理网络请求使用epoll模型，c10k的问题在业界早已得到了解决。但是linux系统下，一切资源皆文件，网络请求也是这样，大量的文件描述符会使操作系统瞬间失去响应。我们可以把秒杀服务集群化，比如增加100台服务器，这样单机所承受的并发量就小了很多。然后我们每台机器本地库存100张火车票，100台服务器上的总库存还是1万，这样保证了库存订单不超卖,下面是我们描述的集群架构:</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441217-4c3ae4db-c05a-4c6e-bb7e-5da7dc730f5a.webp" alt="img"></p>
+<p>问题接踵而至，在高并发情况下，现在我们还无法保证系统的高可用，假如这100台服务器上有两三台机器因为扛不住并发的流量或者其他的原因宕机了。那么这些服务器上的订单就卖不出去了，这就造成了订单的少卖。要解决这个问题，我们需要对总订单量做统一的管理，这就是接下来的容错方案。服务器不仅要在本地减库存，另外要远程统一减库存。有了远程统一减库存的操作，我们就可以根据机器负载情况，为每台机器分配一些多余的“buffer库存”用来防止机器中有机器宕机的情况。我们结合下面架构图具体分析一下:</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828441917-aa9ba94f-60e6-4f60-b331-0434b90a0bb8.webp" alt="img"></p>
+<p>我们采用Redis存储统一库存，因为Redis的性能非常高，号称单机QPS能抗10W的并发。在本地减库存以后，如果本地有订单，我们再去请求redis远程减库存，本地减库存和远程减库存都成功了，才返回给用户抢票成功的提示,这样也能有效的保证订单不会超卖。当机器中有机器宕机时，因为每个机器上有预留的buffer余票，所以宕机机器上的余票依然能够在其他机器上得到弥补，保证了不少卖。buffer余票设置多少合适呢，理论上buffer设置的越多，系统容忍宕机的机器数量就越多，但是buffer设置的太大也会对redis造成一定的影响。虽然redis内存数据库抗并发能力非常高，请求依然会走一次网络IO,其实抢票过程中对redis的请求次数是本地库存和buffer库存的总量，因为当本地库存不足时，系统直接返回用户“已售罄”的信息提示，就不会再走统一扣库存的逻辑，这在一定程度上也避免了巨大的网络请求量把redis压跨，所以buffer值设置多少，需要架构师对系统的负载能力做认真的考量。</p>
+<h2 id="扣库存的优化方案："><a href="#扣库存的优化方案：" class="headerlink" title="扣库存的优化方案："></a>扣库存的优化方案：</h2><p>无论是同步方案还是异步方案，都存在库存过大时，远程缓存热点key的问题。</p>
+<p>如何解决热点key的问题，利用redis的集群功能，进一步提高秒杀的并发能力。</p>
+<h3 id="分桶："><a href="#分桶：" class="headerlink" title="分桶："></a>分桶：</h3><p>如果库存过大，可以把大库存分成多个小份放在不同的redis桶中。</p>
+<p>例如，原来的秒杀商品的id为10001，库存为1000件，在Redis中的存储为(10001, 1000)，我们将原有的库存分割为5份，则每份的库存为200件，此时，我们在Redia中存储的信息为(10001_0, 200)，(10001_1, 200)，(10001_2, 200)，(10001_3, 200)，(10001_4, 200)。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442060-773f92f5-7d2c-4303-bf49-d2691187cd6d.webp" alt="img"></p>
+<p>此时，我们将库存进行分割后，每个分割后的库存使用商品id加上一个数字标识来存储，这样，在对存储商品库存的每个Key进行Hash运算时，得出的Hash结果是不同的，这就说明，存储商品库存的Key有很大概率不在Redis的同一个槽位中，这就能够提升Redis处理请求的性能和并发量。</p>
+<p>分割库存后，我们还需要在Redis中存储一份商品id和分割库存后的Key的映射关系，此时映射关系的Key为商品的id，也就是10001，Value为分割库存后存储库存信息的Key，也就是10001_0，10001_1，10001_2，10001_3，10001_4。在Redis中我们可以使用List来存储这些值。</p>
+<h1 id="优酷体育能量商城的秒杀技术方案"><a href="#优酷体育能量商城的秒杀技术方案" class="headerlink" title="优酷体育能量商城的秒杀技术方案"></a>优酷体育能量商城的秒杀技术方案</h1><p>优酷体育的方案采用了全异步 + 库存分桶方案，具体方案如下：</p>
+<h2 id="缓存模块"><a href="#缓存模块" class="headerlink" title="缓存模块"></a>缓存模块</h2><p>商品详情1s本地缓存。 预计 数据库 QPS 200 5ms</p>
+<p>商城秒杀列表1s本地缓存 （倒计时不缓存）。 数据库 QPS 100 10ms</p>
+<p>商城商品列表本地缓存5秒。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442113-ce5f5c44-1e80-4f8a-9be9-3238343ad5f5.webp" alt="img"></p>
+<h2 id="限流模块："><a href="#限流模块：" class="headerlink" title="限流模块："></a>限流模块：</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442073-804f09f6-baaf-4fbf-aea9-cbfcb43da92e.webp" alt="img"></p>
+<h2 id="库存控制模块："><a href="#库存控制模块：" class="headerlink" title="库存控制模块："></a>库存控制模块：</h2><p>redis exincrBy  支持最大值限制：  每个桶最大能发放10000 ， 回滚库存时： 增加能发放的最大值。</p>
+<p>支持秒杀过程中，运营新增库存，支持本地桶上线下线控制</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442101-a1356fc9-041a-4a8a-a4bc-cea5890befa4.webp" alt="img"></p>
+<h3 id="桶的上线下线逻辑："><a href="#桶的上线下线逻辑：" class="headerlink" title="桶的上线下线逻辑："></a>桶的上线下线逻辑：</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442287-18b353c9-9153-4ae2-9e2c-b041e9225a19.webp" alt="img"></p>
+<h2 id="整体链路流程"><a href="#整体链路流程" class="headerlink" title="整体链路流程"></a>整体链路流程</h2><h3 id="秒杀初始化链路流程："><a href="#秒杀初始化链路流程：" class="headerlink" title="秒杀初始化链路流程："></a>秒杀初始化链路流程：</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442879-3197d41d-077e-4578-bedd-87f0bb8e7148.webp" alt="img"></p>
+<h3 id="秒杀流程："><a href="#秒杀流程：" class="headerlink" title="秒杀流程："></a>秒杀流程：</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715828442807-584f39c2-c364-423d-80df-460b9f40b96a.webp" alt="img"></p>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html">场景题设计优化文章汇总</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html">分库分表和分布式事务解决方案</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%92%E6%9D%80%EF%BC%9F"><span class="toc-text">什么是秒杀？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="toc-text">秒杀有什么特点？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="toc-text">业务特点：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="toc-text">技术特点：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E7%9A%84%E6%8A%80%E6%9C%AF%E6%8C%91%E6%88%98"><span class="toc-text">秒杀的技术挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AF%B9%E7%8E%B0%E6%9C%89%E4%B8%9A%E5%8A%A1%E5%86%B2%E5%87%BB"><span class="toc-text">1: 对现有业务冲击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%EF%BC%9A%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%8C%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%8B%E5%8A%9B%E5%A4%A7"><span class="toc-text">2：高并发的应用，对数据库压力大</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%EF%BC%9A%E5%95%86%E5%93%81%E8%B6%85%E5%8D%96"><span class="toc-text">3：商品超卖</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E6%9E%B6%E6%9E%84%E5%8E%9F%E5%88%99"><span class="toc-text">秒杀架构原则</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%EF%BC%9A%E5%B0%BD%E9%87%8F%E6%8A%8A%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%9C%A8%E4%B8%8A%E6%B8%B8%EF%BC%8C%E5%88%86%E6%95%A3%E7%94%A8%E6%88%B7%E7%9A%84%E5%B9%B6%E5%8F%91%E6%97%B6%E9%97%B4%E3%80%82"><span class="toc-text">1：尽量把请求拦截在上游，分散用户的并发时间。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%B1%82%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8B%A6%E6%88%AA"><span class="toc-text">第一层：客户端拦截</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%B1%82%EF%BC%9A%E5%90%8E%E7%AB%AF%E6%8B%A6%E6%88%AA"><span class="toc-text">第二层：后端拦截</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%EF%BC%9A%E6%8A%8A%E6%95%B0%E6%8D%AE%E6%94%BE%E5%9C%A8%E7%A6%BB%E7%94%A8%E6%88%B7%E6%9C%80%E8%BF%91%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="toc-text">2：把数据放在离用户最近的地方</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">秒杀后端架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%EF%BC%9A%E5%85%A8%E5%BC%82%E6%AD%A5%E6%96%B9%E6%A1%88%EF%BC%9A"><span class="toc-text">1：全异步方案：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%9A%E7%94%A8%E6%88%B7%E5%8F%91%E8%B5%B7%E7%A7%92%E6%9D%80%E8%AF%B7%E6%B1%82"><span class="toc-text">1：用户发起秒杀请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%A3%80%E6%B5%8B%E9%AA%8C%E8%AF%81%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE"><span class="toc-text">（1）检测验证码是否正确</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%98%AF%E5%90%A6%E9%99%90%E6%B5%81"><span class="toc-text">（2）是否限流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%8F%91%E9%80%81MQ"><span class="toc-text">（3）发送MQ</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%9A%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86"><span class="toc-text">2：异步处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%9A%E8%BD%AE%E8%AF%A2%E7%BB%93%E6%9E%9C"><span class="toc-text">3：轮询结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%9A%E7%A7%92%E6%9D%80%E7%BB%93%E7%AE%97"><span class="toc-text">4：秒杀结算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%AA%8C%E8%AF%81%E4%B8%8B%E5%8D%95Token"><span class="toc-text">（1）验证下单Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8A%A0%E5%85%A5%E7%A7%92%E6%9D%80%E8%B4%AD%E7%89%A9%E8%BD%A6"><span class="toc-text">（2）加入秒杀购物车</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%BC%9A%E6%8F%90%E4%BA%A4%E8%AE%A2%E5%8D%95"><span class="toc-text">5：提交订单</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%AE%A2%E5%8D%95%E5%85%A5%E5%BA%93"><span class="toc-text">（1）订单入库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%88%A0%E9%99%A4Token"><span class="toc-text">（2）删除Token</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E6%96%B9%E6%A1%88%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="toc-text">异步方案缺点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%EF%BC%9A%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88"><span class="toc-text">2：同步方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E7%9A%84%E6%89%A3%E5%BA%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%A6%82%E4%B8%8B%EF%BC%88%E6%8B%BF%E4%B9%B0%E7%81%AB%E8%BD%A6%E7%A5%A8%E4%B8%BE%E4%BE%8B%EF%BC%89%EF%BC%9A"><span class="toc-text">具体的扣库存原理如下（拿买火车票举例）：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A3%E5%BA%93%E5%AD%98%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88%EF%BC%9A"><span class="toc-text">扣库存的优化方案：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%A1%B6%EF%BC%9A"><span class="toc-text">分桶：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%98%E9%85%B7%E4%BD%93%E8%82%B2%E8%83%BD%E9%87%8F%E5%95%86%E5%9F%8E%E7%9A%84%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88"><span class="toc-text">优酷体育能量商城的秒杀技术方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97"><span class="toc-text">缓存模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E6%B5%81%E6%A8%A1%E5%9D%97%EF%BC%9A"><span class="toc-text">限流模块：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97%EF%BC%9A"><span class="toc-text">库存控制模块：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%B6%E7%9A%84%E4%B8%8A%E7%BA%BF%E4%B8%8B%E7%BA%BF%E9%80%BB%E8%BE%91%EF%BC%9A"><span class="toc-text">桶的上线下线逻辑：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E9%93%BE%E8%B7%AF%E6%B5%81%E7%A8%8B"><span class="toc-text">整体链路流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%93%BE%E8%B7%AF%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-text">秒杀初始化链路流程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%92%E6%9D%80%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-text">秒杀流程：</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

@@ -1,0 +1,1158 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>面試記：分库分表和分布式事务解决方案 - 愔颂</title>
+
+  
+    <meta property="og:type" content="website">
+<meta property="og:title" content="分库分表和分布式事务解决方案">
+<meta property="og:url" content="https://yinsong-llsc.github.io/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html">
+<meta property="og:site_name" content="愔颂">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591407-197a9652-1ee4-4cfe-85a5-04b0ac7fc5f4.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591485-51d42f39-1352-40be-b7c5-1f1004a8fbdf.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591418-c94cf6e1-d9e9-4ad0-a333-9037752e4a8d.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591743-0698a62b-469c-4b1f-92a3-ff711c4bd781.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591887-ca190a9c-5339-4de7-9c56-7042ddaae5c4.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591891-cbc68445-9d48-4e1c-81d0-ecf6b0ad666a.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591926-5cadafb1-bafb-4d34-bae4-0acd6a1d754c.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592274-4aedc3a8-9dba-4185-92bb-4de01b84e5d4.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592289-dcaf9799-0229-4d85-815a-3ce5dc47fac2.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592321-0b70f7f9-9b6b-4cc2-96b8-c85cdd5fcefc.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592367-621e415f-10a0-48c3-af2c-754db1956ef1.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592430-976af45c-5e1a-4a38-916a-5fcc00083eb9.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592997-87d223dc-82de-4d90-9115-a1ad2ba0112d.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593087-ce38f686-ba7d-4ccd-9587-ccc9fc1d2c4d.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593082-6d87c5f4-6ee2-4f87-86a8-08ad221478ff.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593093-53328272-a6f0-4cfe-a993-7b660efe639f.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593098-826d8cf3-fc45-4247-8c4c-54063193447a.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594053-40a7565b-68e5-4e37-984f-801286409019.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594134-743bb64b-95f1-488c-a856-5c3e313654fb.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594103-df818f48-b026-4456-83c8-b6f5ca5e0ca0.webp">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594079-cf00549c-10bb-4d3a-b988-a217209dcba4.webp">
+<meta property="article:published_time" content="2024-05-24T07:11:36.832Z">
+<meta property="article:modified_time" content="2024-05-24T07:11:36.832Z">
+<meta property="article:author" content="远岫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591407-197a9652-1ee4-4cfe-85a5-04b0ac7fc5f4.webp">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://z1.ax1x.com/2023/10/05/pPXijyT.png">
+  
+
+  
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css"
+  media="all"
+/>
+
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="https://cdn.pixabay.com/photo/2017/01/31/00/09/books-2022464_1280.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html"><div class="main" ff="title">面試記</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/interview/" placeholder="在 interview 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="博客" href="/" style="color:#006633"><span>博客</span></a><a class="nav-item active" title="空间" href="/wiki/" style="color:#006633"><span>空间</span></a><a class="nav-item" title="发现" href="/explore/" style="color:#006633"><span>发现</span></a><a class="nav-item" title="收藏" href="/friends/" style="color:#006633"><span>收藏</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">面试指南</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html#start"><span class="toc-text">面试题知识手册</span></a></div><div class="widget-header dis-select"><span class="name">计算机基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.html"><span class="toc-text">计算机网络&操作系统</span></a></div><div class="widget-header dis-select"><span class="name">Java基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/JVM%E7%AF%87.html"><span class="toc-text">JVM篇</span></a></div><div class="widget-header dis-select"><span class="name">数据库</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/MySQL.html"><span class="toc-text">MySQL</span></a><a class="link" href="/wiki/interview/Redis.html"><span class="toc-text">Redis</span></a><a class="link" href="/wiki/interview/HBase.html"><span class="toc-text">HBase</span></a></div><div class="widget-header dis-select"><span class="name">Spring/框架</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/Spring%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB.html"><span class="toc-text">Spring知识点汇总</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97MQ.html"><span class="toc-text">消息队列MQ</span></a></div><div class="widget-header dis-select"><span class="name">场景架构设计</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E5%9C%BA%E6%99%AF%E9%A2%98%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96%E6%96%87%E7%AB%A0%E6%B1%87%E6%80%BB.html"><span class="toc-text">场景题设计优化文章汇总</span></a><a class="link" href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html"><span class="toc-text">秒杀技术总结</span></a><a class="link active" href="/wiki/interview/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html"><span class="toc-text">分库分表和分布式事务解决方案</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a></div><div class="widget-header dis-select"><span class="name">开发随记</span></div><div class="widget-body fs14"><a class="link" href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html"><span class="toc-text">正则表达式入门</span></a><a class="link" href="/wiki/interview/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%9A%8F%E8%AE%B0.html"><span class="toc-text">常用命令随记</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-24T07:11:36.832Z">2024-05-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>分库分表和分布式事务解决方案</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><meta name="referrer" content="no-referrer"/>
+
+<span id="more"></span>
+
+<h2 id="第一章-为什么要分库分表"><a href="#第一章-为什么要分库分表" class="headerlink" title="第一章 为什么要分库分表"></a>第一章 为什么要分库分表</h2><h3 id="1-1-互联网大并发场景业务下对于OLTP的挑战"><a href="#1-1-互联网大并发场景业务下对于OLTP的挑战" class="headerlink" title="1.1 互联网大并发场景业务下对于OLTP的挑战"></a>1.1 互联网大并发场景业务下对于OLTP的挑战</h3><p>面向拥有超高并发，大规模数据存储的互联网OLTP（Online Transaction Processing，在线事务处理）类业务。同时因计算与数据量不断爆发增长，传统的企业级应用急需更强计算能力的在线事务型数据库。</p>
+<ul>
+<li><strong>在线业务超高并发，扛不住！</strong></li>
+<li><strong>海量业务数据，存不下！</strong></li>
+<li><strong>复杂分析查询，性能慢！</strong></li>
+<li><strong>单表数据量过大，效率差！</strong></li>
+<li><strong>跨实例联机查询，搞不定！</strong></li>
+</ul>
+<h3 id="1-2-分库分表才是OLTP的最终形态"><a href="#1-2-分库分表才是OLTP的最终形态" class="headerlink" title="1.2 分库分表才是OLTP的最终形态"></a>1.2 分库分表才是OLTP的最终形态</h3><ul>
+<li>通过分库分表，将业务数据及访问压力分摊到多台单机数据库实例上，解决在线业务的超高并发难题。</li>
+<li>通过水平拆分可线性扩展数据存储空间，提供 PB 级存储能力。高效解决单机数据库存储瓶颈。</li>
+<li>针对在线业务提供 Parallel Query 以及 MPP 并行加速能力，可大幅提升在线业务海量数据下复杂分析查询的执行效率。</li>
+<li>数据库单表数量过大后，将导致数据库吞吐能力下降，整体性能迟缓。通过分库分表将单表数据水平拆分至各个MySQL中，有效解决单表数据量膨胀问题。</li>
+<li>业务通过使用分库分表即可在不同 RDS 实例多个数据库间进行联合查询及事务操作。可有效避免业务端繁琐复杂的硬代码处理方式，大幅提升业务开发效率。</li>
+</ul>
+<h2 id="第二章-为什么会引入分布式事务"><a href="#第二章-为什么会引入分布式事务" class="headerlink" title="第二章 为什么会引入分布式事务"></a>第二章 为什么会引入分布式事务</h2><h3 id="2-1-分布式事务的典型场景"><a href="#2-1-分布式事务的典型场景" class="headerlink" title="2.1 分布式事务的典型场景"></a>2.1 分布式事务的典型场景</h3><p>这里举一个分布式事务的典型例子——用户下单过程。</p>
+<p>当我们的系统采用了微服务架构后，一个电商系统往往被拆分成如下几个子系统：商品系统、订单系统、支付系统、积分系统等。整个下单的过程如下：</p>
+<ol>
+<li>用户通过商品系统浏览商品，他看中了某一项商品，便点击下单。</li>
+<li>此时订单系统会生成一条订单。</li>
+<li>订单创建成功后，支付系统提供支付功能。</li>
+<li>当支付完成后，由积分系统为该用户增加积分。</li>
+</ol>
+<p>上述步骤2、3、4需要在一个事务中完成。对于传统单体应用而言，实现事务非常简单，只需将这三个步骤放在一个方法A中，再用Spring的@Transactional注解标识该方法即可。Spring通过数据库的事务支持，保证这些步骤要么全都执行完成，要么全都不执行。但在这个微服务架构中，这三个步骤涉及三个系统，涉及三个数据库，此时我们必须在数据库和应用系统之间，通过某项黑科技，实现分布式事务的支持。</p>
+<h3 id="2-2-分布式事务的根源：微服务"><a href="#2-2-分布式事务的根源：微服务" class="headerlink" title="2.2 分布式事务的根源：微服务"></a>2.2 分布式事务的根源：微服务</h3><h4 id="2-2-1-什么是微服务"><a href="#2-2-1-什么是微服务" class="headerlink" title="2.2.1 什么是微服务"></a>2.2.1 什么是微服务</h4><p>简而言之，微服务架构是一种将单应用程序作为一套小型服务开发的方法，每种应用程序都在其自己的进程中运行，并与轻量级机制（通常是HTTP资源的API）进行通信。这些服务是围绕业务功能构建的，可以通过全自动部署机制进行独立部署。这些服务的集中化管理已经是最少的，它们可以用不同的编程语言编写，并使用不同的数据存储技术。</p>
+<h4 id="2-2-2-微服务的优势"><a href="#2-2-2-微服务的优势" class="headerlink" title="2.2.2 微服务的优势"></a>2.2.2 微服务的优势</h4><ol>
+<li>将复杂的业务拆分成多个小的业务，每个业务拆分成一个服务，将复杂的问题简单化。利于分工，降低新人的学习成本。</li>
+<li>微服务系统是分布式系统，业务与业务之间完全解耦，随着业务的增加可以根据业务再拆分，具有极强的横向扩展能力。面对搞并发的场景可以将服务集群化部署，加强系统负载能力。</li>
+<li>服务间采用 HTTP 协议通信，服务与服务之间完全独立。每个服务可以根据业务场景选取合适的编程语言和数据库。</li>
+<li>微服务每个服务都是独立部署的，每个服务的修改和部署对其他服务没有影响。</li>
+</ol>
+<h4 id="2-2-3-微服务落地存在的问题"><a href="#2-2-3-微服务落地存在的问题" class="headerlink" title="2.2.3 微服务落地存在的问题"></a>2.2.3 微服务落地存在的问题</h4><p>虽然微服务现在如火如荼，但对其实践其实仍处于探索阶段。很多中小型互联网公司，鉴于经验、技术实力等问题，微服务落地比较困难。如著名架构师Chris Richardson所言，目前存在的主要困难有如下几方面：</p>
+<ol>
+<li>单体应用拆分为分布式系统后，进程间的通讯机制和故障处理措施变的更加复杂。</li>
+<li>系统微服务化后，一个看似简单的功能，内部可能需要调用多个服务并操作多个数据库实现，服务调用的分布式事务问题变的非常突出。</li>
+<li>微服务数量众多，其测试、部署、监控等都变的更加困难。</li>
+</ol>
+<p>随着RPC框架的成熟，第一个问题已经逐渐得到解决。例如dubbo可以支持多种通讯协议，springcloud可以非常好的支持restful调用。对于第三个问题，随着docker、devops技术的发展以及各公有云paas平台自动化运维工具的推出，微服务的测试、部署与运维会变得越来越容易。</p>
+<p>而对于第二个问题，现在还没有通用方案很好的解决微服务产生的事务问题。分布式事务已经成为微服务落地最大的阻碍，也是最具挑战性的一个技术难题。 为此，本文将深入和大家探讨微服务架构下，分布式事务的各种解决方案。</p>
+<h2 id="第三章-一些基本概念和基本原理"><a href="#第三章-一些基本概念和基本原理" class="headerlink" title="第三章 一些基本概念和基本原理"></a>第三章 一些基本概念和基本原理</h2><h3 id="3-1-读写分离"><a href="#3-1-读写分离" class="headerlink" title="3.1 读写分离"></a>3.1 读写分离</h3><p>这个相对比较好理解一些，就是将数据库分为主从库，一个主库（<strong>Master</strong>）用于写数据，多个从库（<strong>Slaver</strong>）进行轮询读取数据的过程，主从库之间通过某种通讯机制进行数据的同步，是一种常见的数据库架构。下面这张图就展示了 “一主二从” 的结构：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591407-197a9652-1ee4-4cfe-85a5-04b0ac7fc5f4.webp" alt="img"></p>
+<p>当PolarDB-X存储资源MySQL主实例的读请求较多、读压力比较大时，您可以通过读写分离功能对读流量进行分流，减轻存储层的读压力。</p>
+<p>PolarDB-X读写分离功能采用了对应用透明的设计。在不修改应用程序任何代码的情况下，只需在控制台中调整读权重，即可实现将读流量按自定义的权重比例在存储资源MySQL主实例与多个存储资源只读实例之间进行分流，而写流量则不做分流全部到指向主实例。</p>
+<p>设置读写分离后，从存储资源MySQL主实例读取属于强读（即实时强一致读）；而只读实例上的数据是从主实例上异步复制而来存在毫秒级的延迟，因此从只读实例读取属于弱读（即非强一致性读）。您可以通过Hint指定那些需要保证实时性和强一致性的读SQL到主实例上执行，详情请参见<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/100625.html?spm=a2c4g.11186623.2.12.124941a3pP3qnG">读写分离Hint</a>。</p>
+<p><em>通常可以通过事务读取，这样可以将读请求打到主库上执行，保证实施强一致读。</em></p>
+<p><em>读写分离仅对显式事务（即需要显式提交或回滚的事务）以外的读请求（即查询请求）有效，写请求和显式事务中的读请求（包括只读事务）均在主实例中执行，不会被分流到只读实例。</em></p>
+<p><strong>读写分离带来的一系列问题</strong></p>
+<p>大多数互联网数据操作往往都是读多写少，随着数据的增长，数据库的 “读” 会首先成为瓶颈。如果我们希望能线性地提升数据库的读性能和写性能，就需要让读写尽可能的不相互影响，各自为政。<strong>在使用读写分离之前我们应该考虑使用缓存能不能解决问题</strong>。然后再考虑对数据库按照 “读” 和 “写” 进行分组。读写分离意味着将一体的结构的进行分散，在数据量大、高并发的情景中要考虑以下这些问题：</p>
+<ol>
+<li>如何保证 Master 的高可用，故障转移，熔断限流等。</li>
+<li>读写操作的区分规则，代码层面如何处理好读命令和写命令，尽量无感知无业务入侵。</li>
+<li>数据一致性的容忍度。虽然是数据同步，但是由于网络的不确定性这仍然是一个不可忽视的问题。</li>
+<li>分库</li>
+</ol>
+<h3 id="3-2-库级垂直拆分"><a href="#3-2-库级垂直拆分" class="headerlink" title="3.2 库级垂直拆分"></a>3.2 库级垂直拆分</h3><p>数据库垂直拆分指的是按照业务对数据库中的表进行分组，同组的放到一个新的数据库（逻辑上，并非实例）中。需要从实际业务出发将大业务分割成小业务。比如商城的整个业务中的<strong>用户相关表，订单相关表，物流相关表</strong>各自独立分类形成<strong>用户系统数据库，订单系统数据库，物流系统数据库，</strong>如下图：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591485-51d42f39-1352-40be-b7c5-1f1004a8fbdf.webp" alt="img"></p>
+<ul>
+<li><p><strong>带来的好处</strong></p>
+</li>
+<li><ul>
+<li>业务清晰，职责单一 。</li>
+<li>易维护，易扩展 。</li>
+<li>数据服务化 。</li>
+</ul>
+</li>
+<li><p><strong>不好的方面</strong></p>
+</li>
+<li><ul>
+<li>提高了整个应用的复杂度，而且会形成跨库事务。</li>
+<li>引发 “木桶效应”，任何一个短板有可能影响整个系统。</li>
+<li>部分表关系不能 join只能通过服务相互调用来维系。</li>
+<li>甚至由于网络问题引发数据不一致。</li>
+</ul>
+</li>
+</ul>
+<p>在需要进行分库的情况下，通常可优先考虑垂直拆分。</p>
+<h3 id="3-3-库级水平拆分"><a href="#3-3-库级水平拆分" class="headerlink" title="3.3 库级水平拆分"></a>3.3 库级水平拆分</h3><p>在数据库垂直拆分后遇到单机数据库性能瓶颈之后，就可以考虑数据库水平拆分了。 之所以先垂直拆分才水平拆分，是因为垂直拆分后数据业务清晰而且单一，更加方便指定水平的标准。比如我们对商城业务垂直拆分后的 用户系统 进行水平拆分就比对整个商城业务进行水平拆分好找维度，我们可以根据用户注册时间的区间、用户的区域或者用户 ID 的范围、 hash 等条件，然后关联相关表的记录将数据进行拆分，如果放在整个商城业务上你是以用户为准还是以订单为准都不太好考虑。</p>
+<p>我们按照每 100 万为区间对用户系统水平拆分如下：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591418-c94cf6e1-d9e9-4ad0-a333-9037752e4a8d.webp" alt="img"></p>
+<ul>
+<li><p><strong>这种拆分的好处在于</strong></p>
+</li>
+<li><ul>
+<li>单个库的容量可控。</li>
+<li>单挑记录保证了数据完整性。</li>
+<li>数据关系可以通过 join 维持。</li>
+<li>避免了跨库事务 。</li>
+</ul>
+</li>
+<li><p><strong>缺点：</strong></p>
+</li>
+<li><ul>
+<li>拆分规则对编码有一定的影响。</li>
+<li>不同业务的分区交互需要统筹设计。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-4-表级垂直拆分"><a href="#3-4-表级垂直拆分" class="headerlink" title="3.4 表级垂直拆分"></a>3.4 表级垂直拆分</h3><p>表级垂直拆分可以简单来描述，即大宽表拆成多个小表。数据表垂直拆分就是纵向地把表中的列分成多个表，把表从 “宽” 变“窄”。一般遵循以下几个点进行拆分：</p>
+<ul>
+<li>冷热分离，把常用的列放在一个表，不常用的放在一个表。</li>
+<li>大字段列独立存放。</li>
+<li>关联关系的列紧密的放在一起。</li>
+</ul>
+<p>我们把用户表中常用的和不常用的而且大字段分离成两张表：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591743-0698a62b-469c-4b1f-92a3-ff711c4bd781.webp" alt="img"></p>
+<h3 id="3-5-表级水平拆分"><a href="#3-5-表级水平拆分" class="headerlink" title="3.5 表级水平拆分"></a>3.5 表级水平拆分</h3><p>表级别的水平拆分原理和库级别水平拆分原理类似，通常是对于一个库来说的，可以根据主键ID进行hash拆分，或者根据某个指定字段进行拆分。比如下图中user表根据name字段作为拆分键进行拆分：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591887-ca190a9c-5339-4de7-9c56-7042ddaae5c4.webp" alt="img"></p>
+<p>表的水平拆分感觉跟库的水平拆分思想上都是一样的，只不过粒度不同。表结构维持不变。也就是说拆分后数据集的并集等于拆分前的数据集。</p>
+<h3 id="3-6-分布式事务"><a href="#3-6-分布式事务" class="headerlink" title="3.6 分布式事务"></a>3.6 分布式事务</h3><p>众所周知，数据库能实现本地事务，也就是在同一个数据库中，你可以允许一组操作要么全都正确执行，要么全都不执行。这里特别强调了本地事务，也就是目前的数据库只能支持同一个数据库中的事务。但现在的系统往往采用微服务架构，业务系统拥有独立的数据库，因此就出现了跨多个数据库的事务需求，这种事务即为“分布式事务”。那么在目前数据库不支持跨库事务的情况下，我们应该如何实现分布式事务呢？</p>
+<h4 id="3-6-1-什么是事务？"><a href="#3-6-1-什么是事务？" class="headerlink" title="3.6.1 什么是事务？"></a>3.6.1 什么是事务？</h4><p>事务由一组操作构成，我们希望这组操作能够全部正确执行，如果这一组操作中的任意一个步骤发生错误，那么就需要回滚之前已经完成的操作。也就是同一个事务中的所有操作，要么全都正确执行，要么全都不要执行。</p>
+<p><strong>事务的四大特性即 ACID</strong></p>
+<p>说到事务，就不得不提一下事务著名的四大特性。</p>
+<ul>
+<li><strong>原子性（</strong>atomicity<strong>）</strong> ：原子性要求，事务是一个不可分割的执行单元，事务中的所有操作要么全都执行，要么全都不执行。</li>
+<li><strong>一致性（</strong>consistency<strong>）</strong> ：一致性要求，事务在开始前和结束后，数据库的完整性约束没有被破坏。</li>
+<li><strong>隔离性（</strong>isolation<strong>）</strong> ：事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据。</li>
+<li><strong>持久性（</strong>durability<strong>）</strong> ：持久性要求，一个事务完成之后，事务的执行结果必须是持久化保存的。即使数据库发生崩溃，在数据库恢复后事务提交的结果仍然不会丢失。</li>
+</ul>
+<p>注意：事务只能保证数据库的高可靠性，即数据库本身发生问题后，事务提交后的数据仍然能恢复；而如果不是数据库本身的故障，如硬盘损坏了，那么事务提交的数据可能就丢失了。这属于『高可用性』的范畴。因此，事务只能保证数据库的『高可靠性』，而『高可用性』需要整个系统共同配合实现。</p>
+<h4 id="3-6-2-事务的隔离级别"><a href="#3-6-2-事务的隔离级别" class="headerlink" title="3.6.2 事务的隔离级别"></a>3.6.2 事务的隔离级别</h4><p>这里扩展一下，对事务的隔离性做一个详细的解释。</p>
+<p>在事务的四大特性ACID中，要求的隔离性是一种严格意义上的隔离，也就是多个事务是串行执行的，彼此之间不会受到任何干扰。这确实能够完全保证数据的安全性，但在实际业务系统中，这种方式性能不高。因此，数据库定义了四种隔离级别，隔离级别和数据库的性能是呈反比的，隔离级别越低，数据库性能越高，而隔离级别越高，数据库性能越差。</p>
+<p><strong>事务并发执行会出现的问题</strong></p>
+<p>我们先来看一下在不同的隔离级别下，数据库可能会出现的问题：</p>
+<ul>
+<li><strong>更新丢失</strong></li>
+</ul>
+<p>当有两个并发执行的事务，更新同一行数据，那么有可能一个事务会把另一个事务的更新覆盖掉。</p>
+<p>当数据库没有加任何锁操作的情况下会发生。</p>
+<ul>
+<li><strong>脏读</strong></li>
+</ul>
+<p>一个事务读到另一个尚未提交的事务中的数据。</p>
+<p>该数据可能会被回滚从而失效。</p>
+<p>如果第一个事务拿着失效的数据去处理那就发生错误了。</p>
+<ul>
+<li><strong>不可重复读</strong></li>
+</ul>
+<p>不可重复度的含义：一个事务对同一行数据读了两次，却得到了不同的结果。它具体分为如下两种情况：</p>
+<ul>
+<li><ul>
+<li><strong>虚读</strong>：在事务1两次读取同一记录的过程中，事务2对该记录进行了修改，从而事务1第二次读到了不一样的记录。</li>
+<li><strong>幻读</strong>：事务1在两次查询的过程中，事务2对该表进行了插入、删除操作，从而事务1第二次查询的结果发生了变化。</li>
+</ul>
+</li>
+</ul>
+<p><em>不可重复读与脏读的区别？</em></p>
+<p><em>脏读读到的是尚未提交的数据，而不可重复读读到的是已经提交的数据，只不过在两次读的过程中数据被另一个事务改过了。</em></p>
+<h4 id="3-6-3-数据库的四种隔离级别"><a href="#3-6-3-数据库的四种隔离级别" class="headerlink" title="3.6.3 数据库的四种隔离级别"></a>3.6.3 数据库的四种隔离级别</h4><p>数据库一共有如下四种隔离级别：</p>
+<ul>
+<li><strong>Read uncommitted 读未提交</strong></li>
+</ul>
+<p>在该级别下，一个事务对一行数据修改的过程中，不允许另一个事务对该行数据进行修改，但允许另一个事务对该行数据读。</p>
+<p>因此本级别下，不会出现更新丢失，但会出现脏读、不可重复读。</p>
+<ul>
+<li><strong>Read committed 读提交</strong></li>
+</ul>
+<p>在该级别下，未提交的写事务不允许其他事务访问该行，因此不会出现脏读；但是读取数据的事务允许其他事务的访问该行数据，因此会出现不可重复读的情况。</p>
+<ul>
+<li><strong>Repeatable read 重复读</strong></li>
+</ul>
+<p>在该级别下，读事务禁止写事务，但允许读事务，因此不会出现同一事务两次读到不同的数据的情况（不可重复读），且写事务禁止其他一切事务。</p>
+<ul>
+<li><strong>Serializable 序列化</strong></li>
+</ul>
+<p>该级别要求所有事务都必须串行执行，因此能避免一切因并发引起的问题，但效率很低。</p>
+<p>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读、幻读和第二类丢失更新这些并发问题，在可能出现这类问题的个别场合，可以由应用程序采用悲观锁或乐观锁来控制。</p>
+<h4 id="3-6-4-什么是分布式事务？"><a href="#3-6-4-什么是分布式事务？" class="headerlink" title="3.6.4 什么是分布式事务？"></a>3.6.4 什么是分布式事务？</h4><p>到此为止，所介绍的事务都是基于单数据库的本地事务，目前的数据库仅支持单库事务，并不支持跨库事务。而随着微服务架构的普及，一个大型业务系统往往由若干个子系统构成，这些子系统又拥有各自独立的数据库。往往一个业务流程需要由多个子系统共同完成，而且这些操作可能需要在一个事务中完成。在微服务系统中，这些业务场景是普遍存在的。此时，我们就需要在数据库之上通过某种手段，实现支持跨数据库的事务支持，这也就是大家常说的“分布式事务”。</p>
+<h4 id="3-6-5-CAP理论"><a href="#3-6-5-CAP理论" class="headerlink" title="3.6.5 CAP理论"></a>3.6.5 CAP理论</h4><ul>
+<li><strong>C (一致性) Consistency：</strong></li>
+</ul>
+<p>对某个指定的客户端来说，读操作能返回最新的写操作。对于数据分布在不同节点上的数据来说，如果在某个节点更新了数据，那么在其他节点如果都能读取到这个最新的数据，那么就称为强一致，如果有某个节点没有读取到，那就是分布式不一致。</p>
+<ul>
+<li><strong>A (可用性) Availability：</strong></li>
+</ul>
+<p>非故障的节点在合理的时间内返回合理的响应(不是错误和超时的响应)。可用性的两个关键一个是合理的时间，一个是合理的响应。合理的时间指的是请求不能无限被阻塞，应该在合理的时间给出返回。合理的响应指的是系统应该明确返回结果并且结果是正确的。</p>
+<ul>
+<li><strong>P (分区容错性) Partition tolerance：</strong></li>
+</ul>
+<p>当出现网络分区后，系统能够继续工作。打个比方，这里集群有多台机器，有台机器网络出现了问题，但是这个集群仍然可以正工作。</p>
+<p>CAP 三者是不能共有的，只能同时满足其中两点。基于 AP，我们又有了 BASE 理论。</p>
+<ul>
+<li>**基本可用(Basically Available)**：分布式系统在出现故障时，允许损失部分可用功能，保证核心功能可用。</li>
+<li>**软状态(Soft state)**：允许系统中存在中间状态，这个状态不影响系统可用性，这里指的是 CAP 中的不一致。</li>
+<li>**最终一致(Eventually consistent)**：最终一致是指经过一段时间后，所有节点数据都将会达到一致。</li>
+</ul>
+<h4 id="3-6-6-XA协议"><a href="#3-6-6-XA协议" class="headerlink" title="3.6.6 XA协议"></a>3.6.6 XA协议</h4><p>首先我们来简要看下分布式事务处理的XA规范：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591891-cbc68445-9d48-4e1c-81d0-ecf6b0ad666a.webp" alt="img"></p>
+<p>可知XA规范中分布式事务有AP，RM，TM组成：</p>
+<ul>
+<li>其中应用程序(Application Program ，简称AP)：AP定义事务边界（定义事务开始和结束）并访问事务边界内的资源。</li>
+<li>资源管理器(Resource Manager，简称RM)：Rm管理计算机共享的资源，许多软件都可以去访问这些资源，资源包含比如数据库、文件系统、打印机服务器等。</li>
+<li>事务管理器(Transaction Manager ，简称TM)：负责管理全局事务，分配事务唯一标识，监控事务的执行进度，并负责事务的提交、回滚、失败恢复等。</li>
+</ul>
+<p>Xa主要规定了RM与TM之间的交互，下面来看下XA规范中定义的RM 和 TM交互的接口：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772591926-5cadafb1-bafb-4d34-bae4-0acd6a1d754c.webp" alt="img"></p>
+<p>本图来着 参考文章XA规范25页</p>
+<ul>
+<li>xa_start负责开启或者恢复一个事务分支，并且管理XID到调用线程</li>
+<li>xa_end 负责取消当前线程与事务分支的关联</li>
+<li>xa_prepare负责询问RM 是否准备好了提交事务分支</li>
+<li>xa_commit通知RM提交事务分支</li>
+<li>xa_rollback 通知RM回滚事务分支</li>
+</ul>
+<p>XA协议是使用了二阶段协议的，其中：</p>
+<ul>
+<li>第一阶段TM要求所有的RM准备提交对应的事务分支，询问RM是否有能力保证成功的提交事务分支，RM根据自己的情况，如果判断自己进行的工作可以被提交，那就就对工作内容进行持久化，并给TM回执OK；否者给TM的回执NO。RM在发送了否定答复并回滚了已经的工作后，就可以丢弃这个事务分支信息了。</li>
+<li>第二阶段TM根据阶段1各个RM prepare的结果，决定是提交还是回滚事务。如果所有的RM都prepare成功，那么TM通知所有的RM进行提交；如果有RM prepare回执NO的话，则TM通知所有RM回滚自己的事务分支。</li>
+</ul>
+<p>也就是TM与RM之间是通过两阶段提交协议进行交互的。</p>
+<h2 id="第四章-如何合理的进行分库分表"><a href="#第四章-如何合理的进行分库分表" class="headerlink" title="第四章 如何合理的进行分库分表"></a>第四章 如何合理的进行分库分表</h2><h3 id="4-1-当前较流行的分库分表中间件"><a href="#4-1-当前较流行的分库分表中间件" class="headerlink" title="4.1 当前较流行的分库分表中间件"></a>4.1 当前较流行的分库分表中间件</h3><p>比较常见的包括：</p>
+<ul>
+<li>*cobar *</li>
+<li>*TDDL *</li>
+<li>*atlas *</li>
+<li>*sharding-jdbc *</li>
+<li><em>mycat</em></li>
+<li><em>DRDS</em></li>
+<li><em>DBProxy</em></li>
+</ul>
+<p><em><strong>cobar</strong></em>****</p>
+<p>阿里 b2b 团队开发和开源的，属于 proxy 层方案，就是介于应用服务器和数据库服务器之间。应用程序通过 JDBC 驱动访问 cobar 集群，cobar 根据 SQL 和分库规则对 SQL 做分解，然后分发到 MySQL 集群不同的数据库实例上执行。早些年还可以用，但是最近几年都没更新了，基本没啥人用，差不多算是被抛弃的状态吧。而且不支持读写分离、存储过程、跨库 join 和分页等操作。</p>
+<p>Cobar 是提供关系型数据库（MySQL）分布式服务的中间件，它可以让传统的数据库得到良好的线性扩展，并看上去还是一个数据库，对应用保持透明。</p>
+<p>Cobar以Proxy的形式位于前台应用和实际数据库之间，对前台的开放的接口是MySQL通信协议，将前台SQL语句变更并按照数据分布规则发到合适的后台数据分库，再合并返回结果，模拟单库下的数据库行为。</p>
+<p>Cobar属于中间层方案，在应用程序和MySQL之间搭建一层Proxy。中间层介于应用程序与数据库间，需要做一次转发，而基于JDBC协议并无额外转发，直接由应用程序连接数据库，</p>
+<p>性能上有些许优势。这里并非说明中间层一定不如客户端直连，除了性能，需要考虑的因素还有很多，中间层更便于实现监控、数据迁移、连接管理等功能。</p>
+<p>Cobar属于阿里B2B事业群，始于2008年，在阿里服役3年多，接管3000+个MySQL数据库的schema,集群日处理在线SQL请求50亿次以上。</p>
+<p>由于Cobar发起人的离职，Cobar停止维护。后续的类似中间件，比如MyCAT建立于Cobar之上，包括现在阿里服役的RDRS其中也复用了Cobar-Proxy的相关代码。</p>
+<p><strong>TDDL</strong></p>
+<p>淘宝团队开发的，属于 client 层方案。支持基本的 crud 语法和读写分离，但不支持 join、多表查询等语法。目前使用的也不多，因为还依赖淘宝的 diamond 配置管理系统。</p>
+<p>TDDL是Tabao根据自己的业务特点开发了(Tabao Distributed Data Layer, 外号：头都大了)。主要解决了分库分表对应用的透明化以及异构数据库之间的数据复制，</p>
+<p>它是一个基于集中式配置的jdbc datasourcce实现，具有主备，读写分离，动态数据库配置等功能。</p>
+<p>TDDL并非独立的中间件，只能算作中间层，处于业务层和JDBC层中间，是以Jar包方式提供给应用调用，属于JDBC Shard的思想。</p>
+<p>TDDL源码：<a target="_blank" rel="noopener" href="https://github.com/alibaba/tb_tddl">https://github.com/alibaba/tb_tddl</a></p>
+<p>TDDL复杂度相对较高。当前公布的文档较少，只开源动态数据源，分表分库部分还未开源，还需要依赖diamond，<em><strong>不推荐使用</strong></em>。</p>
+<p><strong>atlas</strong></p>
+<p>360 开源的，属于 proxy 层方案，以前是有一些公司在用的，但是确实有一个很大的问题就是社区最新的维护都在 5 年前了。所以，现在用的公司基本也<em><strong>很少</strong></em>了。</p>
+<p>Atlas是一个位于应用程序与MySQL之间的基于MySQL协议的数据中间层项目，它是在mysql-proxy 0.8.2版本上对其进行优化，360团队基于mysql proxy 把lua用C改写，</p>
+<p>它实现了MySQL的客户端和服务端协议，作为服务端与应用程序通讯，同时作为客户端与MySQL通讯。它对应用程序屏蔽了DB的细节。</p>
+<p>Altas不能实现分布式分表，所有的字表必须在同一台DB的同一个DataBase里且所有的字表必须实现建好，Altas没有自动建表的功能。</p>
+<p>原有版本是不支持分库分表， 目前已经放出了分库分表版本。在网上看到一些朋友经常说在高并 发下会经常挂掉，如果大家要使用需要提前做好测试。</p>
+<p><strong>sharding-jdbc</strong></p>
+<p>当当开源的，属于 client 层方案。确实之前用的还比较多一些，因为 SQL 语法支持也比较多，没有太多限制，而且目前推出到了 2.0 版本，支持分库分表、读写分离、分布式 id 生成、柔性事务（最大努力送达型事务、TCC 事务）。而且确实之前使用的公司会比较多一些（这个在官网有登记使用的公司，可以看到从 2017 年一直到现在，是有不少公司在用的），目前社区也还一直在开发和维护，还算是比较活跃，个人认为算是一个现在也可以选择的方案。</p>
+<p>sharding-JDBC是当当应用框架ddframe中，从关系型数据库模块dd-rdb中分离出来的数据库水平分片框架，实现透明化数据库分库分表访问。</p>
+<p>Sharding-JDBC是继dubbox和elastic-job之后，ddframe系列开源的第3个项目。</p>
+<p>Sharding-JDBC直接封装JDBC API，可以理解为增强版的JDBC驱动，旧代码迁移成本几乎为零：</p>
+<ul>
+<li>可适用于任何基于Java的ORM框架，如JPA、Hibernate、Mybatis、Spring JDBC Template或直接使用JDBC。</li>
+<li>可基于任何第三方的数据库连接池，如DBCP、C3P0、 BoneCP、Druid等。</li>
+<li>理论上可支持任意实现JDBC规范的数据库。虽然目前仅支持MySQL，但已有支持Oracle、SQLServer等数据库的计划。</li>
+</ul>
+<p>Sharding-JDBC定位为轻量Java框架，使用客户端直连数据库，以jar包形式提供服务，无proxy代理层，无需额外部署，无其他依赖，DBA也无需改变原有的运维方式。</p>
+<p>Sharding-JDBC分片策略灵活，可支持等号、between、in等多维度分片，也可支持多分片键。</p>
+<p>SQL解析功能完善，支持聚合、分组、排序、limit、or等查询，并支持Binding Table以及笛卡尔积表查询。</p>
+<p><strong>mycat</strong></p>
+<p>基于 cobar 改造的，属于 proxy 层方案，支持的功能非常完善，而且目前应该是非常火的而且不断流行的数据库中间件，社区很活跃，也有一些公司开始在用了。但是确实相比于 sharding jdbc 来说，年轻一些，经历的锤炼少一些。</p>
+<p>MyCAT是社区爱好者在阿里cobar基础上进行二次开发，解决了cobar当时存 在的一些问题，并且加入了许多新的功能在其中。目前MyCAT社区活 跃度很高，</p>
+<p>目前已经有一些公司在使用MyCAT。总体来说支持度比 较高，也会一直维护下去，发展到目前的版本，已经不是一个单纯的MySQL代理了，</p>
+<p>它的后端可以支持MySQL, SQL Server, Oracle, DB2, PostgreSQL等主流数据库，也支持MongoDB这种新型NoSQL方式的存储，未来还会支持更多类型的存储。</p>
+<p>MyCAT是一个强大的数据库中间件，不仅仅可以用作读写分离，以及分表分库、容灾管理，而且可以用于多租户应用开发、云平台基础设施，让你的架构具备很强的适应性和灵活性，</p>
+<p>借助于即将发布的MyCAT只能优化模块，系统的数据访问瓶颈和热点一目了然，根据这些统计分析数据，你可以自动或手工调整后端存储，将不同的表隐射到不同存储引擎上，而整个应用的代码一行也不用改变。</p>
+<p>MyCAT是在Cobar基础上发展的版本，两个显著提高：后端由BIO改为NIO，并发量有大幅提高； 增加了对Order By, Group By, Limit等聚合功能</p>
+<p>（虽然Cobar也可以支持Order By, Group By, Limit语法，但是结果没有进行聚合，只是简单返回给前端，聚合功能还是需要业务系统自己完成）</p>
+<p><strong>DRDS</strong></p>
+<p>DRDS是阿里巴巴自主研发的分布式数据库服务（此项目不开源）,DRDS脱胎于阿里巴巴开源的Cobar分布式数据库引擎，吸收了Cobar核心的Cobar-Proxy源码，</p>
+<p>实现了一套独立的类似MySQL-Proxy协议的解析端，能够对传入的SQL进行解析和处理，对应用程序屏蔽各种复杂的底层DB拓扑结构，获得单机数据库一样的使用体验，</p>
+<p>同时借鉴了淘宝TDDL丰富的分布式数据库实践经验，实现了对分布式Join支持，SUM&#x2F;MAX&#x2F;COUNT&#x2F;AVG等聚合函数支持以及排序等函数支持，</p>
+<p>通过异构索引、小表广播等解决分布式数据库使用场景下衍生出的一系列问题，最终形成了完整的分布式数据库方案。</p>
+<p>现在是品牌升级之后叫PolarDB-X。</p>
+<p><strong>DBProxy</strong></p>
+<p>DBProxy是美团点评DBA团队针对公司内部需求，在奇虎360公司开源的Atlas做了很多改进工作，形成了新的高可靠、高可用企业级数据库中间件</p>
+<p>其特性主要有：读写分离、负载均衡、支持分表、IP过滤、sql语句黑名单、DBA平滑下线DB、从库流量配置、动态加载配置项</p>
+<p>项目的Github地址是<a target="_blank" rel="noopener" href="https://github.com/Meituan-Dianping/DBProxy">https://github.com/Meituan-Dianping/DBProxy</a></p>
+<h3 id="4-2-其他知名度较低的分库分表中间件"><a href="#4-2-其他知名度较低的分库分表中间件" class="headerlink" title="4.2 其他知名度较低的分库分表中间件"></a>4.2 其他知名度较低的分库分表中间件</h3><p><strong>Heisenberg</strong></p>
+<p>Baidu.</p>
+<p>其优点：分库分表与应用脱离，分库表如同使用单库表一样，减少db连接数压力，热重启配置，可水平扩容，遵守MySQL原生协议，读写分离，无语言限制，</p>
+<p>mysqlclient, c, java都可以使用Heisenberg服务器通过管理命令可以查看，如连接数，线程池，结点等，并可以调整采用velocity的分库分表脚本进行自定义分库表，相当的灵活。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/brucexx/heisenberg%EF%BC%88%E5%BC%80%E6%BA%90%E7%89%88%E5%B7%B2%E5%81%9C%E6%AD%A2%E7%BB%B4%E6%8A%A4%EF%BC%89">https://github.com/brucexx/heisenberg（开源版已停止维护）</a></p>
+<p><strong>CDS</strong></p>
+<p>JD. Completed Database Sharding.</p>
+<p>CDS是一款基于客户端开发的分库分表中间件产品，实现了JDBC标准API，支持分库分表，读写分离和数据运维等诸多共，提供高性能，高并发和高可靠的海量数据路由存取服务，业务系统可近乎零成本进行介入，目前支持MySQL, Oracle和SQL Server.</p>
+<p>(架构上和Cobar，MyCAT相似，直接采用jdbc对接，没有实现类似MySQL协议，没有NIO,AIO，SQL Parser模块采用JSqlParser, Sql解析器有：druid&gt;JSqlParser&gt;fdbparser.)</p>
+<p><strong>DDB</strong></p>
+<p>网易. Distributed DataBase.</p>
+<p>DDB经历了三次服务模式的重大更迭：Driver模式-&gt;Proxy模式-&gt;云模式。</p>
+<p>Driver模式：基于JDBC驱动访问，提供一个db.jar, 和TDDL类似， 位于应用层和JDBC之间. Proxy模式：在DDB中搭建了一组代理服务器来提供标准的MySQL服务，在代理服务器内部实现分库分表的逻辑。应用通过标准数据库驱动访问DDB Proxy, Proxy内部通过MySQL解码器将请求还原为SQL, 并由DDB Driver执行得到结果。</p>
+<p>私有云模式：基于网易私有云开发的一套平台化管理工具Cloudadmin, 将DDB原先Master的功能打散，一部分分库相关功能集成到proxy中，如分库管理、表管理、用户管理等，一部分中心化功能集成到Cloudadmin中，如报警监控，此外，Cloudadmin中提供了一键部署、自动和手动备份，版本管理等平台化功能。</p>
+<p><strong>OneProxy</strong></p>
+<p>数据库界大牛，前支付宝数据库团队领导楼方鑫开发，基于mysql官方 的proxy思想利用c进行开发的，OneProxy是一款商业收费的中间件， 楼总舍去了一些功能点，专注在性能和稳定性上。测试过说在高并发下很稳定。</p>
+<p><strong>Oceanus</strong> ：</p>
+<p>58同城数据库中间件</p>
+<p>Oceanus致力于打造一个功能简单、可依赖、易于上手、易于扩展、易于集成的解决方案，甚至是平台化系统。拥抱开源，提供各类插件机制集成其他开源项目，新手可以在几分钟内上手编程，分库分表逻辑不再与业务紧密耦合，扩容有标准模式，减少意外错误的发生。</p>
+<p><strong>Vitess</strong></p>
+<p>这个中间件是Youtube生产在使用的，但是架构很复杂。 与以往中间件不同，使用Vitess应用改动比较大要 使用他提供语言的API接口，我们可以借鉴他其中的一些设计思想。</p>
+<p><strong>Kingshard</strong></p>
+<p>Kingshard是前360Atlas中间件开发团队的陈菲利用业务时间 用go语言开发的，目前参与开发的人员有3个左右， 目前来看还不是成熟可以使用的产品，需要在不断完善。</p>
+<p><strong>MaxScale与MySQL Route</strong></p>
+<p>这两个中间件都算是官方的吧，MaxScale是mariadb (MySQL原作者维护的一个版本)研发的，目前版本不支持分库分表。</p>
+<p>MySQL Route是现在MySQL 官方Oracle公司发布出来的一个中间件。</p>
+<h3 id="4-3-如何选择拆分键"><a href="#4-3-如何选择拆分键" class="headerlink" title="4.3 如何选择拆分键"></a>4.3 如何选择拆分键</h3><p>本文将介绍如何在PolarDB-X中选择合适的拆分键。</p>
+<p><strong>背景信息</strong></p>
+<p>拆分键即分库或分表字段，是水平拆分过程中用于生成拆分规则的数据表字段。PolarDB-X将拆分键值通过拆分函数计算得到一个计算结果，然后根据这个结果将数据分拆到私有定制RDS实例上。</p>
+<p>数据表拆分的首要原则是尽可能找到数据所归属的业务逻辑实体，并确定大部分（或核心的）SQL操作或者具备一定并发的SQL都是围绕这个实体进行，然后可使用该实体对应的字段作为拆分键。</p>
+<p><strong>示例</strong></p>
+<p>业务逻辑实体通常与应用场景相关，下面的一些典型应用场景都有明确的业务逻辑实体（以此类推，其它应用场景也能找到合适的业务逻辑实体），其标识型字段可用来做拆分键。</p>
+<ul>
+<li>面向用户的互联网应用，围绕用户维度来做各种操作，那么业务逻辑实体就是用户，可使用用户ID作为拆分键。</li>
+<li>侧重于卖家的电商应用，围绕卖家维度来做各种操作，那么业务逻辑实体就是卖家，可使用卖家ID作为拆分键。</li>
+<li>游戏类在线应用，围绕玩家维度来做各种操作，那么业务逻辑实体就是玩家，可使用玩家ID作为拆分键。</li>
+<li>车联网在线应用，围绕车辆维度来做各种操作，那么业务逻辑实体就是车辆，可使用车辆ID作为拆分键。</li>
+<li>税务类在线应用，围绕纳税人来进行前台业务操作，那么业务逻辑实体就是纳税人，可使用纳税人ID作为拆分键。</li>
+</ul>
+<p>例如某面向卖家的电商应用，需要对如下单表进行水平拆分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE sample_order (   id INT(11) NOT NULL,   sellerId INT(11) NOT NULL,   trade_id INT(11) NOT NULL,   buyer_id INT(11) NOT NULL,   buyer_nick VARCHAR(64) DEFAULT NULL,   PRIMARY KEY (id) )</span><br></pre></td></tr></table></figure>
+
+<p>确定业务逻辑实体为卖家，那么选择字段sellerId作为拆分键，则您可以使用如下分布式DDL语句建表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE sample_order (   id INT(11) NOT NULL,   sellerId INT(11) NOT NULL,   trade_id INT(11) NOT NULL,   buyer_id INT(11) NOT NULL,   buyer_nick VARCHAR(64) DEFAULT NULL,   PRIMARY KEY (id) ) DBPARTITION BY HASH(sellerId)</span><br></pre></td></tr></table></figure>
+
+<p>如果确实找不到合适的业务逻辑实体作为拆分键，特别是传统企业级应用，那么可以考虑以下方法来选择拆分键。</p>
+<ul>
+<li>根据数据分布和访问的均衡度来考虑拆分键，尽量将数据表中的数据相对均匀地分布在不同分表中，PolarDB-X推出了全局强一致二级索引和Parallel Query能够提高在此场景下SQL并发度并缩短响应时间。</li>
+<li>按照数字（字符串）类型与时间类型字段相结合作为拆分键，进行分库和分表，适用于日志检索类的应用场景。</li>
+</ul>
+<p>例如某日志系统记录了用户的所有操作，现需要对如下日志单表进行水平拆分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE user_log (   userId INT(11) NOT NULL,   name VARCHAR(64) NOT NULL,   operation VARCHAR(128) DEFAULT NULL,   actionDate DATE DEFAULT NULL )</span><br></pre></td></tr></table></figure>
+
+<p>此时可以选择用户标识与时间字段相结合作为拆分键，并按照一周七天进行分表，则您可以使用如下分布式DDL语句建表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE user_log (   userId INT(11) NOT NULL,   name VARCHAR(64) NOT NULL,   operation VARCHAR(128) DEFAULT NULL,   actionDate DATE DEFAULT NULL ) DBPARTITION BY HASH(userId) TBPARTITION BY WEEK(actionDate) TBPARTITIONS 7</span><br></pre></td></tr></table></figure>
+
+<p>更多拆分键的选择和分表形式，请参见<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/71300.html#concept-1825026">CREATE TABLE</a>和<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/71263.html#multiTask1985">拆分函数概述</a>。</p>
+<h3 id="4-4-如何选择分片数"><a href="#4-4-如何选择分片数" class="headerlink" title="4.4 如何选择分片数"></a>4.4 如何选择分片数</h3><p>DRDS 中的水平拆分有两个层次：分库和分表。每个 RDS 实例上默认会创建8个物理分库，每个物理分库上可以创建一个或多个物理分表。分表数通常也被称为分片数。</p>
+<p>一般情况下，建议单个物理分表的容量不超过500万行数据。通常可以预估1到2年的数据增长量，用估算出的总数据量除以总的物理分库数，再除以建议的最大数据量500万，即可得出每个物理分库上需要创建的物理分表数：</p>
+<ol>
+<li>物理分库上的物理分表数 &#x3D; 向上取整(估算的总数据量 &#x2F; (RDS 实例数 * 8) &#x2F; 5,000,000)</li>
+</ol>
+<p>因此，当计算出的物理分表数等于1时，分库即可，无需再进一步分表，即每个物理分库上一个物理分表；若计算结果大于1，则建议既分库又分表，即每个物理分库上多个物理分表。</p>
+<p>例如，某用户预估一张表在2年后的总数据量大概是1亿行，购买了4个 RDS 实例，那么按照上述公式计算：</p>
+<ol>
+<li>物理分库上的物理分表数 &#x3D; CEILING(100,000,000 &#x2F; ( 4 * 8 ) &#x2F; 5,000,000) &#x3D; CEILING(0.625) &#x3D; 1</li>
+</ol>
+<p>结果为1，那么只分库即可，即每个物理分库上1个物理分表。</p>
+<p>若上述例子中仅购买了1个 RDS 实例，那么按照上述公式计算：</p>
+<ol>
+<li>物理分库上的物理分表数 &#x3D; CEILING(100,000,000 &#x2F; ( 1 * 8 ) &#x2F; 5,000,000) &#x3D; CEILING(2.5) &#x3D; 3</li>
+</ol>
+<p>结果为3，那么建议既分库又分表，即每个物理分库上3个物理分表。</p>
+<h3 id="4-5-单个表的容量限制最佳实践"><a href="#4-5-单个表的容量限制最佳实践" class="headerlink" title="4.5 单个表的容量限制最佳实践"></a>4.5 单个表的容量限制最佳实践</h3><p>分表的大小是有限制的，建议单个分表的数据记录数不宜超过500万。（阿里巴巴最佳实践）</p>
+<h3 id="4-6-DRDS-的分库分表，能否更换分库分表的拆分键"><a href="#4-6-DRDS-的分库分表，能否更换分库分表的拆分键" class="headerlink" title="4.6 DRDS 的分库分表，能否更换分库分表的拆分键"></a>4.6 DRDS 的分库分表，能否更换分库分表的拆分键</h3><p>对于已经被建好的分库分表，DRDS 不支持变更它们的拆分键。如果确实有需要变更表的拆分键，可以采用以下的临时办法：</p>
+<ul>
+<li>选择新的分库键并重新建表；</li>
+<li>然后将原表的数据进行导入。</li>
+</ul>
+<h3 id="4-7-PolarDB-X实例中每一个RDS的分库数，每个分库里的分表数是否有限制"><a href="#4-7-PolarDB-X实例中每一个RDS的分库数，每个分库里的分表数是否有限制" class="headerlink" title="4.7 PolarDB-X实例中每一个RDS的分库数，每个分库里的分表数是否有限制"></a>4.7 PolarDB-X实例中每一个RDS的分库数，每个分库里的分表数是否有限制</h3><p>单个RDS实例的默认分库数目是8个，不可更改。</p>
+<p>每个分库里的分表数目理论上是没有限制的，受限于PolarDB-X服务器本身的硬件资源。分表数目的选择需要依据对业务数据量的评估，详情请参见<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/51307.html?spm=ata.21736010.0.0.4d697536ZqbYw7">如何选择分片数</a>。</p>
+<h3 id="4-8-PolarDB-X是否支持分布式JOIN？它是如何支持复杂SQL？"><a href="#4-8-PolarDB-X是否支持分布式JOIN？它是如何支持复杂SQL？" class="headerlink" title="4.8 PolarDB-X是否支持分布式JOIN？它是如何支持复杂SQL？"></a>4.8 PolarDB-X是否支持分布式JOIN？它是如何支持复杂SQL？</h3><p>PolarDB-X支持大部分的JOIN语法，但对于比较复杂的情况，PolarDB-X做了一些限制。例如大表之间的JOIN，由于执行代价过高，速度过慢容易导致性能或者系统不可用等情况，因此请尽量避免，详情请参见<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/144297.html">Join与子查询的优化和执行</a>。</p>
+<h3 id="4-9-平滑扩容"><a href="#4-9-平滑扩容" class="headerlink" title="4.9 平滑扩容"></a>4.9 平滑扩容</h3><p><strong>什么是平滑扩容</strong></p>
+<p>PolarDB-X 平滑扩容是指通过增加 RDS 的数量以提升整体性能。当 RDS 的 IOPS、CPU、磁盘容量等指标到达瓶颈，并且 SQL 优化、RDS 升配已无法解决瓶颈（例如磁盘已升至顶配）时，可通过 PolarDB-X 水平扩容增加 RDS 数量，提升 PolarDB-X 数据库的容量。</p>
+<p>PolarDB-X 平滑扩容通过迁移分库到新 RDS 来降低原 RDS 的压力。例如，扩容前8个库的压力集中在一个 RDS 实例上，扩容后8个库分别部署在两个 RDS 实例上，单个 RDS 实例的压力就明显降低。如下图所示：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592274-4aedc3a8-9dba-4185-92bb-4de01b84e5d4.webp" alt="img"></p>
+<p><strong>说明：</strong>平滑扩容多次后，如果出现 RDS 数量和分库数量相等的情况，需要创建另外一个 PolarDB-X 和预期容量 RDS 的数据库，再进行数据迁移以达到更大规模数据容量扩展的目标。此过程较复杂，推荐创建 PolarDB-X 数据库时要考虑未来2-3年数据的增长预期，做好 RDS 数量规划。</p>
+<h2 id="第五章-一定要分库分表吗？有没有过渡的方案"><a href="#第五章-一定要分库分表吗？有没有过渡的方案" class="headerlink" title="第五章 一定要分库分表吗？有没有过渡的方案"></a>第五章 一定要分库分表吗？有没有过渡的方案</h2><p>前面说到分库分表是OLTP的最终形态，但是对于大多数公司来说，分库分表引入的复杂度会大大提升开发成本。所以针对此场景我们设计了一定的过渡方案。</p>
+<ul>
+<li>读写分离：查询走只读实例，缓解主实例压力。</li>
+<li>查询分析走分析库：业务库只承载事务相关操作，业务库通过同步技术将数据实时同步至分析库（如阿里的ADB），查询分析场景走分析库。</li>
+<li>升级为更高性能的OLTP数据库，如PolarDB，单库最大64TB，单集群最大100TB，最大写TPS支持十万，完全兼容Mysql。</li>
+</ul>
+<h2 id="第六章-分布式事务解决方案"><a href="#第六章-分布式事务解决方案" class="headerlink" title="第六章 分布式事务解决方案"></a>第六章 分布式事务解决方案</h2><h3 id="6-1-二阶段提交（2PC）"><a href="#6-1-二阶段提交（2PC）" class="headerlink" title="6.1 二阶段提交（2PC）"></a>6.1 二阶段提交（2PC）</h3><p>二阶段提交协议（Two-phase Commit Protocol，简称 2PC）是分布式事务的核心协议。在此协议中，一个事务管理器（Transaction Manager，简称 TM）协调 1 个或多个资源管理器（Resource Manager，简称 RM）的活动，所有资源管理器向事务管理器汇报自身活动状态，由事务管理器根据各资源管理器汇报的状态（完成准备或准备失败）来决定各资源管理器是“提交”事务还是进行“回滚”操作。</p>
+<p>二阶段提交的具体流程如下：</p>
+<ol>
+<li>应用程序向事务管理器提交请求，发起分布式事务；</li>
+<li>在第一阶段，事务管理器联络所有资源管理器，通知它们准备提交事务；</li>
+<li>各资源管理器返回完成准备（或准备失败）的消息给事务管理器（响应超时算作失败）；</li>
+<li>在第二阶段：</li>
+</ol>
+<ul>
+<li><ul>
+<li>如果所有资源管理器均完成准备（如图 1），则事务管理器会通知所有资源管理器执行事务提交；</li>
+<li>如果任一资源管理器准备失败（如图 2 中的资源管理器 B），则事务管理器会通知所有资源管理器进行事务回滚。</li>
+</ul>
+</li>
+</ul>
+<p><strong>所有资源管理器完成准备，事务管理器协调各资源管理器提交事务</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592289-dcaf9799-0229-4d85-815a-3ce5dc47fac2.webp" alt="img"></p>
+<p><strong>任一资源管理器准备失败，事务管理器协调各资源管理器回滚事务</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592321-0b70f7f9-9b6b-4cc2-96b8-c85cdd5fcefc.webp" alt="img"></p>
+<h3 id="6-2-TCC补偿方案"><a href="#6-2-TCC补偿方案" class="headerlink" title="6.2 TCC补偿方案"></a>6.2 TCC补偿方案</h3><p>Try-Confirm-Cancel（TCC）是初步操作（Try）、确认操作（Confirm）和取消操作（Cancel）三种操作的缩写，这三种操作的业务含义如下：</p>
+<ul>
+<li>Try 阶段：对业务系统做检测及资源预留；</li>
+<li>Confirm 阶段：对业务系统做确认提交。默认 Confirm 阶段是不会出错的，只要 Try 成功，Confirm 一定成功；</li>
+<li>Cancel 阶段：当业务执行出现错误，需要回滚的状态下，执行业务取消，释放预留资源。</li>
+</ul>
+<p>TCC 是二阶段提交协议（Two-phase Commit Protocol，简称 2PC）的扩展，Try 操作对应 2PC 中一阶段的准备提交事务（Prepare），Confirm 对应 2PC 中二阶段事务提交（Commit），Cancel 对应 2PC 中二阶段事务回滚（Rollback）。</p>
+<p>与 2PC 不同的是，TCC 是一种编程模型，是应用层的 2PC；TCC 的 3 个操作均由编码实现，通过编码实现了 2PC 资源管理器的功能。</p>
+<p>TCC 自编码的特性决定 TCC 资源管理器可以跨数据库、跨应用实现资源管理，将对不同的数据库访问、不同的业务操作通过编码方式转换一个原子操作，解决了复杂业务场景下的事务问题。同时 TCC 的每一个操作对于数据库来讲都是一个本地数据库事务，操作结束则本地数据库事务结束，数据库的资源也就被释放；这就规避了数据库层面的 2PC 对资源占用导致的性能低下问题。</p>
+<p>基本原理如下图所示：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592367-621e415f-10a0-48c3-af2c-754db1956ef1.webp" alt="img"></p>
+<p>事务开始时，业务应用会向事务协调器注册启动事务。之后业务应用会调用所有服务的try接口，完成一阶段准备。之后事务协调器会根据try接口返回情况，决定调用confirm接口或者cancel接口。如果接口调用失败，会进行重试。</p>
+<p>TCC方案让应用自己定义数据库操作的粒度，使得降低锁冲突、提高吞吐量成为可能，比如华为分布式事务中间件DTM性能极高，普通配置服务器可以支持全局事务1万+ TPS，分支事务计算方式为3万+ TPS （阿里分布式事务中间件也是采用后者计算方式）。 当然TCC方案也有不足之处，集中表现在以下两个方面：</p>
+<p>对应用的侵入性强。业务逻辑的每个分支都需要实现try、confirm、cancel三个操作，应用侵入性较强，改造成本高。</p>
+<p>实现难度较大。需要按照网络状态、系统故障等不同的失败原因实现不同的回滚策略。为了满足一致性的要求，confirm和cancel接口必须实现幂等。</p>
+<p>上述原因导致TCC方案大多被研发实力较强、有迫切需求的大公司所采用。微服务倡导服务的轻量化，而TCC方案中很多事务的处理逻辑需要应用自己编码实现，复杂且开发量大。</p>
+<h3 id="6-3-基于消息的最终一致性"><a href="#6-3-基于消息的最终一致性" class="headerlink" title="6.3 基于消息的最终一致性"></a>6.3 基于消息的最终一致性</h3><p>消息一致性方案是通过消息中间件保证上、下游应用数据操作的[一致性。基本思路是将本地操作和发送消息放在一个事务中，保证本地操作和消息发送要么两者都成功或者都失败。下游应用向消息系统订阅该消息，收到消息后执行相应操作。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592430-976af45c-5e1a-4a38-916a-5fcc00083eb9.webp" alt="img"></p>
+<p>消息方案从本质上讲是将分布式事务转换为两个本地事务，然后依靠下游业务的重试机制达到最终一致性。基于消息的最终一致性方案对应用侵入性也很高，应用需要进行大量业务改造，成本非常高。</p>
+<p>入侵代码的方案是基于现有情形“迫不得已”才推出的解决方案，实际上它们实现起来非常不优雅，比如TCC，一个事务的调用通常伴随而来的是对该事务接口增加一系列的反向操作，提交逻辑必然伴随着回滚的逻辑，这样的代码会使得项目非常臃肿，维护成本高。</p>
+<p>针对上面所说的分布式事务解决方案的痛点，那很显然，我们理想的分布式事务解决方案肯定是性能要好而且要对业务无入侵，业务层上无需关心分布式事务机制的约束，也就是本文所重点推荐的非侵入事务（全局事务），真正做到事务与业务分离。</p>
+<p><strong>下面举例基于阿里云RocketMQ事务消息来保证分布式事务的数据一致性来进行说明。</strong></p>
+<p>例如，针对一家互联网电商企业，其业务涉及广泛，如注册、订单、库存、物流等；同时，也会涉及许多业务峰值时刻，如秒杀活动、周年庆、定期特惠等。这些活动都对分布性系统中的各项微服务应用的处理性能带来很大的挑战。</p>
+<p>消息队列 RocketMQ 版作为分布式系统中的重要组件，可用于应对这些挑战，例如解决应用的分布式事务的数据一致性问题。</p>
+<p>注册系统注册的流程中，用户入口在网页注册系统，通知系统在邮件系统，两个系统之间的数据需要保持最终一致。</p>
+<p><strong>普通消息处理</strong></p>
+<p>如上所述，注册系统和邮件通知系统之间通过消息队列进行异步处理。注册系统将注册信息写入注册系统之后，发送一条注册成功的消息到消息队列 RocketMQ 版，邮件通知系统订阅消息队列 RocketMQ 版的注册消息，做相应的业务处理，发送注册成功或者失败的邮件。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772592997-87d223dc-82de-4d90-9115-a1ad2ba0112d.webp" alt="img"></p>
+<p>流程说明如下：</p>
+<ol>
+<li>注册系统发起注册。</li>
+<li>注册系统向消息队列 RocketMQ 版发送注册消息成功与否的消息。2.1 消息发送成功，进入 3。 2.2 消息发送失败，导致邮件通知系统未收到消息队列 RocketMQ 版发送的注册成功与否的消息，而无法发送邮件，最终邮件通知系统和注册系统之间的状态数据不一致。</li>
+<li>邮件通知系统收到消息队列 RocketMQ 版的注册成功消息。</li>
+<li>邮件通知系统发送注册成功邮件给用户。</li>
+</ol>
+<p>在这样的情况下，虽然实现了系统间的解藕，上游系统不需要关心下游系统的业务处理结果；但是数据一致性不好处理，如何保证邮件通知系统状态与注册系统状态的最终一致。</p>
+<p><strong>事务消息处理</strong></p>
+<p>此时，需要有利用消息队列 RocketMQ 版所提供的事务消息来实现系统间的状态数据一致性。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593087-ce38f686-ba7d-4ccd-9587-ccc9fc1d2c4d.webp" alt="img"></p>
+<p>流程说明如下：</p>
+<ol>
+<li>注册系统向消息队列 RocketMQ 版发送半事务消息。1.1 半事务消息发送成功，进入 2。 1.2 半事务消息发送失败，注册系统不进行注册，流程结束。（最终注册系统与邮件通知系统数据一致）</li>
+<li>注册系统开始注册。2.1 注册成功，进入 3.1。 2.2 注册失败，进行 3.2。</li>
+<li>注册系统向消息队列 RocketMQ 版发送半消息状态。3.1 提交半事务消息，产生注册成功消息，进入 4。 3.2 回滚半事务消息，未产生注册成功消息，流程结束。（最终注册系统与邮件通知系统数据一致）</li>
+<li>邮件通知系统接收消息队列 RocketMQ 版的注册成功消息。</li>
+<li>邮件通知系统发送注册成功邮件。（最终注册系统与邮件通知系统数据一致）</li>
+</ol>
+<p>半事务消息（Half-transaction message）是消息队列中的一个特性，它常用于实现分布式系统中的最终一致性。消息队列 RocketMQ 版支持半事务消息，这项功能特别适合处理那些既需要执行本地事务，又需要发送消息到消息队列进行后续处理的场景。</p>
+<p>在分布式系统中进行事务操作时，可能会涉及到一个系统操作（例如，更新数据库记录）和向其他系统或服务发送消息（例如，进行异步处理或通知）。在这种情况下，半事务消息非常有用，因为它们能够确保本地事务和消息发布之间的一致性。</p>
+<p>半事务消息的流程大致分为以下几个步骤：</p>
+<ol>
+<li><strong>发送半事务消息</strong>：首先，发送一个半事务消息到消息队列。此时消息不会立即被消费者消费，因为它处于“未确定”的状态。</li>
+<li><strong>执行本地事务</strong>：在发送半事务消息后，执行相关的本地事务逻辑，例如修改数据库的某些记录。</li>
+<li><strong>本地事务结果</strong>：本地事务的执行结果会有两种：成功或失败。</li>
+</ol>
+<ul>
+<li><ul>
+<li>如果本地事务执行成功，发送确认消息，此时 RocketMQ 会将半事务消息更改为可供消费者消费的状态。</li>
+<li>如果本地事务执行失败，发送回滚消息，RocketMQ 会删除该半事务消息或执行回滚操作，确保消息不会被消费。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><strong>消息队列回查事务状态</strong>：为了处理长时间未确定状态的事务消息，RocketMQ 会定期向消息发送者的系统发起回查，查询本地事务的当前状态，然后基于查询结果确认或回滚半事务消息。</li>
+</ol>
+<p>这个机制的好处是，它提供了一种机制来保证跨服务的操作都是成功的，或者在遇到问题时都被回滚，这样可以在不丢失消息的前提下保证各服务间处理的一致性。在分布式系统常见的设计模式，如Saga模式中，半事务消息广泛用于实现服务间复杂事务的一致性。</p>
+<p>总而言之，半事务消息是一种特殊类型的消息，在消息和关联的本地事务之间建立了半成品状态，从而保证只有在本地事务成功完成时，消息才会被其他系统消费。这为分布式系统中事务一致性提供了一种相对安全的解决方案。</p>
+<h3 id="6-4-全局事务"><a href="#6-4-全局事务" class="headerlink" title="6.4 全局事务"></a>6.4 全局事务</h3><p><strong>6.4.1 为什么需要全局事务服务</strong></p>
+<p>一个完整的业务往往需要调用多个子业务或服务，随着业务的不断增多，涉及的服务及数据也越来越多，越来越复杂。传统的系统难以支撑，出现了应用和数据库等的分布式系统。分布式系统又带来了数据一致性的问题，从而产生了分布式事务。</p>
+<h4 id="6-4-2-阿里云全局事务服务GTS"><a href="#6-4-2-阿里云全局事务服务GTS" class="headerlink" title="6.4.2 阿里云全局事务服务GTS"></a>6.4.2 阿里云全局事务服务GTS</h4><p>全局事务服务GTS（Global Transaction Service）用于实现分布式环境下，特别是微服务架构下的高性能事务一致性。可以与RDS、MySQL、PostgreSQL等数据源，Spring Cloud、Dubbo、HSF及其他RPC框架，MQ消息队列等中间件产品配合使用，轻松实现分布式数据库事务、多库事务、消息事务、服务链路级事务及各种组合。</p>
+<h4 id="6-4-3-开源分布式事务解决方案Seata"><a href="#6-4-3-开源分布式事务解决方案Seata" class="headerlink" title="6.4.3 开源分布式事务解决方案Seata"></a>6.4.3 开源分布式事务解决方案Seata</h4><p>Simple Extensible Autonomous Transaction Architecture（Seata）是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。</p>
+<p>2019 年，基于 GTS 的技术积累，阿里巴巴发起了开源项目 <a target="_blank" rel="noopener" href="https://github.com/seata/seata?spm=a2c4g.11186623.2.12.102873de9SDqld">Seata</a></p>
+<p>2020 年 2 月，基于 Seata 项目 GA 后的版本，GTS 实现与 Seata 的协议兼容，支持使用 Seata 的应用无缝迁移到云上，基于 GTS 提供的服务高效运行。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593082-6d87c5f4-6ee2-4f87-86a8-08ad221478ff.webp" alt="img"></p>
+<p><em>GTS 已经全面兼容和支持开源分布式事务 Seata，实现与 Seata 的协议兼容，支持使用 Seata 的应用无缝迁移到云上，基于 GTS 提供的服务高效运行。</em></p>
+<h4 id="6-4-4-分布式事务框架和事务模式"><a href="#6-4-4-分布式事务框架和事务模式" class="headerlink" title="6.4.4 分布式事务框架和事务模式"></a>6.4.4 分布式事务框架和事务模式</h4><p>GTS 定义了一套事务框架以便描述分布式事务，在框架下支持不同事务模式运行。</p>
+<p><strong>核心组件定义</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593093-53328272-a6f0-4cfe-a993-7b660efe639f.webp" alt="img"></p>
+<p>分布式事务包含以下 3 个核心组件：</p>
+<ul>
+<li>Transaction Coordinator（TC）：事务协调器，维护全局事务的运行状态，负责协调并驱动全局事务的提交或回滚。</li>
+<li>Transaction Manager（TM）：控制全局事务的边界，负责开启一个全局事务，并最终发起全局提交或全局回滚的决议。</li>
+<li>Resource Manager（RM）：控制分支事务，负责分支注册、状态汇报，并接收事务协调器的指令，驱动分支（本地）事务的提交和回滚。</li>
+</ul>
+<p>一个典型的事务过程包括：</p>
+<ol>
+<li>TM 向 TC 申请开启（Begin）一个全局事务，全局事务创建成功并生成一个全局唯一的 XID。</li>
+<li>XID 在微服务调用链路的上下文中传播。</li>
+<li>RM 向 TC 注册分支事务，将其纳入 XID 对应全局事务的管辖。</li>
+<li>TM 向 TC 发起针对 XID 的全局提交（Commit）或回滚（Rollback）决议。</li>
+<li>TC 调度 XID 下管辖的全部分支事务完成提交（Commit）或回滚（Rollback）请求。</li>
+</ol>
+<p><strong>事务框架</strong></p>
+<p>基于架构上定义的 3 个核心组件，分布式事务被抽象成如下事务框架。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772593098-826d8cf3-fc45-4247-8c4c-54063193447a.webp" alt="img"></p>
+<p>3个核心组件的功能如下：</p>
+<ul>
+<li>TM定义全局事务的边界。</li>
+<li>RM负责定义分支事务的边界和行为。</li>
+<li>TC、TM和RM交互，做全局的协调。交互包括开启（Begin）、提交（Commit）、回滚（Rollback）全局事务；分支注册（Register Branch）、状态上报（Branch Status Report）和分支提交（Branch Commit）、分支回滚（Branch Rollback）。</li>
+</ul>
+<p><strong>事务模式</strong></p>
+<p>事务模式是这个框架下 RM 驱动的分支事务的不同行为模式，即事务（分支）模式。事务模式包括 AT 模式、TCC 模式、Saga 模式和 XA 模式。</p>
+<ul>
+<li><strong>AT 模式</strong></li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594053-40a7565b-68e5-4e37-984f-801286409019.webp" alt="img"></p>
+<p>AT 模式 RM 驱动分支事务的行为分为以下两个阶段：</p>
+<ul>
+<li>执行阶段：</li>
+</ul>
+<ol>
+<li><ol>
+<li>代理 JDBC 数据源，解析业务 SQL，生成更新前后的镜像数据，形成 UNDO LOG。</li>
+<li>向 TC 注册分支。</li>
+<li>分支注册成功后，把业务数据的更新和 UNDO LOG 放在同一个本地事务中提交。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>完成阶段：</p>
+</li>
+<li><ul>
+<li>全局提交，收到 TC 的分支提交请求，异步删除相应分支的 UNDO LOG。</li>
+<li>全局回滚，收到 TC 的分支回滚请求，查询分支对应的 UNDO LOG 记录，生成补偿回滚的 SQL 语句，执行分支回滚并返回结果给 TC。</li>
+</ul>
+</li>
+<li><p><strong>TCC模式</strong></p>
+</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594134-743bb64b-95f1-488c-a856-5c3e313654fb.webp" alt="img"></p>
+<p>TCC 模式 RM 驱动分支事务的行为分为以下两个阶段：</p>
+<ul>
+<li>执行阶段：</li>
+</ul>
+<ol>
+<li><ol>
+<li>向 TC 注册分支。</li>
+<li>执行业务定义的 Try 方法。</li>
+<li>向 TC 上报 Try 方法执行情况：成功或失败。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>完成阶段：</p>
+</li>
+<li><ul>
+<li>全局提交，收到 TC 的分支提交请求，执行业务定义的 Confirm 方法。</li>
+<li>全局回滚，收到 TC 的分支回滚请求，执行业务定义的 Cancel 方法。</li>
+</ul>
+</li>
+<li><p><strong>Saga 模式</strong></p>
+</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594103-df818f48-b026-4456-83c8-b6f5ca5e0ca0.webp" alt="img"></p>
+<p>Saga 模式 RM 驱动分支事务的行为包含以下两个阶段：</p>
+<ul>
+<li>执行阶段：</li>
+</ul>
+<ol>
+<li><ol>
+<li>向 TC 注册分支。</li>
+<li>执行业务方法。</li>
+<li>向 TC 上报业务方法执行情况：成功或失败。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>完成阶段：</p>
+</li>
+<li><ul>
+<li>全局提交，RM 不需要处理。</li>
+<li>全局回滚，收到 TC 的分支回滚请求，执行业务定义的补偿回滚方法。</li>
+</ul>
+</li>
+<li><p><strong>XA模式</strong></p>
+</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1713772594079-cf00549c-10bb-4d3a-b988-a217209dcba4.webp" alt="img"></p>
+<p>XA 模式 RM 驱动分支事务的行为包含以下两个阶段：</p>
+<ul>
+<li>执行阶段：</li>
+</ul>
+<ol>
+<li><ol>
+<li>向 TC 注册分支。</li>
+<li>XA Start，执行业务 SQL，XA End。</li>
+<li>XA prepare，并向 TC 上报 XA 分支的执行情况：成功或失败。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>完成阶段：</p>
+</li>
+<li><ul>
+<li>收到 TC 的分支提交请求，XA Commit。</li>
+<li>收到 TC 的分支回滚请求，XA Rollback。</li>
+</ul>
+</li>
+</ul>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/interview/%E7%A7%92%E6%9D%80%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93.html">秒杀技术总结</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/interview/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%85%A5%E9%97%A8.html">正则表达式入门</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" src="https://giscus.app/client.js" data-repo="echoalways/giscus" data-repo-id="R_kgDOKjJRiQ" data-category="Announcements" data-category-id="DIC_kwDOKjJRic4CaUxu" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+</br>
+<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</br>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("09/23/2023 00:00:00");
+    Y = new Date();
+    T = (Y.getTime() - X.getTime());
+    M = 24 * 60 * 60 * 1000;
+    a = T / M;
+    A = Math.floor(a);
+    b = (a - A) * 24;
+    B = Math.floor(b);
+    c = (b - B) * 60;
+    C = Math.floor((b - B) * 60);
+    D = Math.floor((c - C) * 60);
+    runtime_span.innerHTML = "🌱本站已运行 " + A + "天|" + B + "小时|" + C + "分|" + D + "秒🌱"
+}
+show_runtime();
+</script>
+<span id="runtime_span"></span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">第一章 为什么要分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BA%92%E8%81%94%E7%BD%91%E5%A4%A7%E5%B9%B6%E5%8F%91%E5%9C%BA%E6%99%AF%E4%B8%9A%E5%8A%A1%E4%B8%8B%E5%AF%B9%E4%BA%8EOLTP%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-text">1.1 互联网大并发场景业务下对于OLTP的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%89%8D%E6%98%AFOLTP%E7%9A%84%E6%9C%80%E7%BB%88%E5%BD%A2%E6%80%81"><span class="toc-text">1.2 分库分表才是OLTP的最终形态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BC%95%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">第二章 为什么会引入分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="toc-text">2.1 分布式事务的典型场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E6%A0%B9%E6%BA%90%EF%BC%9A%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-text">2.2 分布式事务的根源：微服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-text">2.2.1 什么是微服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">2.2.2 微服务的优势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%90%BD%E5%9C%B0%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">2.2.3 微服务落地存在的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">第三章 一些基本概念和基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-text">3.1 读写分离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BA%93%E7%BA%A7%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86"><span class="toc-text">3.2 库级垂直拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%BA%93%E7%BA%A7%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86"><span class="toc-text">3.3 库级水平拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%A1%A8%E7%BA%A7%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86"><span class="toc-text">3.4 表级垂直拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E8%A1%A8%E7%BA%A7%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86"><span class="toc-text">3.5 表级水平拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">3.6 分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%EF%BC%9F"><span class="toc-text">3.6.1 什么是事务？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-2-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">3.6.2 事务的隔离级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-3-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%9B%9B%E7%A7%8D%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">3.6.3 数据库的四种隔离级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-4-%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%EF%BC%9F"><span class="toc-text">3.6.4 什么是分布式事务？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-5-CAP%E7%90%86%E8%AE%BA"><span class="toc-text">3.6.5 CAP理论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-6-XA%E5%8D%8F%E8%AE%AE"><span class="toc-text">3.6.6 XA协议</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E7%9A%84%E8%BF%9B%E8%A1%8C%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">第四章 如何合理的进行分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%BD%93%E5%89%8D%E8%BE%83%E6%B5%81%E8%A1%8C%E7%9A%84%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">4.1 当前较流行的分库分表中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%85%B6%E4%BB%96%E7%9F%A5%E5%90%8D%E5%BA%A6%E8%BE%83%E4%BD%8E%E7%9A%84%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">4.2 其他知名度较低的分库分表中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E6%8B%86%E5%88%86%E9%94%AE"><span class="toc-text">4.3 如何选择拆分键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%88%86%E7%89%87%E6%95%B0"><span class="toc-text">4.4 如何选择分片数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%8D%95%E4%B8%AA%E8%A1%A8%E7%9A%84%E5%AE%B9%E9%87%8F%E9%99%90%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">4.5 单个表的容量限制最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-DRDS-%E7%9A%84%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%8C%E8%83%BD%E5%90%A6%E6%9B%B4%E6%8D%A2%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%8B%86%E5%88%86%E9%94%AE"><span class="toc-text">4.6 DRDS 的分库分表，能否更换分库分表的拆分键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-PolarDB-X%E5%AE%9E%E4%BE%8B%E4%B8%AD%E6%AF%8F%E4%B8%80%E4%B8%AARDS%E7%9A%84%E5%88%86%E5%BA%93%E6%95%B0%EF%BC%8C%E6%AF%8F%E4%B8%AA%E5%88%86%E5%BA%93%E9%87%8C%E7%9A%84%E5%88%86%E8%A1%A8%E6%95%B0%E6%98%AF%E5%90%A6%E6%9C%89%E9%99%90%E5%88%B6"><span class="toc-text">4.7 PolarDB-X实例中每一个RDS的分库数，每个分库里的分表数是否有限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-8-PolarDB-X%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E5%88%86%E5%B8%83%E5%BC%8FJOIN%EF%BC%9F%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81%E5%A4%8D%E6%9D%82SQL%EF%BC%9F"><span class="toc-text">4.8 PolarDB-X是否支持分布式JOIN？它是如何支持复杂SQL？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-%E5%B9%B3%E6%BB%91%E6%89%A9%E5%AE%B9"><span class="toc-text">4.9 平滑扩容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%B8%80%E5%AE%9A%E8%A6%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%97%EF%BC%9F%E6%9C%89%E6%B2%A1%E6%9C%89%E8%BF%87%E6%B8%A1%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-text">第五章 一定要分库分表吗？有没有过渡的方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">第六章 分布式事务解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%EF%BC%882PC%EF%BC%89"><span class="toc-text">6.1 二阶段提交（2PC）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-TCC%E8%A1%A5%E5%81%BF%E6%96%B9%E6%A1%88"><span class="toc-text">6.2 TCC补偿方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%9F%BA%E4%BA%8E%E6%B6%88%E6%81%AF%E7%9A%84%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-text">6.3 基于消息的最终一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1"><span class="toc-text">6.4 全局事务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-2-%E9%98%BF%E9%87%8C%E4%BA%91%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1%E6%9C%8D%E5%8A%A1GTS"><span class="toc-text">6.4.2 阿里云全局事务服务GTS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-3-%E5%BC%80%E6%BA%90%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata"><span class="toc-text">6.4.3 开源分布式事务解决方案Seata</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-4-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E6%A1%86%E6%9E%B6%E5%92%8C%E4%BA%8B%E5%8A%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">6.4.4 分布式事务框架和事务模式</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
