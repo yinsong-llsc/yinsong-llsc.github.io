@@ -38,6 +38,8 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695285687342-c2faeb86-cc94-4860-94f1-ce7f4513b19f.png">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286299801-3d1a298d-7492-426f-af73-79b8d258ff11.png">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286983657-73661062-3c1f-4f1c-8cdf-662354547abf.png">
+<meta property="og:image" content="https://static.developers.pub/356af7fefeda498e8d9caa48d92d5c6b">
+<meta property="og:image" content="https://static.developers.pub/49a523cd9d2846f6a827544fdfd20c64">
 <meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/server-load-balancing.png">
 <meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/cs-basics/network/osi-7-model.png">
 <meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/load-balancing/spring-cloud-lb-gateway.png">
@@ -49,7 +51,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/36098302/1697247192909-b475b66c-cf87-4f59-b5fd-17734fe1f140.png?x-oss-process=image%2Fresize%2Cw_739%2Climit_0">
 <meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/high-performance/message-queue20210507200944439.png">
 <meta property="article:published_time" content="2023-10-09T02:22:19.073Z">
-<meta property="article:modified_time" content="2024-05-12T07:26:45.966Z">
+<meta property="article:modified_time" content="2024-06-12T07:33:22.235Z">
 <meta property="article:author" content="远岫">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss.javaguide.cn/github/javaguide/java/io/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9pcy1jbG91ZC5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70.jpeg">
@@ -101,7 +103,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Java%E9%9D%A2%E8%AF%95/">Java面试</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-09T02:22:19.073Z">2023-10-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-05-12T07:26:45.966Z">2024-05-12</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2023-10-09T02:22:19.073Z">2023-10-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-06-12T07:33:22.235Z">2024-06-12</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -344,12 +346,325 @@
 <h3 id="7、通信协议"><a href="#7、通信协议" class="headerlink" title="7、通信协议"></a>7、通信协议</h3><p>Dubbo 框架提供了自定义的高性能 RPC 通信协议：基于 HTTP&#x2F;2 的 Triple 协议 和 基于 TCP 的 Dubbo2 协议。除此之外，Dubbo 框架支持任意第三方通信协议，如官方支持的 gRPC、Thrift、REST、JsonRPC、Hessian2 等，更多协议可以通过自定义扩展实现。这对于微服务实践中经常要处理的多协议通信场景非常有用。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.nlark.com/yuque/0/2023/png/36098302/1695286983657-73661062-3c1f-4f1c-8cdf-662354547abf.png" alt="img"></p>
 <p>具体见文档：<a target="_blank" rel="noopener" href="https://cn.dubbo.apache.org/zh-cn/overview/core-features/protocols/">https://cn.dubbo.apache.org/zh-cn/overview/core-features/protocols/</a></p>
-<h3 id="8、SPI机制"><a href="#8、SPI机制" class="headerlink" title="8、SPI机制"></a>8、SPI机制</h3><p>spi， 简单来说， 就是 service provider interface， 说白了是什么意思呢， 比如你有个接口， 现在这个接口有 3 个实现类， 那么在系统运行的时候对这个接口到底选择哪个实现类呢？ 这就需要 spi 了， 需要根据指定的配置或者是默认的配置， 去找到对应的实现类加载进来， 然后用这个实现类的实例对象。</p>
-<blockquote>
-<p>举个栗子。<br>你有一个接口 A。 A1&#x2F;A2&#x2F;A3 分别是接口 A 的不同实现。 你通过配置 接口 A &#x3D; 实现 A2， 那么在系统实际<br>运行的时候， 会加载你的配置， 用实现 A2 实例化一个对象来提供服务。</p>
-</blockquote>
-<p>spi 机制一般用在哪儿？ 插件扩展的场景， 比如说你开发了一个给别人使用的开源框架， 如果你想让别人自<br>己写个插件， 插到你的开源框架里面， 从而扩展某个功能， 这个时候 spi 思想就用上了。  </p>
-<h3 id="9、使用示例"><a href="#9、使用示例" class="headerlink" title="9、使用示例"></a>9、使用示例</h3><p>Dubbo使用的具体操作步骤如下：</p>
+<h3 id="8、SPI机制"><a href="#8、SPI机制" class="headerlink" title="8、SPI机制"></a>8、SPI机制</h3><h4 id="（1）Java-SPI"><a href="#（1）Java-SPI" class="headerlink" title="（1）Java SPI"></a><strong>（1）Java SPI</strong></h4><p>Java SPI（Service Provider Interface）是一种服务发现机制，它允许在运行时为某个接口自动发现并加载多个实现。这一机制主要用于设计可插拔的模块化应用程序，使得应用程序的组件或服务的具体实现可以在部署时灵活选择或替换，而不需修改应用程序的源代码，从而达到解耦和增强可扩展性的目的。</p>
+<p>SPI的核心概念包括：</p>
+<ol>
+<li><strong>接口与实现分离</strong>：SPI的核心思想是将接口定义与其实现分离。API的提供者仅定义接口规范，不提供具体的实现，具体的实现交由第三方开发者提供。</li>
+<li><strong>配置文件注册</strong>：实现者需要在自己jar包的<code>META-INF/services</code>目录下创建一个以接口全限定名命名的文本文件，并在这个文件中指定实现类的全限定名。这样，当应用启动时，Java SPI机制会扫描这些配置文件，自动发现并加载所有可用的实现。</li>
+<li><strong>服务查找与加载</strong>：在应用中，通过<code>java.util.ServiceLoader</code>类来加载服务提供者。<code>ServiceLoader.load(Class&lt;T&gt; service)</code>方法会查找并加载所有可用的服务提供者，然后可以遍历这些实现，选择合适的使用。</li>
+</ol>
+<h4 id="（2）为什么dubbo自己实现了SPI？"><a href="#（2）为什么dubbo自己实现了SPI？" class="headerlink" title="（2）为什么dubbo自己实现了SPI？"></a><strong>（2）为什么dubbo自己实现了SPI？</strong></h4><p>因为 Java SPI 在查找扩展实现类的时候遍历 SPI 的配置文件并且<strong>将实现类全部实例化</strong>，假设一个实现类初始化过程比较消耗资源且耗时，但是你的代码里面又用不上它，这就产生了资源的浪费。</p>
+<p>因此 Dubbo 就自己实现了一个 SPI，给每个实现类配了个名字，通过名字去文件里面找到对应的实现类全限定名然后加载实例化，按需加载。</p>
+<h3 id="9、Dubbo的分层架构设计"><a href="#9、Dubbo的分层架构设计" class="headerlink" title="9、Dubbo的分层架构设计"></a>9、Dubbo的分层架构设计</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://static.developers.pub/356af7fefeda498e8d9caa48d92d5c6b" alt="356af7fefeda498e8d9caa48d92d5c6b"></p>
+<p>Dubbo整体架构分为10层，从宏观上把握这10层架构，并了解各层的功能和扩展点，可以帮助我们更好的了解 Dubbo。</p>
+<h4 id="代理层—Proxy"><a href="#代理层—Proxy" class="headerlink" title="代理层—Proxy"></a><strong>代理层—Proxy</strong></h4><p>Proxy 层的功能就是使用<strong>动态代理</strong>的方式为接口创建代理类，Proxy 层最主要的接口就是 ProxyFactory。其默认的扩展点有：stub、jdk、javassist。<strong>jdk 使用反射的方式创建代理类，javassist 通过拼接字符串然后编译的方式创建代理类</strong>。</p>
+<ul>
+<li>对于服务提供者，代理的对象是接口的真实实现。</li>
+<li>对于服务消费者，代理的对象是远程服务的 invoker 对象。</li>
+</ul>
+<h4 id="注册层—Registry"><a href="#注册层—Registry" class="headerlink" title="注册层—Registry"></a><strong>注册层—Registry</strong></h4><p>注册层主要负责的就是服务的注册发现。这层的主要接口就是 RegistryFactory，其接口方法有 @Adaptive 注解，会根据参数 protocol 来选择实现，默认的扩展实现有：</p>
+<ul>
+<li>zookeeper</li>
+<li>redis</li>
+<li>multicast(广播模式)</li>
+<li>内存</li>
+</ul>
+<h4 id="集群层—Cluster"><a href="#集群层—Cluster" class="headerlink" title="集群层—Cluster"></a><strong>集群层—Cluster</strong></h4><p>集群层主要是对多提供者调用场景的抽象，是 Dubbo 整个集群容错的抽象层。主要的扩展点有：容错(Cluster)、路由(RouterFactory)、负载均衡(LoadBalance)。这层的这些扩展点参考之前的博客。</p>
+<ol>
+<li>容错</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>机制名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Failover <strong>默认</strong></td>
+<td>失败重试。默认失败后在重试1次，重试<strong>其他服务器</strong>。通常使用在读&#x2F;幂等写的场景。会对下游服务造成较大压力。</td>
+</tr>
+<tr>
+<td>Failfast</td>
+<td>快速失败。失败就返回异常。使用在非幂等写的场景。但受网络影响大。</td>
+</tr>
+<tr>
+<td>Failsafe</td>
+<td>失败不做处理，直接忽略异常。使用在不关心调用结果，且成功与否不重要的场景。</td>
+</tr>
+<tr>
+<td>Failback</td>
+<td>失败后放入队列，并定时重试。使用在要保持最终一致或异步处理的场景。</td>
+</tr>
+<tr>
+<td>Forking</td>
+<td>并行调用多个服务，只要一个成功就可以。使用在实时性要求高的场景，但会造成消费者资源浪费。</td>
+</tr>
+<tr>
+<td>Broadcast</td>
+<td>广播给所有提供者，有一个失败就失败。</td>
+</tr>
+<tr>
+<td>Mock</td>
+<td>出现异常就会使用默认的返回内容，使用在服务降级的场景。</td>
+</tr>
+<tr>
+<td>Available</td>
+<td>不用负载均衡，找到第一个可用提供者就调用。</td>
+</tr>
+<tr>
+<td>Mergeable</td>
+<td>把多个节点的返回结果合并。</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>路由</li>
+</ol>
+<ul>
+<li>条件路由；</li>
+<li>文件路由；</li>
+<li>脚本路由。</li>
+</ul>
+<ol start="3">
+<li>负载均衡</li>
+</ol>
+<ul>
+<li>权重随机负载均衡(<strong>默认</strong>)；</li>
+<li>权重轮询负载均衡；</li>
+<li>一致性 hash 负载均衡；</li>
+<li>最小活跃数负载均衡。</li>
+</ul>
+<h4 id="协议层—Protocol"><a href="#协议层—Protocol" class="headerlink" title="协议层—Protocol"></a><strong>协议层—Protocol</strong></h4><p>协议层是 Dubbo RPC 的核心，在这一层发起服务暴露(protocol.export)和服务引用(protocol.refer)。</p>
+<p>Dubbo 提供的协议有：</p>
+<ul>
+<li>Dubbo (默认)；</li>
+<li>injvm；</li>
+<li>rmi；</li>
+<li>http；</li>
+<li>hessian；</li>
+<li>thrift。</li>
+</ul>
+<h4 id="信息交换层—Exchange"><a href="#信息交换层—Exchange" class="headerlink" title="信息交换层—Exchange"></a><strong>信息交换层—Exchange</strong></h4><p>信息交换层的作用就是封装 Request&#x2F;Response 对象。</p>
+<h4 id="传输层—Transport"><a href="#传输层—Transport" class="headerlink" title="传输层—Transport"></a><strong>传输层—Transport</strong></h4><p>数据传输就是在传输层发生的，所以这层包含 Transport(传输)、Dispatcher(分派)、Codec2(编解码)、ThreadPool(线程池)，这几个接口。这也很好理解，数据传输发生在传输层，所以传输层一定需要具备数据传输的能力，也就是 Transport 和 Codec2，其中 Transport 就是 Netty 等网络传输的接口，编解码不必说了，传输肯定需要；除了传输能力，数据接收之后的处理，Dispatcher 和 ThreadPool，也就是分派任务和任务提交给线程池处理，也是必不可少的。</p>
+<ol>
+<li>Transport</li>
+</ol>
+<ul>
+<li>Netty;</li>
+<li>Mina;</li>
+<li>Grizzly。</li>
+</ul>
+<ol start="2">
+<li>Dispatcher</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>all</td>
+<td>所有消息都派发到线程池，包括请求，响应，连接事件，断开事件等，<strong>默认</strong></td>
+</tr>
+<tr>
+<td>direct</td>
+<td>所有消息都不派发到线程池，全部在 IO 线程上直接执行</td>
+</tr>
+<tr>
+<td>message</td>
+<td>只有<strong>请求</strong>和<strong>响应</strong>消息派发到线程池，其它消息均在 IO 线程上执行</td>
+</tr>
+<tr>
+<td>execution</td>
+<td>只有<strong>请求</strong>消息派发到线程池，不含响应。其它消息均在 IO 线程上执行</td>
+</tr>
+<tr>
+<td>connection</td>
+<td>在 IO 线程上，将连接断开事件放入队列，有序逐个执行，其它消息派发到线程池</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>ThreadPool</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>线程池类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fixed</td>
+<td>固定大小线程池，默认线程数200，启动时建立，不会关闭，一直存在</td>
+</tr>
+<tr>
+<td>cached</td>
+<td>缓存线程池，空闲一分钟自动删除，需要时重建</td>
+</tr>
+<tr>
+<td>limited</td>
+<td>可伸缩线程池，但只会扩大不会缩小。这么做的目的是避免收缩的时候来大流量带来性能问题</td>
+</tr>
+<tr>
+<td>eager</td>
+<td>优先创建 worker 线程池。任务数大于 corePoolSize 小于 maxPoolSize，创建 worker 处理，线程数大于 maxPoolSize ，任务放入阻塞队列，阻塞队列满了走拒绝策略。</td>
+</tr>
+</tbody></table>
+<h4 id="序列化层—Serialize"><a href="#序列化层—Serialize" class="headerlink" title="序列化层—Serialize"></a><strong>序列化层—Serialize</strong></h4><p>序列化的作用是把对象转化为二进制流，然后在网络中传输。Dubbo 提供的序列化方式有：</p>
+<ul>
+<li>Hessian2(默认);</li>
+<li>Fastjson;</li>
+<li>fst;</li>
+<li>Java;</li>
+<li>Kayo;</li>
+<li>protobuff。</li>
+</ul>
+<h3 id="10、集群容错有哪些？"><a href="#10、集群容错有哪些？" class="headerlink" title="10、集群容错有哪些？"></a>10、集群容错有哪些？</h3><p>集群调用失败时，Dubbo 提供的容错方案</p>
+<p>在集群调用失败时，Dubbo 提供了多种容错方案，缺省为 failover 重试。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://static.developers.pub/49a523cd9d2846f6a827544fdfd20c64" alt="49a523cd9d2846f6a827544fdfd20c64"></p>
+<p>各节点关系：</p>
+<ul>
+<li>这里的 <code>Invoker</code> 是 <code>Provider</code> 的一个可调用 <code>Service</code> 的抽象，<code>Invoker</code> 封装了 <code>Provider</code> 地址及 <code>Service</code> 接口信息</li>
+<li><code>Directory</code> 代表多个 <code>Invoker</code>，可以把它看成 <code>List&lt;Invoker&gt;</code> ，但与 <code>List</code> 不同的是，它的值可能是动态变化的，比如注册中心推送变更</li>
+<li><code>Cluster</code> 将 <code>Directory</code> 中的多个 <code>Invoker</code> 伪装成一个 <code>Invoker</code>，对上层透明，伪装过程包含了容错逻辑，调用失败后，重试另一个</li>
+<li><code>Router</code> 负责从多个 <code>Invoker</code> 中按路由规则选出子集，比如读写分离，应用隔离等</li>
+<li><code>LoadBalance</code> 负责从多个 <code>Invoker</code> 中选出具体的一个用于本次调用，选的过程包含了负载均衡算法，调用失败后，需要重选</li>
+</ul>
+<h4 id="10-1、集群容错模式"><a href="#10-1、集群容错模式" class="headerlink" title="10.1、集群容错模式"></a>10.1、集群容错模式</h4><p><strong>Failover Cluster</strong></p>
+<p>失败自动切换，当出现失败，重试其它服务器。通常用于读操作，但重试会带来更长延迟。可通过 <code>retries=&quot;2&quot;</code> 来设置重试次数(不含第一次)。</p>
+<p>重试次数配置如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">retries</span>=<span class="string">&quot;2&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>或</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">retries</span>=<span class="string">&quot;2&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>或</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:method</span> <span class="attr">name</span>=<span class="string">&quot;findFoo&quot;</span> <span class="attr">retries</span>=<span class="string">&quot;2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:reference</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Failfast Cluster</strong></p>
+<p>快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，比如新增记录。</p>
+<p><strong>Failsafe Cluster</strong></p>
+<p>失败安全，出现异常时，直接忽略。通常用于写入审计日志等操作。</p>
+<p><strong>Failback Cluster</strong></p>
+<p>失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知操作。</p>
+<p><strong>Forking Cluster</strong></p>
+<p>并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多服务资源。可通过 <code>forks=&quot;2&quot;</code> 来设置最大并行数。</p>
+<p><strong>Broadcast Cluster</strong></p>
+<p>广播调用所有提供者，逐个调用，任意一台报错则报错。通常用于通知所有提供者更新缓存或日志等本地资源信息。</p>
+<p>现在广播调用中，可以通过 <code>broadcast.fail.percent</code> 配置节点调用失败的比例，当达到这个比例后，<code>BroadcastClusterInvoker</code> 将不再调用其他节点，直接抛出异常。 <code>broadcast.fail.percent</code> 取值在 <code>0～100</code> 范围内。默认情况下当全部调用失败后，才会抛出异常。 <code>broadcast.fail.percent</code> 只是控制的当失败后是否继续调用其他节点，并不改变结果(任意一台报错则报错)。<code>broadcast.fail.percent</code> 参数 在 dubbo2.7.10 及以上版本生效。</p>
+<p><code>Broadcast Cluster</code> 配置 <code>broadcast.fail.percent</code>。</p>
+<p><code>broadcast.fail.percent=20</code> 代表了当 20% 的节点调用失败就抛出异常，不再调用其他节点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@reference(cluster = &quot;broadcast&quot;, parameters = &#123;&quot;broadcast.fail.percent&quot;, &quot;20&quot;&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Available Cluster</strong></p>
+<p>调用目前可用的实例（只调用一个），如果当前没有可用的实例，则抛出异常。通常用于不需要负载均衡的场景。</p>
+<p><strong>Mergeable Cluster</strong></p>
+<p>将集群中的调用结果聚合起来返回结果，通常和group一起配合使用。通过分组对结果进行聚合并返回聚合后的结果，比如菜单服务，用group区分同一接口的多种实现，现在消费方需从每种group中调用一次并返回结果，对结果进行合并之后返回，这样就可以实现聚合菜单项。</p>
+<p><strong>ZoneAware Cluster</strong></p>
+<p>多注册中心订阅的场景，注册中心集群间的负载均衡。对于多注册中心间的选址策略有如下四种</p>
+<ol>
+<li>指定优先级：<code>preferred=&quot;true&quot;</code>注册中心的地址将被优先选择</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span> <span class="attr">preferred</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>同中心优先：检查当前请求所属的区域，优先选择具有相同区域的注册中心</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span> <span class="attr">zone</span>=<span class="string">&quot;beijing&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>权重轮询：根据每个注册中心的权重分配流量</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">id</span>=<span class="string">&quot;beijing&quot;</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span> <span class="attr">weight</span>=<span class="string">&quot;100&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">id</span>=<span class="string">&quot;shanghai&quot;</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2182&quot;</span> <span class="attr">weight</span>=<span class="string">&quot;10&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>缺省值：选择一个可用的注册中心</li>
+</ol>
+<h3 id="11、负载均衡方式有哪些？"><a href="#11、负载均衡方式有哪些？" class="headerlink" title="11、负载均衡方式有哪些？"></a>11、负载均衡方式有哪些？</h3><h4 id="11-1、RandomLoadBalance"><a href="#11-1、RandomLoadBalance" class="headerlink" title="11.1、RandomLoadBalance"></a>11.1、RandomLoadBalance</h4><p>RandomLoadBalance 是加权随机算法的具体实现，它的算法思想很简单。</p>
+<p>假设我们有一组服务器 servers &#x3D; [A, B, C]，他们对应的权重为 weights &#x3D; [5, 3, 2]，权重总和为10。现在把这些权重值平铺在一维坐标值上，[0, 5) 区间属于服务器 A，[5, 8) 区间属于服务器 B，[8, 10) 区间属于服务器 C。接下来通过随机数生成器生成一个范围在 [0, 10) 之间的随机数，然后计算这个随机数会落到哪个区间上。比如数字3会落到服务器 A 对应的区间上，此时返回服务器 A 即可。权重越大的机器，在坐标轴上对应的区间范围就越大，因此随机数生成器生成的数字就会有更大的概率落到此区间内。只要随机数生成器产生的随机数分布性很好，在经过多次选择后，每个服务器被选中的次数比例接近其权重比例。</p>
+<h4 id="11-2、LeastActiveLoadBalance"><a href="#11-2、LeastActiveLoadBalance" class="headerlink" title="11.2、LeastActiveLoadBalance"></a>11.2、LeastActiveLoadBalance</h4><p>LeastActiveLoadBalance 翻译过来是最小活跃数负载均衡。活跃调用数越小，表明该服务提供者效率越高，单位时间内可处理更多的请求。此时应优先将请求分配给该服务提供者。</p>
+<h4 id="11-3、ConsistentHashLoadBalance"><a href="#11-3、ConsistentHashLoadBalance" class="headerlink" title="11.3、ConsistentHashLoadBalance"></a>11.3、ConsistentHashLoadBalance</h4><p>一致性 hash 算法由麻省理工学院的 Karger 及其合作者于1997年提出的，算法提出之初是用于大规模缓存系统的负载均衡。</p>
+<h4 id="11-4、RoundRobinLoadBalance"><a href="#11-4、RoundRobinLoadBalance" class="headerlink" title="11.4、RoundRobinLoadBalance"></a>11.4、RoundRobinLoadBalance</h4><p>加权轮询负载均衡的实现 RoundRobinLoadBalance。我们先来了解一下什么是加权轮询。这里从最简单的轮询开始讲起，<strong>所谓轮询是指将请求轮流分配给每台服务器</strong>。举个例子，我们有三台服务器 A、B、C。我们将第一个请求分配给服务器 A，第二个请求分配给服务器 B，第三个请求分配给服务器 C，第四个请求再次分配给服务器 A。这个过程就叫做轮询。轮询是一种无状态负载均衡算法，实现简单，适用于每台服务器性能相近的场景下。但现实情况下，我们并不能保证每台服务器性能均相近。如果我们将等量的请求分配给性能较差的服务器，这显然是不合理的。因此，这个时候我们需要<strong>对轮询过程进行加权，以调控每台服务器的负载。经过加权后，每台服务器能够得到的请求数比例，接近或等于他们的权重比</strong>。比如服务器 A、B、C 权重比为 5:2:1。</p>
+<h3 id="12、Dubbo优雅停机"><a href="#12、Dubbo优雅停机" class="headerlink" title="12、Dubbo优雅停机"></a>12、Dubbo优雅停机</h3><p>优雅停机是指在停止应用时，执行的一系列保证应用正常关闭的操作。这些操作往往包括等待已有请求执行完成、关闭线程、关闭连接和释放资源等，优雅停机可以避免非正常关闭程序可能造成数据异常或丢失，应用异常等问题。优雅停机本质上是JVM即将关闭前执行的一些额外的处理代码。</p>
+<p><strong>适用场景：</strong></p>
+<ol>
+<li>JVM主动关闭(<code>System.exit(int)</code>；</li>
+<li>JVM由于资源问题退出(<code>OOM</code>)；</li>
+<li>应用程序接受到<code>SIGTERM</code>或<code>SIGINT</code>信号。</li>
+</ol>
+<h4 id="12-1、配置方式"><a href="#12-1、配置方式" class="headerlink" title="12.1、配置方式"></a>12.1、配置方式</h4><ul>
+<li><strong>服务的优雅停机</strong></li>
+</ul>
+<p>在Dubbo中，优雅停机是默认开启的，停机等待时间为10000毫秒。可以通过配置<code>dubbo.service.shutdown.wait</code>来修改等待时间。</p>
+<p>例如将等待时间设置为20秒可通过增加以下配置实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dubbo.<span class="property">service</span>.<span class="property">shutdown</span>.<span class="property">wait</span>=<span class="number">20000</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>容器的优雅停机</strong></li>
+</ul>
+<p>当使用<code>org.apache.dubbo.container.Main</code>这种容器方式来使用 Dubbo 时，也可以通过配置<code>dubbo.shutdown.hook</code>为<code>true</code>来开启优雅停机。</p>
+<ul>
+<li><strong>通过QOS优雅上下线</strong></li>
+</ul>
+<p>基于<code>ShutdownHook</code>方式的优雅停机无法确保所有关闭流程一定执行完，所以 Dubbo 推出了多段关闭的方式来保证服务完全无损。</p>
+<p>多段关闭即将停止应用分为多个步骤，通过运维自动化脚本或手工操作的方式来保证脚本每一阶段都能执行完毕。</p>
+<p>在关闭应用前，首先通过 QOS 的<code>offline</code>指令下线所有服务，然后等待一定时间确保已经到达请求全部处理完毕，由于服务已经在注册中心下线，当前应用不会有新的请求。这时再执行真正的关闭(SIGTERM 或 SIGINT)流程，就能保证服务无损。</p>
+<p>QOS可通过 telnet 或 HTTP 方式使用，具体方式请见<a target="_blank" rel="noopener" href="http://dubbo.apache.org/zh-cn/docs/user/references/qos.html">Dubbo-QOS命令使用说明</a>。</p>
+<h4 id="12-2、流程"><a href="#12-2、流程" class="headerlink" title="12.2、流程"></a>12.2、流程</h4><p><strong>Provider在接收到停机指令后</strong></p>
+<ul>
+<li>从注册中心上注销所有服务；</li>
+<li>从配置中心取消监听动态配置；</li>
+<li>向所有连接的客户端发送只读事件，停止接收新请求；</li>
+<li>等待一段时间以处理已到达的请求，然后关闭请求处理线程池；</li>
+<li>断开所有客户端连接。</li>
+</ul>
+<p><strong>Consumer在接收到停机指令后</strong></p>
+<ul>
+<li>拒绝新到请求，直接返回调用异常；</li>
+<li>等待当前已发送请求执行完毕，如果响应超时则强制关闭连接。</li>
+</ul>
+<p>当使用容器方式运行 Dubbo 时，在容器准备退出前，可进行一系列的资源释放和清理工。</p>
+<p>例如使用 SpringContainer时，Dubbo 的<code>ShutdownHook</code>线程会执行<code>ApplicationContext</code>的<code>stop</code>和<code>close</code>方法，保证 Bean的生命周期完整。</p>
+<h4 id="12-3、实现原理"><a href="#12-3、实现原理" class="headerlink" title="12.3、实现原理"></a>12.3、实现原理</h4><ol>
+<li>在加载类<code>org.apache.dubbo.config.AbstractConfig</code>时，通过<code>org.apache.dubbo.config.DubboShutdownHook</code>向JVM注册 <code>ShutdownHook</code>。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Register the ShutdownHook</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!registered.get() &amp;&amp; registered.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">        Runtime.getRuntime().addShutdownHook(getDubboShutdownHook());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>每个<code>ShutdownHook</code>都是一个单独的线程，由JVM在退出时触发执行<code>org.apache.dubbo.config.DubboShutdownHook</code>。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Destroy all the resources, including registries and protocols.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doDestroy</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!destroyed.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// destroy all the registries</span></span><br><span class="line">    AbstractRegistryFactory.destroyAll();</span><br><span class="line">    <span class="comment">// destroy all the protocols</span></span><br><span class="line">    destroyProtocols();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>首先关闭所有注册中心，这一步包括：</li>
+</ol>
+<ul>
+<li>从注册中心注销所有已经发布的服务；</li>
+<li>取消订阅当前应用所有依赖的服务；</li>
+<li>断开与注册中心的连接。</li>
+</ul>
+<ol>
+<li>执行所有<code>Protocol</code>的<code>destroy()</code>，主要包括：</li>
+</ol>
+<ul>
+<li>销毁所有<code>Invoker</code>和<code>Exporter</code>；</li>
+<li>关闭<code>Server</code>，向所有已连接<code>Client</code>发送当前<code>Server</code>只读事件；</li>
+<li>关闭独享&#x2F;共享<code>Client</code>，断开连接，取消超时和重试任务；</li>
+<li>释放所有相关资源。</li>
+</ul>
+<ol>
+<li>执行完毕，关闭<code>JVM</code>。</li>
+</ol>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>使用<code>SIGKILL</code>关闭应用不会执行优雅停机；</li>
+<li>优雅停机不保证会等待所有已发送&#x2F;到达请求结束；</li>
+<li>配置的优雅停机等待时间<code>timeout</code>不是所有步骤等待时间的总和，而是每一个<code>destroy</code>执行的最大时间。例如配置等待时间为5秒，则关闭Server、关闭Client等步骤会分别等待5秒。</li>
+</ul>
+<h3 id="13、手写RPC框架"><a href="#13、手写RPC框架" class="headerlink" title="13、手写RPC框架"></a>13、手写RPC框架</h3><p><a target="_blank" rel="noopener" href="https://www.developers.pub/wiki/1002310/601">手写RPC</a></p>
+<h3 id="14、使用示例"><a href="#14、使用示例" class="headerlink" title="14、使用示例"></a>14、使用示例</h3><p>Dubbo使用的具体操作步骤如下：</p>
 <ol>
 <li>定义接口：<ul>
 <li>首先，你需要定义服务接口，即提供给其他模块调用的方法和参数。</li>
@@ -760,7 +1075,7 @@ show_runtime();
 
 
 
-<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-I-O"><span class="toc-text">Java I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BD%95%E4%B8%BA-I-O"><span class="toc-text">1、何为 I&#x2F;O?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E7%9A%84-IO-%E6%A8%A1%E5%9E%8B"><span class="toc-text">2、有哪些常见的 IO 模型?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89BIO-Blocking-I-O"><span class="toc-text">（1）BIO (Blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89NIO-Non-blocking-I-O"><span class="toc-text">（2）NIO (Non-blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89AIO-Asynchronous-I-O"><span class="toc-text">（3）AIO (Asynchronous I&#x2F;O)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Netty"><span class="toc-text">Netty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Netty-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">1、Netty 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Netty%EF%BC%9F"><span class="toc-text">2、为什么要用 Netty？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Netty-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F"><span class="toc-text">3、Netty 应用场景了解么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81Netty-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E4%B8%8E%E4%BD%9C%E7%94%A8"><span class="toc-text">4、Netty 核心组件与作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81Reactor%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">5、Reactor线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFTCP%E7%B2%98%E5%8C%85%E3%80%81%E6%8B%86%E5%8C%85%EF%BC%9F"><span class="toc-text">6、什么是TCP粘包、拆包？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81Netty%E7%9A%84%E9%95%BF%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6"><span class="toc-text">7、Netty的长连接和心跳机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81Netty%E7%9A%84%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="toc-text">8、Netty的零拷贝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo"><span class="toc-text">Dubbo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFRPC%EF%BC%9F"><span class="toc-text">1、什么是RPC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFDubbo%EF%BC%9F"><span class="toc-text">2、什么是Dubbo？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E7%90%86"><span class="toc-text">3、原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-text">4、服务发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">5、负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E6%B5%81%E9%87%8F%E7%AE%A1%E6%8E%A7"><span class="toc-text">6、流量管控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-text">7、通信协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81SPI%E6%9C%BA%E5%88%B6"><span class="toc-text">8、SPI机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">9、使用示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F"><span class="toc-text">1、什么是负载均衡？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%88%86%E4%B8%BA%E5%93%AA%E5%87%A0%E7%A7%8D%EF%BC%9F"><span class="toc-text">2、负载均衡分为哪几种？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（1）服务端负载均衡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（2）客户端负载均衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">3、负载均衡常见的算法有哪些？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%9A%8F%E6%9C%BA%E6%B3%95"><span class="toc-text">（1）随机法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%BD%AE%E8%AF%A2%E6%B3%95"><span class="toc-text">（2）轮询法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%B8%80%E8%87%B4%E6%80%A7-Hash-%E6%B3%95"><span class="toc-text">（3）一致性 Hash 法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E6%9C%80%E5%B0%8F%E8%BF%9E%E6%8E%A5%E6%B3%95"><span class="toc-text">（4）最小连接法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%83%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-text">4、七层负载均衡可以怎么做？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89DNS%E8%A7%A3%E6%9E%90"><span class="toc-text">（1）DNS解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">（2）反向代理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96"><span class="toc-text">数据库优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-text">1、读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（1）什么是读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">（2）读写分离会带来什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（3）如何实现读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">（4）主从复制原理是什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">2、分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%BA%93%EF%BC%9F"><span class="toc-text">（1）什么是分库？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（2）什么是分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E9%9C%80%E8%A6%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（3）什么情况下需要分库分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">（4）常见的分片算法有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E5%91%A2%EF%BC%9F"><span class="toc-text">（5）分库分表会带来什么问题呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%886%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%AF%94%E8%BE%83%E6%8E%A8%E8%8D%90%E7%9A%84%E6%96%B9%E6%A1%88%EF%BC%9F"><span class="toc-text">（6）分库分表比较推荐的方案？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%887%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%8E%EF%BC%8C%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%BF%81%E7%A7%BB%E5%91%A2%EF%BC%9F"><span class="toc-text">（7）分库分表后，数据怎么迁移呢？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-text">消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B"><span class="toc-text">1、消息队列选型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Kafka-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-text">2、Kafka 核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF-Producer%E3%80%81Consumer%E3%80%81Broker%E3%80%81Topic%E3%80%81Partition%EF%BC%9F"><span class="toc-text">（1）什么是 Producer、Consumer、Broker、Topic、Partition？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E7%9A%84%E5%A4%9A%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-text">（2）Kafka 的多副本机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Kafka-%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E3%80%81%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E5%92%8C%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-text">3、Kafka 消费顺序、消息丢失和重复消费</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%EF%BC%9F"><span class="toc-text">（1）Kafka 如何保证消息的消费顺序？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%EF%BC%9F"><span class="toc-text">（2）Kafka 如何保证消息不丢失？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F"><span class="toc-text">（3）Kafka 如何保证消息不重复消费？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%A4%A7%E9%87%8F%E6%B6%88%E6%81%AF%E5%9C%A8-MQ-%E9%87%8C%E9%95%BF%E6%97%B6%E9%97%B4%E7%A7%AF%E5%8E%8B%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="toc-text">（4）大量消息在 MQ 里长时间积压，该如何解决？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">海量数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Bitmap"><span class="toc-text">1、Bitmap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9A%E7%BB%9F%E8%AE%A1%E4%B8%8D%E5%90%8C%E5%8F%B7%E7%A0%81%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-text">2、问题一：统计不同号码的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9A%E5%87%BA%E7%8E%B0%E9%A2%91%E7%8E%87%E6%9C%80%E9%AB%98%E7%9A%84100%E4%B8%AA%E8%AF%8D"><span class="toc-text">3、问题二：出现频率最高的100个词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%89%EF%BC%9A%E6%9F%A5%E6%89%BE%E4%B8%A4%E4%B8%AA%E5%A4%A7%E6%96%87%E4%BB%B6%E5%85%B1%E5%90%8C%E7%9A%84URL"><span class="toc-text">4、问题三：查找两个大文件共同的URL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven"><span class="toc-text">Maven</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81%E5%8F%8A%E8%A7%A3%E5%86%B3"><span class="toc-text">1、Maven依赖冲突及解决</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E9%97%AE%E9%A2%98%E8%AE%BE%E8%AE%A1"><span class="toc-text">场景问题设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AF%B9%E4%BA%8E%E9%AB%98%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%87%8F%EF%BC%8C10%E4%BA%BF%E7%BA%A7%EF%BC%8C%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AAredis%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="toc-text">1、对于高并发数据量，10亿级，怎么实现一个redis排行榜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95"><span class="toc-text">2、实现用户多设备同时登录</span></a></li></ol></li></ol></div><div class="widget-footer">
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-I-O"><span class="toc-text">Java I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BD%95%E4%B8%BA-I-O"><span class="toc-text">1、何为 I&#x2F;O?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E7%9A%84-IO-%E6%A8%A1%E5%9E%8B"><span class="toc-text">2、有哪些常见的 IO 模型?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89BIO-Blocking-I-O"><span class="toc-text">（1）BIO (Blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89NIO-Non-blocking-I-O"><span class="toc-text">（2）NIO (Non-blocking I&#x2F;O)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89AIO-Asynchronous-I-O"><span class="toc-text">（3）AIO (Asynchronous I&#x2F;O)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Netty"><span class="toc-text">Netty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Netty-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">1、Netty 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Netty%EF%BC%9F"><span class="toc-text">2、为什么要用 Netty？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Netty-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BA%86%E8%A7%A3%E4%B9%88%EF%BC%9F"><span class="toc-text">3、Netty 应用场景了解么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81Netty-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E4%B8%8E%E4%BD%9C%E7%94%A8"><span class="toc-text">4、Netty 核心组件与作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81Reactor%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-text">5、Reactor线程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFTCP%E7%B2%98%E5%8C%85%E3%80%81%E6%8B%86%E5%8C%85%EF%BC%9F"><span class="toc-text">6、什么是TCP粘包、拆包？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81Netty%E7%9A%84%E9%95%BF%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6"><span class="toc-text">7、Netty的长连接和心跳机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81Netty%E7%9A%84%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="toc-text">8、Netty的零拷贝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dubbo"><span class="toc-text">Dubbo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFRPC%EF%BC%9F"><span class="toc-text">1、什么是RPC？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFDubbo%EF%BC%9F"><span class="toc-text">2、什么是Dubbo？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E7%90%86"><span class="toc-text">3、原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-text">4、服务发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">5、负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E6%B5%81%E9%87%8F%E7%AE%A1%E6%8E%A7"><span class="toc-text">6、流量管控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-text">7、通信协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81SPI%E6%9C%BA%E5%88%B6"><span class="toc-text">8、SPI机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89Java-SPI"><span class="toc-text">（1）Java SPI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%B8%BA%E4%BB%80%E4%B9%88dubbo%E8%87%AA%E5%B7%B1%E5%AE%9E%E7%8E%B0%E4%BA%86SPI%EF%BC%9F"><span class="toc-text">（2）为什么dubbo自己实现了SPI？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81Dubbo%E7%9A%84%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">9、Dubbo的分层架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B1%82%E2%80%94Proxy"><span class="toc-text">代理层—Proxy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E5%B1%82%E2%80%94Registry"><span class="toc-text">注册层—Registry</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E5%B1%82%E2%80%94Cluster"><span class="toc-text">集群层—Cluster</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E5%B1%82%E2%80%94Protocol"><span class="toc-text">协议层—Protocol</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E4%BA%A4%E6%8D%A2%E5%B1%82%E2%80%94Exchange"><span class="toc-text">信息交换层—Exchange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E2%80%94Transport"><span class="toc-text">传输层—Transport</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E5%B1%82%E2%80%94Serialize"><span class="toc-text">序列化层—Serialize</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10%E3%80%81%E9%9B%86%E7%BE%A4%E5%AE%B9%E9%94%99%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">10、集群容错有哪些？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#10-1%E3%80%81%E9%9B%86%E7%BE%A4%E5%AE%B9%E9%94%99%E6%A8%A1%E5%BC%8F"><span class="toc-text">10.1、集群容错模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%96%B9%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">11、负载均衡方式有哪些？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#11-1%E3%80%81RandomLoadBalance"><span class="toc-text">11.1、RandomLoadBalance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-2%E3%80%81LeastActiveLoadBalance"><span class="toc-text">11.2、LeastActiveLoadBalance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-3%E3%80%81ConsistentHashLoadBalance"><span class="toc-text">11.3、ConsistentHashLoadBalance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-4%E3%80%81RoundRobinLoadBalance"><span class="toc-text">11.4、RoundRobinLoadBalance</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12%E3%80%81Dubbo%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA"><span class="toc-text">12、Dubbo优雅停机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#12-1%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F"><span class="toc-text">12.1、配置方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-2%E3%80%81%E6%B5%81%E7%A8%8B"><span class="toc-text">12.2、流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-3%E3%80%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">12.3、实现原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13%E3%80%81%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6"><span class="toc-text">13、手写RPC框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14%E3%80%81%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">14、使用示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F"><span class="toc-text">1、什么是负载均衡？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%88%86%E4%B8%BA%E5%93%AA%E5%87%A0%E7%A7%8D%EF%BC%9F"><span class="toc-text">2、负载均衡分为哪几种？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（1）服务端负载均衡</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">（2）客户端负载均衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">3、负载均衡常见的算法有哪些？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%9A%8F%E6%9C%BA%E6%B3%95"><span class="toc-text">（1）随机法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%BD%AE%E8%AF%A2%E6%B3%95"><span class="toc-text">（2）轮询法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%B8%80%E8%87%B4%E6%80%A7-Hash-%E6%B3%95"><span class="toc-text">（3）一致性 Hash 法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E6%9C%80%E5%B0%8F%E8%BF%9E%E6%8E%A5%E6%B3%95"><span class="toc-text">（4）最小连接法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%83%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8F%AF%E4%BB%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="toc-text">4、七层负载均衡可以怎么做？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89DNS%E8%A7%A3%E6%9E%90"><span class="toc-text">（1）DNS解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">（2）反向代理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96"><span class="toc-text">数据库优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-text">1、读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（1）什么是读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">（2）读写分离会带来什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%9F"><span class="toc-text">（3）如何实现读写分离？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">（4）主从复制原理是什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">2、分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%BA%93%EF%BC%9F"><span class="toc-text">（1）什么是分库？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（2）什么是分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E9%9C%80%E8%A6%81%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="toc-text">（3）什么情况下需要分库分表？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-text">（4）常见的分片算法有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E5%91%A2%EF%BC%9F"><span class="toc-text">（5）分库分表会带来什么问题呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%886%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%AF%94%E8%BE%83%E6%8E%A8%E8%8D%90%E7%9A%84%E6%96%B9%E6%A1%88%EF%BC%9F"><span class="toc-text">（6）分库分表比较推荐的方案？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%887%EF%BC%89%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%8E%EF%BC%8C%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%BF%81%E7%A7%BB%E5%91%A2%EF%BC%9F"><span class="toc-text">（7）分库分表后，数据怎么迁移呢？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-text">消息队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E9%80%89%E5%9E%8B"><span class="toc-text">1、消息队列选型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Kafka-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-text">2、Kafka 核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BB%80%E4%B9%88%E6%98%AF-Producer%E3%80%81Consumer%E3%80%81Broker%E3%80%81Topic%E3%80%81Partition%EF%BC%9F"><span class="toc-text">（1）什么是 Producer、Consumer、Broker、Topic、Partition？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E7%9A%84%E5%A4%9A%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-text">（2）Kafka 的多副本机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Kafka-%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%E3%80%81%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E5%92%8C%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-text">3、Kafka 消费顺序、消息丢失和重复消费</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E7%9A%84%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F%EF%BC%9F"><span class="toc-text">（1）Kafka 如何保证消息的消费顺序？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%EF%BC%9F"><span class="toc-text">（2）Kafka 如何保证消息不丢失？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89Kafka-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%EF%BC%9F"><span class="toc-text">（3）Kafka 如何保证消息不重复消费？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%A4%A7%E9%87%8F%E6%B6%88%E6%81%AF%E5%9C%A8-MQ-%E9%87%8C%E9%95%BF%E6%97%B6%E9%97%B4%E7%A7%AF%E5%8E%8B%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="toc-text">（4）大量消息在 MQ 里长时间积压，该如何解决？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text">海量数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Bitmap"><span class="toc-text">1、Bitmap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9A%E7%BB%9F%E8%AE%A1%E4%B8%8D%E5%90%8C%E5%8F%B7%E7%A0%81%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-text">2、问题一：统计不同号码的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9A%E5%87%BA%E7%8E%B0%E9%A2%91%E7%8E%87%E6%9C%80%E9%AB%98%E7%9A%84100%E4%B8%AA%E8%AF%8D"><span class="toc-text">3、问题二：出现频率最高的100个词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E9%97%AE%E9%A2%98%E4%B8%89%EF%BC%9A%E6%9F%A5%E6%89%BE%E4%B8%A4%E4%B8%AA%E5%A4%A7%E6%96%87%E4%BB%B6%E5%85%B1%E5%90%8C%E7%9A%84URL"><span class="toc-text">4、问题三：查找两个大文件共同的URL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven"><span class="toc-text">Maven</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Maven%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81%E5%8F%8A%E8%A7%A3%E5%86%B3"><span class="toc-text">1、Maven依赖冲突及解决</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E9%97%AE%E9%A2%98%E8%AE%BE%E8%AE%A1"><span class="toc-text">场景问题设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AF%B9%E4%BA%8E%E9%AB%98%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%87%8F%EF%BC%8C10%E4%BA%BF%E7%BA%A7%EF%BC%8C%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AAredis%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="toc-text">1、对于高并发数据量，10亿级，怎么实现一个redis排行榜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E5%A4%9A%E8%AE%BE%E5%A4%87%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95"><span class="toc-text">2、实现用户多设备同时登录</span></a></li></ol></li></ol></div><div class="widget-footer">
 
 <a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
 </div></aside><div class='float-panel blur'>
