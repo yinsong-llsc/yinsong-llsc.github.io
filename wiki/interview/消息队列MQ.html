@@ -40,8 +40,8 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759716670-faf1f9d1-ef54-475e-8e3c-ac48ee2636b0.webp">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759717239-67ed5e90-ac8d-456b-9b47-c47a57ba3f82.webp">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/webp/36098302/1715759717315-b356f557-2521-4bdb-80de-65a072a62f0c.webp">
-<meta property="article:published_time" content="2024-05-29T09:00:48.040Z">
-<meta property="article:modified_time" content="2024-05-29T09:00:48.040Z">
+<meta property="article:published_time" content="2024-07-23T02:20:15.759Z">
+<meta property="article:modified_time" content="2024-07-23T02:20:15.759Z">
 <meta property="article:author" content="远岫">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/36098302/1716727389326-3701fb77-12ee-43d8-9c55-a728f94e0db6.png">
@@ -98,7 +98,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/interview/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9F%A5%E8%AF%86%E6%89%8B%E5%86%8C.html">面試記</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-05-29T09:00:48.040Z">2024-05-29</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-07-23T02:20:15.759Z">2024-07-23</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -319,43 +319,13 @@
 <li>增长推送间隔 max.poll.interval.ms&#x3D;t+1 minutes</li>
 </ol>
 <blockquote>
-<ol>
-<li><strong>消费速度慢导致Session Timeout</strong>：<ul>
-<li><strong>原因</strong>：消费者的处理逻辑耗时过长，超过了session.timeout.ms配置的值，导致Kafka认为消费者已挂，进而触发rebalance。</li>
-<li><strong>解决</strong>：优化消费者逻辑，减少处理时间；适当增加session.timeout.ms的值，但需注意不要设得过大以免长时间检测不到真正的问题。</li>
+<p>第一类非必要 Rebalance 是因为未能及时发送心跳，导致 Consumer 被“踢出”Group 而引发的。<br>因此，你需要仔细地设置 session.timeout.ms 和 heartbeat.interval.ms 的值。我在这里给出一些推荐数值，你可以“无脑”地应用在你的生产环境中。</p>
+<ul>
+<li>设置 session.timeout.ms &#x3D; 6s。</li>
+<li>设置 heartbeat.interval.ms &#x3D; 2s。</li>
+<li>要保证 Consumer 实例在被判定为“dead”之前，能够发送至少 3 轮的心跳请求，即 session.timeout.ms &gt;&#x3D; 3 * heartbeat.interval.ms</li>
 </ul>
-</li>
-<li><strong>消息处理耗时且未及时提交offset</strong>：<ul>
-<li><strong>原因</strong>：消费者处理消息时间过长，未能在auto.commit.interval.ms配置的时间间隔内提交offset。</li>
-<li><strong>解决</strong>：手动控制offset提交时机，确保消息被成功处理后再提交；或者调整auto.commit.interval.ms，但要权衡好自动提交的频率和可能的重复消费风险。</li>
-</ul>
-</li>
-<li><strong>空闲消费者导致的定期rebalance</strong>：<ul>
-<li><strong>原因</strong>：Kafka定期尝试删除过期位移，这仅在消费者组处于Empty状态下进行，可能导致不必要的rebalance。</li>
-<li><strong>解决</strong>：确保消费者组始终活跃，避免长时间无消息消费的空闲状态。</li>
-</ul>
-</li>
-<li><strong>消费者组成员频繁变动</strong>：<ul>
-<li><strong>原因</strong>：消费者频繁加入或离开组，尤其是短时间内大量消费者的动态变化。</li>
-<li><strong>解决</strong>：优化应用部署策略，减少不必要的消费者组成员变动；考虑使用更稳定的部署模式，比如静态分配消费者。</li>
-</ul>
-</li>
-<li><strong>网络延迟或不稳定</strong>：<ul>
-<li><strong>原因</strong>：网络问题导致心跳超时或协调信息传输延迟。</li>
-<li><strong>解决</strong>：优化网络环境，检查网络配置，确保Kafka集群与消费者之间的网络稳定可靠。</li>
-</ul>
-</li>
-<li><strong>配置不一致</strong>：<ul>
-<li><strong>原因</strong>：消费者配置（如session.timeout.ms, max.poll.interval.ms等）与Kafka集群的预期配置不匹配。</li>
-<li><strong>解决</strong>：统一和校验所有消费者的配置，确保它们与Kafka集群的配置相协调。</li>
-</ul>
-</li>
-<li><strong>Eager Rebalance Protocol</strong>：<ul>
-<li><strong>对于Kafka较新版本</strong>，利用Eager Rebalance Protocol可以更快地检测和响应消费者状态变化，减少不必要的rebalance。</li>
-<li><strong>解决</strong>：升级到支持此协议的Kafka版本，并适当配置相关参数。</li>
-</ul>
-</li>
-</ol>
+<p>第二类非必要 Rebalance 是 Consumer 消费时间过长导致的。增大max.poll.interval.ms 参数值。</p>
 </blockquote>
 <h4 id="2、ZooKeeper-的作用"><a href="#2、ZooKeeper-的作用" class="headerlink" title="2、ZooKeeper 的作用"></a>2、ZooKeeper 的作用</h4><p>目前，Kafka 使用 ZooKeeper 存放集群元数据、成员管理、Controller 选举，以及其他一些管理类任务。之后，等 KIP-500 提案完成后，Kafka 将完全不再依赖于 ZooKeeper。</p>
 <ul>
